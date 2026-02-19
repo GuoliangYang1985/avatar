@@ -1,0 +1,661 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map id="WHQ" name="杨老师校园" dir="resource/map/assets/" start_row="30" start_col="30" >
+	<background file="background.jpg" x_offset="-800" y_offset="0" cols="130" rows="130"/>
+	<ItemDefinitions>
+		<ItemDefinition id="greenPlants.png" file="greenPlants.png" x_offset="-36" y_offset="-77" rows="1" cols="1" walkable="false" overlap="true"/>
+		<ItemDefinition id="lightLeft.png" file="lightLeft.png" x_offset="-16" y_offset="-87" rows="1" cols="1" walkable="false" overlap="true"/>
+		<ItemDefinition id="lightRight.png" file="lightRight.png" x_offset="-15" y_offset="-85" rows="1" cols="1" walkable="false" overlap="true"/>
+		<ItemDefinition id="light0.png" file="light0.png" x_offset="-20" y_offset="-100" rows="1" cols="1" walkable="false" overlap="true"/>
+		<ItemDefinition id="horse.png" file="horse.png" x_offset="-71" y_offset="-95" rows="4" cols="4" walkable="false" overlap="true"/>
+		<ItemDefinition id="carBlackRight.png" file="carBlackRight.png" x_offset="-115" y_offset="-20" rows="4" cols="2" walkable="false" overlap="true"/>
+		<ItemDefinition id="carWhiteRight.png" file="carWhiteRight.png" x_offset="-115" y_offset="-20" rows="4" cols="2" walkable="false" overlap="true"/>
+		<ItemDefinition id="carWhiteLeft.png" file="carWhiteLeft.png" x_offset="-46" y_offset="-12" rows="2" cols="4" walkable="false" overlap="true"/>
+		<ItemDefinition id="plantain.png" file="plantain.png" x_offset="-95" y_offset="-145" rows="1" cols="1" walkable="false" overlap="true"/>
+		<ItemDefinition id="tree.png" file="tree.png" x_offset="-105" y_offset="-130" rows="2" cols="2" walkable="false" overlap="true"/>
+		<ItemDefinition id="tussockRight.png" file="tussockRight.png" x_offset="-110" y_offset="-13" rows="4" cols="2" walkable="false" overlap="true"/>
+		<ItemDefinition id="library.png" file="library.png" x_offset="-490" y_offset="-141" rows="16" cols="15" walkable="false" overlap="true"/>
+		<ItemDefinition id="tussockLeft.png" file="tussockLeft.png" x_offset="-48" y_offset="-18" rows="2" cols="4" walkable="false" overlap="true"/>
+		<ItemDefinition id="carBlackLeft.png" file="carBlackLeft.png" x_offset="-50" y_offset="-17" rows="2" cols="4" walkable="false" overlap="true"/>
+		<ItemDefinition id="train.png" file="train.png" x_offset="-384" y_offset="-263" rows="17" cols="7" walkable="false" overlap="true"/>
+		<ItemDefinition id="teaching.png" file="teaching.png" x_offset="-825" y_offset="-40" rows="1" cols="1" walkable="false" overlap="true"/>
+		<ItemDefinition id="go.png" file="go.png" x_offset="-39" y_offset="12" rows="2" cols="2" walkable="true" overlap="true"/>
+		<ItemDefinition id="navigation.png" file="navigation.png" x_offset="-60" y_offset="-110" rows="2" cols="2" walkable="false" overlap="true"/>
+		<ItemDefinition id="npc1.png" file="npc1.png" x_offset="-30" y_offset="-80" rows="1" cols="1" walkable="false" overlap="true"/>
+	</ItemDefinitions>
+	<Items>
+		<Item source="npc1.png" col="35" row="22" type="QuestNpcItem" name="园丁" >
+			<onClick>
+				<quest_start id="casetree"/>
+				<quest_end id="casetree"/>
+				<quest_end id="helpGardener1"/>
+			</onClick>
+		</Item>
+		<Item source="greenPlants.png" col="42" row="17"/>
+		<Item source="greenPlants.png" col="34" row="17"/>
+		<Item source="tussockRight.png" col="7" row="10"/>
+		<Item source="tussockLeft.png" col="2" row="15"/>
+		<Item source="teaching.png" col="1" row="0"/>
+		<Item source="tree.png" col="17" row="31" type="QuestItem" questItemId="questItem1" correspondingVitemId="Q_GWGC_TREE">
+			<questObject name = "castTree" />
+		</Item>
+		<Item source="tree.png" col="0" row="21" type="QuestItem" questItemId="questItem2" correspondingVitemId="Q_GWGC_TREE">
+			<questObject name = "castTree" />
+		</Item>
+		<Item source="light0.png" col="0" row="23"/>
+		<Item source="tree.png" col="9" row="21" type="QuestItem" questItemId="questItem3" correspondingVitemId="Q_GWGC_TREE">
+			<questObject name = "castTree" />
+		</Item>
+		<Item source="light0.png" col="16" row="0"/>
+		<Item source="tree.png" col="15" row="2" type="QuestItem" questItemId="questItem4" correspondingVitemId="Q_GWGC_TREE">
+			<questObject name = "castTree" />
+		</Item>
+		<Item source="lightLeft.png" col="16" row="22"/>
+		<Item source="light0.png" col="12" row="23"/>
+		<Item source="train.png" col="17" row="34" type="NavigateToURL">
+			<file url="https://github.com/YuanIdea/yuan" width="1000" height="480" />
+		</Item>
+		<Item source="lightRight.png" col="22" row="22"/>
+		<Item source="light0.png" col="26" row="22"/>
+		<Item source="light0.png" col="23" row="3"/>
+		<Item source="light0.png" col="16" row="13"/>
+		<Item source="library.png" col="27" row="1"/>
+		<Item source="tussockLeft.png" col="29" row="17"/>
+		<Item source="carBlackRight.png" col="29" row="19"/>
+		<Item source="carWhiteRight.png" col="32" row="19"/>
+		<Item source="tree.png" col="25" row="13" type="QuestItem" questItemId="wenhuaqu2513" correspondingVitemId="Q_GWGC_TREE">
+			<questObject name = "castTree" />
+		</Item>
+		<Item source="light0.png" col="44" row="23"/>
+		<Item source="light0.png" col="45" row="30"/>
+		<Item source="light0.png" col="36" row="38"/>
+		<Item source="plantain.png" col="57" row="33" type="QuestItem" questItemId="wenhuaqu5733" correspondingVitemId="Q_GWGC_TREE">
+			<questObject name = "castTree" />
+		</Item>
+		<Item source="plantain.png" col="39" row="50" type="QuestItem" questItemId="wenhuaqu3950" correspondingVitemId="Q_GWGC_TREE">
+			<questObject name = "castTree" />
+		</Item>
+		<Item source="tree.png" col="26" row="32" type="QuestItem" questItemId="wenhuaqu2632" correspondingVitemId="Q_GWGC_TREE">
+			<questObject name = "castTree" />
+		</Item>
+		<Item source="horse.png" col="25" row="38"/>
+		<Item source="carWhiteLeft.png" col="25" row="50"/>
+		<Item source="carBlackLeft.png" col="25" row="47"/>
+		<Item source="tree.png" col="29" row="54" type="QuestItem" questItemId="wenhuaqu2954" correspondingVitemId="Q_GWGC_TREE">
+			<questObject name = "castTree" />
+		</Item>
+		<Item source="light0.png" col="30" row="52"/>
+		<Item source="light0.png" col="30" row="38"/>
+		<Item source="light0.png" col="36" row="52"/>
+		<Item source="tree.png" col="47" row="22" type="QuestItem" questItemId="wenhuaqu4722" correspondingVitemId="Q_GWGC_TREE">
+			<questObject name = "castTree" />
+		</Item>
+		<Item source="carBlackRight.png" col="42" row="19"/>
+		<Item source="light0.png" col="19" row="30"/>
+		<Item source="navigation.png" col="29" row="31" type="MultiNavigationItem">
+			<title text="文化区" x="-26" y="-96" font_size="16" font_color="0x000000" font_family="微软雅黑"></title>
+			<menu  text="杨老师学堂" url="resource/map/learn1.xml"  x="-42" y="-60" font_size="14" font_color="0xCCCCCC" font_family="黑体" over_color="0x2B8FD1" out_color="0x000000" idBlod="true"></menu>
+			<menu  text="杨老师图书馆" url="resource/map/learn1.xml"  x="-42" y="-34" font_size="14" font_color="0xCCCCCC" font_family="黑体" over_color="0x2B8FD1" out_color="0x000000" idBlod="true"></menu>
+		</Item>
+	</Items>
+	<Tiles>
+		<Tile col="1" row="0" walkability="false" placeability="true"/>
+		<Tile col="2" row="0" walkability="false" placeability="true"/>
+		<Tile col="3" row="0" walkability="false" placeability="true"/>
+		<Tile col="4" row="0" walkability="false" placeability="true"/>
+		<Tile col="5" row="0" walkability="false" placeability="true"/>
+		<Tile col="6" row="0" walkability="false" placeability="true"/>
+		<Tile col="7" row="0" walkability="false" placeability="true"/>
+		<Tile col="12" row="0" walkability="false" placeability="true"/>
+		<Tile col="13" row="0" walkability="false" placeability="true"/>
+		<Tile col="14" row="0" walkability="false" placeability="true"/>
+		<Tile col="0" row="1" walkability="false" placeability="true"/>
+		<Tile col="1" row="1" walkability="false" placeability="true"/>
+		<Tile col="2" row="1" walkability="false" placeability="true"/>
+		<Tile col="3" row="1" walkability="false" placeability="true"/>
+		<Tile col="4" row="1" walkability="false" placeability="true"/>
+		<Tile col="5" row="1" walkability="false" placeability="true"/>
+		<Tile col="6" row="1" walkability="false" placeability="true"/>
+		<Tile col="7" row="1" walkability="false" placeability="true"/>
+		<Tile col="8" row="1" walkability="false" placeability="true"/>
+		<Tile col="12" row="1" walkability="false" placeability="true"/>
+		<Tile col="13" row="1" walkability="false" placeability="true"/>
+		<Tile col="14" row="1" walkability="false" placeability="true"/>
+		<Tile col="15" row="1" walkability="false" placeability="true"/>
+		<Tile col="0" row="2" walkability="false" placeability="true"/>
+		<Tile col="1" row="2" walkability="false" placeability="true"/>
+		<Tile col="2" row="2" walkability="false" placeability="true"/>
+		<Tile col="3" row="2" walkability="false" placeability="true"/>
+		<Tile col="4" row="2" walkability="false" placeability="true"/>
+		<Tile col="5" row="2" walkability="false" placeability="true"/>
+		<Tile col="6" row="2" walkability="false" placeability="true"/>
+		<Tile col="7" row="2" walkability="false" placeability="true"/>
+		<Tile col="8" row="2" walkability="false" placeability="true"/>
+		<Tile col="12" row="2" walkability="false" placeability="true"/>
+		<Tile col="13" row="2" walkability="false" placeability="true"/>
+		<Tile col="14" row="2" walkability="false" placeability="true"/>
+		<Tile col="15" row="2" walkability="false" placeability="true"/>
+		<Tile col="0" row="3" walkability="false" placeability="true"/>
+		<Tile col="1" row="3" walkability="false" placeability="true"/>
+		<Tile col="2" row="3" walkability="false" placeability="true"/>
+		<Tile col="3" row="3" walkability="false" placeability="true"/>
+		<Tile col="4" row="3" walkability="false" placeability="true"/>
+		<Tile col="5" row="3" walkability="false" placeability="true"/>
+		<Tile col="6" row="3" walkability="false" placeability="true"/>
+		<Tile col="7" row="3" walkability="false" placeability="true"/>
+		<Tile col="8" row="3" walkability="false" placeability="true"/>
+		<Tile col="12" row="3" walkability="false" placeability="true"/>
+		<Tile col="13" row="3" walkability="false" placeability="true"/>
+		<Tile col="14" row="3" walkability="false" placeability="true"/>
+		<Tile col="15" row="3" walkability="false" placeability="true"/>
+		<Tile col="0" row="4" walkability="false" placeability="true"/>
+		<Tile col="1" row="4" walkability="false" placeability="true"/>
+		<Tile col="2" row="4" walkability="false" placeability="true"/>
+		<Tile col="3" row="4" walkability="false" placeability="true"/>
+		<Tile col="4" row="4" walkability="false" placeability="true"/>
+		<Tile col="5" row="4" walkability="false" placeability="true"/>
+		<Tile col="6" row="4" walkability="false" placeability="true"/>
+		<Tile col="7" row="4" walkability="false" placeability="true"/>
+		<Tile col="8" row="4" walkability="false" placeability="true"/>
+		<Tile col="12" row="4" walkability="false" placeability="true"/>
+		<Tile col="13" row="4" walkability="false" placeability="true"/>
+		<Tile col="14" row="4" walkability="false" placeability="true"/>
+		<Tile col="15" row="4" walkability="false" placeability="true"/>
+		<Tile col="0" row="5" walkability="false" placeability="true"/>
+		<Tile col="1" row="5" walkability="false" placeability="true"/>
+		<Tile col="2" row="5" walkability="false" placeability="true"/>
+		<Tile col="3" row="5" walkability="false" placeability="true"/>
+		<Tile col="4" row="5" walkability="false" placeability="true"/>
+		<Tile col="5" row="5" walkability="false" placeability="true"/>
+		<Tile col="6" row="5" walkability="false" placeability="true"/>
+		<Tile col="7" row="5" walkability="false" placeability="true"/>
+		<Tile col="8" row="5" walkability="false" placeability="true"/>
+		<Tile col="13" row="5" walkability="false" placeability="true"/>
+		<Tile col="14" row="5" walkability="false" placeability="true"/>
+		<Tile col="15" row="5" walkability="false" placeability="true"/>
+		<Tile col="0" row="6" walkability="false" placeability="true"/>
+		<Tile col="1" row="6" walkability="false" placeability="true"/>
+		<Tile col="2" row="6" walkability="false" placeability="true"/>
+		<Tile col="3" row="6" walkability="false" placeability="true"/>
+		<Tile col="4" row="6" walkability="false" placeability="true"/>
+		<Tile col="5" row="6" walkability="false" placeability="true"/>
+		<Tile col="6" row="6" walkability="false" placeability="true"/>
+		<Tile col="7" row="6" walkability="false" placeability="true"/>
+		<Tile col="8" row="6" walkability="false" placeability="true"/>
+		<Tile col="14" row="6" walkability="false" placeability="true"/>
+		<Tile col="15" row="6" walkability="false" placeability="true"/>
+		<Tile col="0" row="7" walkability="false" placeability="true"/>
+		<Tile col="1" row="7" walkability="false" placeability="true"/>
+		<Tile col="2" row="7" walkability="false" placeability="true"/>
+		<Tile col="3" row="7" walkability="false" placeability="true"/>
+		<Tile col="4" row="7" walkability="false" placeability="true"/>
+		<Tile col="5" row="7" walkability="false" placeability="true"/>
+		<Tile col="6" row="7" walkability="false" placeability="true"/>
+		<Tile col="7" row="7" walkability="false" placeability="true"/>
+		<Tile col="8" row="7" walkability="false" placeability="true"/>
+		<Tile col="0" row="8" walkability="false" placeability="true"/>
+		<Tile col="1" row="8" walkability="false" placeability="true"/>
+		<Tile col="2" row="8" walkability="false" placeability="true"/>
+		<Tile col="3" row="8" walkability="false" placeability="true"/>
+		<Tile col="4" row="8" walkability="false" placeability="true"/>
+		<Tile col="5" row="8" walkability="false" placeability="true"/>
+		<Tile col="6" row="8" walkability="false" placeability="true"/>
+		<Tile col="7" row="8" walkability="false" placeability="true"/>
+		<Tile col="8" row="8" walkability="false" placeability="true"/>
+		<Tile col="0" row="9" walkability="false" placeability="true"/>
+		<Tile col="1" row="9" walkability="false" placeability="true"/>
+		<Tile col="2" row="9" walkability="false" placeability="true"/>
+		<Tile col="3" row="9" walkability="false" placeability="true"/>
+		<Tile col="4" row="9" walkability="false" placeability="true"/>
+		<Tile col="5" row="9" walkability="false" placeability="true"/>
+		<Tile col="6" row="9" walkability="false" placeability="true"/>
+		<Tile col="7" row="9" walkability="false" placeability="true"/>
+		<Tile col="8" row="9" walkability="false" placeability="true"/>
+		<Tile col="13" row="9" walkability="false" placeability="true"/>
+		<Tile col="0" row="10" walkability="false" placeability="true"/>
+		<Tile col="1" row="10" walkability="false" placeability="true"/>
+		<Tile col="2" row="10" walkability="false" placeability="true"/>
+		<Tile col="3" row="10" walkability="false" placeability="true"/>
+		<Tile col="4" row="10" walkability="false" placeability="true"/>
+		<Tile col="5" row="10" walkability="false" placeability="true"/>
+		<Tile col="6" row="10" walkability="false" placeability="true"/>
+		<Tile col="13" row="10" walkability="false" placeability="true"/>
+		<Tile col="14" row="10" walkability="false" placeability="true"/>
+		<Tile col="0" row="11" walkability="false" placeability="true"/>
+		<Tile col="1" row="11" walkability="false" placeability="true"/>
+		<Tile col="2" row="11" walkability="false" placeability="true"/>
+		<Tile col="3" row="11" walkability="false" placeability="true"/>
+		<Tile col="4" row="11" walkability="false" placeability="true"/>
+		<Tile col="5" row="11" walkability="false" placeability="true"/>
+		<Tile col="6" row="11" walkability="false" placeability="true"/>
+		<Tile col="13" row="11" walkability="false" placeability="true"/>
+		<Tile col="14" row="11" walkability="false" placeability="true"/>
+		<Tile col="0" row="12" walkability="false" placeability="true"/>
+		<Tile col="1" row="12" walkability="false" placeability="true"/>
+		<Tile col="2" row="12" walkability="false" placeability="true"/>
+		<Tile col="3" row="12" walkability="false" placeability="true"/>
+		<Tile col="4" row="12" walkability="false" placeability="true"/>
+		<Tile col="5" row="12" walkability="false" placeability="true"/>
+		<Tile col="6" row="12" walkability="false" placeability="true"/>
+		<Tile col="13" row="12" walkability="false" placeability="true"/>
+		<Tile col="14" row="12" walkability="false" placeability="true"/>
+		<Tile col="0" row="13" walkability="false" placeability="true"/>
+		<Tile col="1" row="13" walkability="false" placeability="true"/>
+		<Tile col="2" row="13" walkability="false" placeability="true"/>
+		<Tile col="3" row="13" walkability="false" placeability="true"/>
+		<Tile col="4" row="13" walkability="false" placeability="true"/>
+		<Tile col="5" row="13" walkability="false" placeability="true"/>
+		<Tile col="6" row="13" walkability="false" placeability="true"/>
+		<Tile col="7" row="13" walkability="false" placeability="true"/>
+		<Tile col="13" row="13" walkability="false" placeability="true"/>
+		<Tile col="14" row="13" walkability="false" placeability="true"/>
+		<Tile col="15" row="13" walkability="false" placeability="true"/>
+		<Tile col="0" row="14" walkability="false" placeability="true"/>
+		<Tile col="1" row="14" walkability="false" placeability="true"/>
+		<Tile col="2" row="14" walkability="false" placeability="true"/>
+		<Tile col="3" row="14" walkability="false" placeability="true"/>
+		<Tile col="4" row="14" walkability="false" placeability="true"/>
+		<Tile col="5" row="14" walkability="false" placeability="true"/>
+		<Tile col="6" row="14" walkability="false" placeability="true"/>
+		<Tile col="7" row="14" walkability="false" placeability="true"/>
+		<Tile col="13" row="14" walkability="false" placeability="true"/>
+		<Tile col="14" row="14" walkability="false" placeability="true"/>
+		<Tile col="15" row="14" walkability="false" placeability="true"/>
+		<Tile col="1" row="15" walkability="false" placeability="true"/>
+		<Tile col="5" row="15" walkability="false" placeability="true"/>
+		<Tile col="6" row="15" walkability="false" placeability="true"/>
+		<Tile col="7" row="15" walkability="false" placeability="true"/>
+		<Tile col="13" row="15" walkability="false" placeability="true"/>
+		<Tile col="14" row="15" walkability="false" placeability="true"/>
+		<Tile col="15" row="15" walkability="false" placeability="true"/>
+		<Tile col="12" row="16" walkability="false" placeability="true"/>
+		<Tile col="13" row="16" walkability="false" placeability="true"/>
+		<Tile col="14" row="16" walkability="false" placeability="true"/>
+		<Tile col="15" row="16" walkability="false" placeability="true"/>
+		<Tile col="12" row="17" walkability="false" placeability="true"/>
+		<Tile col="13" row="17" walkability="false" placeability="true"/>
+		<Tile col="14" row="17" walkability="false" placeability="true"/>
+		<Tile col="15" row="17" walkability="false" placeability="true"/>
+		<Tile col="0" row="18" walkability="false" placeability="true"/>
+		<Tile col="1" row="18" walkability="false" placeability="true"/>
+		<Tile col="2" row="18" walkability="false" placeability="true"/>
+		<Tile col="3" row="18" walkability="false" placeability="true"/>
+		<Tile col="4" row="18" walkability="false" placeability="true"/>
+		<Tile col="5" row="18" walkability="false" placeability="true"/>
+		<Tile col="6" row="18" walkability="false" placeability="true"/>
+		<Tile col="7" row="18" walkability="false" placeability="true"/>
+		<Tile col="8" row="18" walkability="false" placeability="true"/>
+		<Tile col="9" row="18" walkability="false" placeability="true"/>
+		<Tile col="10" row="18" walkability="false" placeability="true"/>
+		<Tile col="11" row="18" walkability="false" placeability="true"/>
+		<Tile col="12" row="18" walkability="false" placeability="true"/>
+		<Tile col="13" row="18" walkability="false" placeability="true"/>
+		<Tile col="14" row="18" walkability="false" placeability="true"/>
+		<Tile col="15" row="18" walkability="false" placeability="true"/>
+		<Tile col="0" row="19" walkability="false" placeability="true"/>
+		<Tile col="1" row="19" walkability="false" placeability="true"/>
+		<Tile col="2" row="19" walkability="false" placeability="true"/>
+		<Tile col="3" row="19" walkability="false" placeability="true"/>
+		<Tile col="4" row="19" walkability="false" placeability="true"/>
+		<Tile col="5" row="19" walkability="false" placeability="true"/>
+		<Tile col="6" row="19" walkability="false" placeability="true"/>
+		<Tile col="7" row="19" walkability="false" placeability="true"/>
+		<Tile col="8" row="19" walkability="false" placeability="true"/>
+		<Tile col="9" row="19" walkability="false" placeability="true"/>
+		<Tile col="10" row="19" walkability="false" placeability="true"/>
+		<Tile col="11" row="19" walkability="false" placeability="true"/>
+		<Tile col="12" row="19" walkability="false" placeability="true"/>
+		<Tile col="13" row="19" walkability="false" placeability="true"/>
+		<Tile col="14" row="19" walkability="false" placeability="true"/>
+		<Tile col="0" row="20" walkability="false" placeability="true"/>
+		<Tile col="1" row="20" walkability="false" placeability="true"/>
+		<Tile col="2" row="20" walkability="false" placeability="true"/>
+		<Tile col="3" row="20" walkability="false" placeability="true"/>
+		<Tile col="4" row="20" walkability="false" placeability="true"/>
+		<Tile col="5" row="20" walkability="false" placeability="true"/>
+		<Tile col="6" row="20" walkability="false" placeability="true"/>
+		<Tile col="7" row="20" walkability="false" placeability="true"/>
+		<Tile col="8" row="20" walkability="false" placeability="true"/>
+		<Tile col="9" row="20" walkability="false" placeability="true"/>
+		<Tile col="10" row="20" walkability="false" placeability="true"/>
+		<Tile col="11" row="20" walkability="false" placeability="true"/>
+		<Tile col="12" row="20" walkability="false" placeability="true"/>
+		<Tile col="13" row="20" walkability="false" placeability="true"/>
+		<Tile col="14" row="20" walkability="false" placeability="true"/>
+		<Tile col="0" row="21" walkability="false" placeability="true"/>
+		<Tile col="1" row="21" walkability="false" placeability="true"/>
+		<Tile col="2" row="21" walkability="false" placeability="true"/>
+		<Tile col="3" row="21" walkability="false" placeability="true"/>
+		<Tile col="4" row="21" walkability="false" placeability="true"/>
+		<Tile col="5" row="21" walkability="false" placeability="true"/>
+		<Tile col="6" row="21" walkability="false" placeability="true"/>
+		<Tile col="7" row="21" walkability="false" placeability="true"/>
+		<Tile col="8" row="21" walkability="false" placeability="true"/>
+		<Tile col="9" row="21" walkability="false" placeability="true"/>
+		<Tile col="10" row="21" walkability="false" placeability="true"/>
+		<Tile col="11" row="21" walkability="false" placeability="true"/>
+		<Tile col="12" row="21" walkability="false" placeability="true"/>
+		<Tile col="13" row="21" walkability="false" placeability="true"/>
+		<Tile col="14" row="21" walkability="false" placeability="true"/>
+		<Tile col="42" row="30" walkability="false" placeability="true"/>
+		<Tile col="43" row="30" walkability="false" placeability="true"/>
+		<Tile col="44" row="30" walkability="false" placeability="true"/>
+		<Tile col="45" row="30" walkability="false" placeability="true"/>
+		<Tile col="41" row="31" walkability="false" placeability="true"/>
+		<Tile col="42" row="31" walkability="false" placeability="true"/>
+		<Tile col="43" row="31" walkability="false" placeability="true"/>
+		<Tile col="44" row="31" walkability="false" placeability="true"/>
+		<Tile col="45" row="31" walkability="false" placeability="true"/>
+		<Tile col="46" row="31" walkability="false" placeability="true"/>
+		<Tile col="47" row="31" walkability="false" placeability="true"/>
+		<Tile col="50" row="31" walkability="false" placeability="true"/>
+		<Tile col="51" row="31" walkability="false" placeability="true"/>
+		<Tile col="52" row="31" walkability="false" placeability="true"/>
+		<Tile col="53" row="31" walkability="false" placeability="true"/>
+		<Tile col="54" row="31" walkability="false" placeability="true"/>
+		<Tile col="55" row="31" walkability="false" placeability="true"/>
+		<Tile col="56" row="31" walkability="false" placeability="true"/>
+		<Tile col="38" row="32" walkability="false" placeability="true"/>
+		<Tile col="39" row="32" walkability="false" placeability="true"/>
+		<Tile col="40" row="32" walkability="false" placeability="true"/>
+		<Tile col="41" row="32" walkability="false" placeability="true"/>
+		<Tile col="42" row="32" walkability="false" placeability="true"/>
+		<Tile col="43" row="32" walkability="false" placeability="true"/>
+		<Tile col="44" row="32" walkability="false" placeability="true"/>
+		<Tile col="45" row="32" walkability="false" placeability="true"/>
+		<Tile col="46" row="32" walkability="false" placeability="true"/>
+		<Tile col="47" row="32" walkability="false" placeability="true"/>
+		<Tile col="50" row="32" walkability="false" placeability="true"/>
+		<Tile col="51" row="32" walkability="false" placeability="true"/>
+		<Tile col="52" row="32" walkability="false" placeability="true"/>
+		<Tile col="53" row="32" walkability="false" placeability="true"/>
+		<Tile col="54" row="32" walkability="false" placeability="true"/>
+		<Tile col="55" row="32" walkability="false" placeability="true"/>
+		<Tile col="56" row="32" walkability="false" placeability="true"/>
+		<Tile col="57" row="32" walkability="false" placeability="true"/>
+		<Tile col="38" row="33" walkability="false" placeability="true"/>
+		<Tile col="39" row="33" walkability="false" placeability="true"/>
+		<Tile col="40" row="33" walkability="false" placeability="true"/>
+		<Tile col="41" row="33" walkability="false" placeability="true"/>
+		<Tile col="42" row="33" walkability="false" placeability="true"/>
+		<Tile col="43" row="33" walkability="false" placeability="true"/>
+		<Tile col="44" row="33" walkability="false" placeability="true"/>
+		<Tile col="45" row="33" walkability="false" placeability="true"/>
+		<Tile col="46" row="33" walkability="false" placeability="true"/>
+		<Tile col="47" row="33" walkability="false" placeability="true"/>
+		<Tile col="50" row="33" walkability="false" placeability="true"/>
+		<Tile col="51" row="33" walkability="false" placeability="true"/>
+		<Tile col="52" row="33" walkability="false" placeability="true"/>
+		<Tile col="53" row="33" walkability="false" placeability="true"/>
+		<Tile col="54" row="33" walkability="false" placeability="true"/>
+		<Tile col="55" row="33" walkability="false" placeability="true"/>
+		<Tile col="56" row="33" walkability="false" placeability="true"/>
+		<Tile col="57" row="33" walkability="false" placeability="true"/>
+		<Tile col="58" row="33" walkability="false" placeability="true"/>
+		<Tile col="38" row="34" walkability="false" placeability="true"/>
+		<Tile col="39" row="34" walkability="false" placeability="true"/>
+		<Tile col="40" row="34" walkability="false" placeability="true"/>
+		<Tile col="41" row="34" walkability="false" placeability="true"/>
+		<Tile col="42" row="34" walkability="false" placeability="true"/>
+		<Tile col="43" row="34" walkability="false" placeability="true"/>
+		<Tile col="44" row="34" walkability="false" placeability="true"/>
+		<Tile col="45" row="34" walkability="false" placeability="true"/>
+		<Tile col="51" row="34" walkability="false" placeability="true"/>
+		<Tile col="52" row="34" walkability="false" placeability="true"/>
+		<Tile col="53" row="34" walkability="false" placeability="true"/>
+		<Tile col="54" row="34" walkability="false" placeability="true"/>
+		<Tile col="55" row="34" walkability="false" placeability="true"/>
+		<Tile col="56" row="34" walkability="false" placeability="true"/>
+		<Tile col="57" row="34" walkability="false" placeability="true"/>
+		<Tile col="58" row="34" walkability="false" placeability="true"/>
+		<Tile col="59" row="34" walkability="false" placeability="true"/>
+		<Tile col="38" row="35" walkability="false" placeability="true"/>
+		<Tile col="39" row="35" walkability="false" placeability="true"/>
+		<Tile col="40" row="35" walkability="false" placeability="true"/>
+		<Tile col="41" row="35" walkability="false" placeability="true"/>
+		<Tile col="42" row="35" walkability="false" placeability="true"/>
+		<Tile col="43" row="35" walkability="false" placeability="true"/>
+		<Tile col="53" row="35" walkability="false" placeability="true"/>
+		<Tile col="54" row="35" walkability="false" placeability="true"/>
+		<Tile col="55" row="35" walkability="false" placeability="true"/>
+		<Tile col="56" row="35" walkability="false" placeability="true"/>
+		<Tile col="57" row="35" walkability="false" placeability="true"/>
+		<Tile col="58" row="35" walkability="false" placeability="true"/>
+		<Tile col="59" row="35" walkability="false" placeability="true"/>
+		<Tile col="37" row="36" walkability="false" placeability="true"/>
+		<Tile col="38" row="36" walkability="false" placeability="true"/>
+		<Tile col="39" row="36" walkability="false" placeability="true"/>
+		<Tile col="40" row="36" walkability="false" placeability="true"/>
+		<Tile col="41" row="36" walkability="false" placeability="true"/>
+		<Tile col="42" row="36" walkability="false" placeability="true"/>
+		<Tile col="45" row="36" walkability="false" placeability="true"/>
+		<Tile col="46" row="36" walkability="false" placeability="true"/>
+		<Tile col="47" row="36" walkability="false" placeability="true"/>
+		<Tile col="50" row="36" walkability="false" placeability="true"/>
+		<Tile col="51" row="36" walkability="false" placeability="true"/>
+		<Tile col="54" row="36" walkability="false" placeability="true"/>
+		<Tile col="55" row="36" walkability="false" placeability="true"/>
+		<Tile col="56" row="36" walkability="false" placeability="true"/>
+		<Tile col="57" row="36" walkability="false" placeability="true"/>
+		<Tile col="58" row="36" walkability="false" placeability="true"/>
+		<Tile col="59" row="36" walkability="false" placeability="true"/>
+		<Tile col="37" row="37" walkability="false" placeability="true"/>
+		<Tile col="38" row="37" walkability="false" placeability="true"/>
+		<Tile col="39" row="37" walkability="false" placeability="true"/>
+		<Tile col="40" row="37" walkability="false" placeability="true"/>
+		<Tile col="41" row="37" walkability="false" placeability="true"/>
+		<Tile col="44" row="37" walkability="false" placeability="true"/>
+		<Tile col="45" row="37" walkability="false" placeability="true"/>
+		<Tile col="46" row="37" walkability="false" placeability="true"/>
+		<Tile col="47" row="37" walkability="false" placeability="true"/>
+		<Tile col="50" row="37" walkability="false" placeability="true"/>
+		<Tile col="51" row="37" walkability="false" placeability="true"/>
+		<Tile col="52" row="37" walkability="false" placeability="true"/>
+		<Tile col="55" row="37" walkability="false" placeability="true"/>
+		<Tile col="56" row="37" walkability="false" placeability="true"/>
+		<Tile col="57" row="37" walkability="false" placeability="true"/>
+		<Tile col="58" row="37" walkability="false" placeability="true"/>
+		<Tile col="59" row="37" walkability="false" placeability="true"/>
+		<Tile col="37" row="38" walkability="false" placeability="true"/>
+		<Tile col="38" row="38" walkability="false" placeability="true"/>
+		<Tile col="39" row="38" walkability="false" placeability="true"/>
+		<Tile col="40" row="38" walkability="false" placeability="true"/>
+		<Tile col="43" row="38" walkability="false" placeability="true"/>
+		<Tile col="44" row="38" walkability="false" placeability="true"/>
+		<Tile col="45" row="38" walkability="false" placeability="true"/>
+		<Tile col="46" row="38" walkability="false" placeability="true"/>
+		<Tile col="47" row="38" walkability="false" placeability="true"/>
+		<Tile col="50" row="38" walkability="false" placeability="true"/>
+		<Tile col="51" row="38" walkability="false" placeability="true"/>
+		<Tile col="52" row="38" walkability="false" placeability="true"/>
+		<Tile col="53" row="38" walkability="false" placeability="true"/>
+		<Tile col="56" row="38" walkability="false" placeability="true"/>
+		<Tile col="57" row="38" walkability="false" placeability="true"/>
+		<Tile col="58" row="38" walkability="false" placeability="true"/>
+		<Tile col="59" row="38" walkability="false" placeability="true"/>
+		<Tile col="38" row="39" walkability="false" placeability="true"/>
+		<Tile col="39" row="39" walkability="false" placeability="true"/>
+		<Tile col="40" row="39" walkability="false" placeability="true"/>
+		<Tile col="43" row="39" walkability="false" placeability="true"/>
+		<Tile col="44" row="39" walkability="false" placeability="true"/>
+		<Tile col="45" row="39" walkability="false" placeability="true"/>
+		<Tile col="46" row="39" walkability="false" placeability="true"/>
+		<Tile col="47" row="39" walkability="false" placeability="true"/>
+		<Tile col="52" row="39" walkability="false" placeability="true"/>
+		<Tile col="53" row="39" walkability="false" placeability="true"/>
+		<Tile col="54" row="39" walkability="false" placeability="true"/>
+		<Tile col="56" row="39" walkability="false" placeability="true"/>
+		<Tile col="57" row="39" walkability="false" placeability="true"/>
+		<Tile col="58" row="39" walkability="false" placeability="true"/>
+		<Tile col="59" row="39" walkability="false" placeability="true"/>
+		<Tile col="38" row="40" walkability="false" placeability="true"/>
+		<Tile col="39" row="40" walkability="false" placeability="true"/>
+		<Tile col="40" row="40" walkability="false" placeability="true"/>
+		<Tile col="42" row="40" walkability="false" placeability="true"/>
+		<Tile col="43" row="40" walkability="false" placeability="true"/>
+		<Tile col="44" row="40" walkability="false" placeability="true"/>
+		<Tile col="45" row="40" walkability="false" placeability="true"/>
+		<Tile col="46" row="40" walkability="false" placeability="true"/>
+		<Tile col="47" row="40" walkability="false" placeability="true"/>
+		<Tile col="48" row="40" walkability="false" placeability="true"/>
+		<Tile col="49" row="40" walkability="false" placeability="true"/>
+		<Tile col="50" row="40" walkability="false" placeability="true"/>
+		<Tile col="52" row="40" walkability="false" placeability="true"/>
+		<Tile col="53" row="40" walkability="false" placeability="true"/>
+		<Tile col="54" row="40" walkability="false" placeability="true"/>
+		<Tile col="57" row="40" walkability="false" placeability="true"/>
+		<Tile col="58" row="40" walkability="false" placeability="true"/>
+		<Tile col="59" row="40" walkability="false" placeability="true"/>
+		<Tile col="38" row="41" walkability="false" placeability="true"/>
+		<Tile col="39" row="41" walkability="false" placeability="true"/>
+		<Tile col="40" row="41" walkability="false" placeability="true"/>
+		<Tile col="43" row="41" walkability="false" placeability="true"/>
+		<Tile col="44" row="41" walkability="false" placeability="true"/>
+		<Tile col="45" row="41" walkability="false" placeability="true"/>
+		<Tile col="46" row="41" walkability="false" placeability="true"/>
+		<Tile col="47" row="41" walkability="false" placeability="true"/>
+		<Tile col="48" row="41" walkability="false" placeability="true"/>
+		<Tile col="49" row="41" walkability="false" placeability="true"/>
+		<Tile col="50" row="41" walkability="false" placeability="true"/>
+		<Tile col="57" row="41" walkability="false" placeability="true"/>
+		<Tile col="58" row="41" walkability="false" placeability="true"/>
+		<Tile col="46" row="42" walkability="false" placeability="true"/>
+		<Tile col="47" row="42" walkability="false" placeability="true"/>
+		<Tile col="48" row="42" walkability="false" placeability="true"/>
+		<Tile col="49" row="42" walkability="false" placeability="true"/>
+		<Tile col="50" row="42" walkability="false" placeability="true"/>
+		<Tile col="51" row="42" walkability="false" placeability="true"/>
+		<Tile col="38" row="43" walkability="false" placeability="true"/>
+		<Tile col="39" row="43" walkability="false" placeability="true"/>
+		<Tile col="40" row="43" walkability="false" placeability="true"/>
+		<Tile col="47" row="43" walkability="false" placeability="true"/>
+		<Tile col="48" row="43" walkability="false" placeability="true"/>
+		<Tile col="49" row="43" walkability="false" placeability="true"/>
+		<Tile col="50" row="43" walkability="false" placeability="true"/>
+		<Tile col="51" row="43" walkability="false" placeability="true"/>
+		<Tile col="52" row="43" walkability="false" placeability="true"/>
+		<Tile col="53" row="43" walkability="false" placeability="true"/>
+		<Tile col="54" row="43" walkability="false" placeability="true"/>
+		<Tile col="38" row="44" walkability="false" placeability="true"/>
+		<Tile col="39" row="44" walkability="false" placeability="true"/>
+		<Tile col="40" row="44" walkability="false" placeability="true"/>
+		<Tile col="43" row="44" walkability="false" placeability="true"/>
+		<Tile col="44" row="44" walkability="false" placeability="true"/>
+		<Tile col="45" row="44" walkability="false" placeability="true"/>
+		<Tile col="47" row="44" walkability="false" placeability="true"/>
+		<Tile col="48" row="44" walkability="false" placeability="true"/>
+		<Tile col="49" row="44" walkability="false" placeability="true"/>
+		<Tile col="50" row="44" walkability="false" placeability="true"/>
+		<Tile col="51" row="44" walkability="false" placeability="true"/>
+		<Tile col="52" row="44" walkability="false" placeability="true"/>
+		<Tile col="53" row="44" walkability="false" placeability="true"/>
+		<Tile col="54" row="44" walkability="false" placeability="true"/>
+		<Tile col="55" row="44" walkability="false" placeability="true"/>
+		<Tile col="37" row="45" walkability="false" placeability="true"/>
+		<Tile col="38" row="45" walkability="false" placeability="true"/>
+		<Tile col="39" row="45" walkability="false" placeability="true"/>
+		<Tile col="40" row="45" walkability="false" placeability="true"/>
+		<Tile col="41" row="45" walkability="false" placeability="true"/>
+		<Tile col="43" row="45" walkability="false" placeability="true"/>
+		<Tile col="44" row="45" walkability="false" placeability="true"/>
+		<Tile col="45" row="45" walkability="false" placeability="true"/>
+		<Tile col="50" row="45" walkability="false" placeability="true"/>
+		<Tile col="51" row="45" walkability="false" placeability="true"/>
+		<Tile col="52" row="45" walkability="false" placeability="true"/>
+		<Tile col="53" row="45" walkability="false" placeability="true"/>
+		<Tile col="54" row="45" walkability="false" placeability="true"/>
+		<Tile col="37" row="46" walkability="false" placeability="true"/>
+		<Tile col="38" row="46" walkability="false" placeability="true"/>
+		<Tile col="39" row="46" walkability="false" placeability="true"/>
+		<Tile col="40" row="46" walkability="false" placeability="true"/>
+		<Tile col="41" row="46" walkability="false" placeability="true"/>
+		<Tile col="44" row="46" walkability="false" placeability="true"/>
+		<Tile col="45" row="46" walkability="false" placeability="true"/>
+		<Tile col="46" row="46" walkability="false" placeability="true"/>
+		<Tile col="47" row="46" walkability="false" placeability="true"/>
+		<Tile col="50" row="46" walkability="false" placeability="true"/>
+		<Tile col="51" row="46" walkability="false" placeability="true"/>
+		<Tile col="52" row="46" walkability="false" placeability="true"/>
+		<Tile col="53" row="46" walkability="false" placeability="true"/>
+		<Tile col="37" row="47" walkability="false" placeability="true"/>
+		<Tile col="38" row="47" walkability="false" placeability="true"/>
+		<Tile col="39" row="47" walkability="false" placeability="true"/>
+		<Tile col="40" row="47" walkability="false" placeability="true"/>
+		<Tile col="41" row="47" walkability="false" placeability="true"/>
+		<Tile col="42" row="47" walkability="false" placeability="true"/>
+		<Tile col="45" row="47" walkability="false" placeability="true"/>
+		<Tile col="46" row="47" walkability="false" placeability="true"/>
+		<Tile col="47" row="47" walkability="false" placeability="true"/>
+		<Tile col="50" row="47" walkability="false" placeability="true"/>
+		<Tile col="51" row="47" walkability="false" placeability="true"/>
+		<Tile col="52" row="47" walkability="false" placeability="true"/>
+		<Tile col="37" row="48" walkability="false" placeability="true"/>
+		<Tile col="38" row="48" walkability="false" placeability="true"/>
+		<Tile col="39" row="48" walkability="false" placeability="true"/>
+		<Tile col="40" row="48" walkability="false" placeability="true"/>
+		<Tile col="41" row="48" walkability="false" placeability="true"/>
+		<Tile col="42" row="48" walkability="false" placeability="true"/>
+		<Tile col="43" row="48" walkability="false" placeability="true"/>
+		<Tile col="46" row="48" walkability="false" placeability="true"/>
+		<Tile col="47" row="48" walkability="false" placeability="true"/>
+		<Tile col="50" row="48" walkability="false" placeability="true"/>
+		<Tile col="51" row="48" walkability="false" placeability="true"/>
+		<Tile col="37" row="49" walkability="false" placeability="true"/>
+		<Tile col="38" row="49" walkability="false" placeability="true"/>
+		<Tile col="39" row="49" walkability="false" placeability="true"/>
+		<Tile col="40" row="49" walkability="false" placeability="true"/>
+		<Tile col="41" row="49" walkability="false" placeability="true"/>
+		<Tile col="42" row="49" walkability="false" placeability="true"/>
+		<Tile col="43" row="49" walkability="false" placeability="true"/>
+		<Tile col="44" row="49" walkability="false" placeability="true"/>
+		<Tile col="37" row="50" walkability="false" placeability="true"/>
+		<Tile col="38" row="50" walkability="false" placeability="true"/>
+		<Tile col="39" row="50" walkability="false" placeability="true"/>
+		<Tile col="40" row="50" walkability="false" placeability="true"/>
+		<Tile col="41" row="50" walkability="false" placeability="true"/>
+		<Tile col="42" row="50" walkability="false" placeability="true"/>
+		<Tile col="43" row="50" walkability="false" placeability="true"/>
+		<Tile col="44" row="50" walkability="false" placeability="true"/>
+		<Tile col="45" row="50" walkability="false" placeability="true"/>
+		<Tile col="46" row="50" walkability="false" placeability="true"/>
+		<Tile col="37" row="51" walkability="false" placeability="true"/>
+		<Tile col="38" row="51" walkability="false" placeability="true"/>
+		<Tile col="39" row="51" walkability="false" placeability="true"/>
+		<Tile col="40" row="51" walkability="false" placeability="true"/>
+		<Tile col="41" row="51" walkability="false" placeability="true"/>
+		<Tile col="42" row="51" walkability="false" placeability="true"/>
+		<Tile col="43" row="51" walkability="false" placeability="true"/>
+		<Tile col="44" row="51" walkability="false" placeability="true"/>
+		<Tile col="45" row="51" walkability="false" placeability="true"/>
+		<Tile col="46" row="51" walkability="false" placeability="true"/>
+		<Tile col="47" row="51" walkability="false" placeability="true"/>
+		<Tile col="37" row="52" walkability="false" placeability="true"/>
+		<Tile col="38" row="52" walkability="false" placeability="true"/>
+		<Tile col="39" row="52" walkability="false" placeability="true"/>
+		<Tile col="40" row="52" walkability="false" placeability="true"/>
+		<Tile col="41" row="52" walkability="false" placeability="true"/>
+		<Tile col="42" row="52" walkability="false" placeability="true"/>
+		<Tile col="43" row="52" walkability="false" placeability="true"/>
+		<Tile col="44" row="52" walkability="false" placeability="true"/>
+		<Tile col="45" row="52" walkability="false" placeability="true"/>
+		<Tile col="46" row="52" walkability="false" placeability="true"/>
+		<Tile col="47" row="52" walkability="false" placeability="true"/>
+		<Tile col="37" row="53" walkability="false" placeability="true"/>
+		<Tile col="38" row="53" walkability="false" placeability="true"/>
+		<Tile col="39" row="53" walkability="false" placeability="true"/>
+		<Tile col="40" row="53" walkability="false" placeability="true"/>
+		<Tile col="41" row="53" walkability="false" placeability="true"/>
+		<Tile col="42" row="53" walkability="false" placeability="true"/>
+		<Tile col="43" row="53" walkability="false" placeability="true"/>
+		<Tile col="44" row="53" walkability="false" placeability="true"/>
+		<Tile col="45" row="53" walkability="false" placeability="true"/>
+		<Tile col="46" row="53" walkability="false" placeability="true"/>
+		<Tile col="38" row="54" walkability="false" placeability="true"/>
+		<Tile col="39" row="54" walkability="false" placeability="true"/>
+		<Tile col="40" row="54" walkability="false" placeability="true"/>
+		<Tile col="41" row="54" walkability="false" placeability="true"/>
+		<Tile col="42" row="54" walkability="false" placeability="true"/>
+		<Tile col="43" row="54" walkability="false" placeability="true"/>
+		<Tile col="44" row="54" walkability="false" placeability="true"/>
+		<Tile col="45" row="54" walkability="false" placeability="true"/>
+	</Tiles>
+</map>
