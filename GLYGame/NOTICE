@@ -1,0 +1,28 @@
+Copyright 2026-Present [杨国梁/Guoliang Yang]
+
+This product includes software developed by:
+- [杨国梁 / Guoliang-Yang@hotmail.com]
+
+=========================================================================
+NOTICE
+=========================================================================
+The core concepts of this software are derived from the book *ActionScript for Multiplayer Games and Virtual Worlds*. The character walking images used in this software are synthesized from character assets provided in the book. The original implementations in the book are in ActionScript (AS), while this software is implemented in C++.Other map assets are generated using AI.
+
+This software relies on the following third-party components during runtime. **These components are not distributed with this software.**
+-----------------------------------------------------------------------------
+1. gdiplus.dll
+-----------------------------------------------------------------------------
+  - **Source**: Microsoft Windows Operating System (GDI+)
+  - **Purpose**: Provides graphics rendering support
+  - **Copyright**: © Microsoft Corporation. All rights reserved.
+  - **Distribution Notice**: This component is part of the Windows operating system and is not included with this software. Users must ensure that their runtime environment (Windows OS) is properly licensed.
+
+-----------------------------------------------------------------------------
+2. msxml4.dll (Microsoft XML Core Services 4.0)
+-----------------------------------------------------------------------------
+  - **Source**: Microsoft Corporation
+  - **Purpose**: Provides XML parsing support
+  - **Copyright**: © Microsoft Corporation. All rights reserved.
+  - **Distribution and Installation Notice**: This component is not distributed with this software. Users need to download and install it separately from the official Microsoft Download Center at:
+    https://www.microsoft.com/en-us/download/details.aspx?id=36292
+  - **License**: Installation and use of this component are subject to the license terms provided by Microsoft.

@@ -1,0 +1,139 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: GLYGame - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating command line "rc.exe /l 0x804 /fo"Debug/GLYGame.res" /d "_DEBUG" /d "_AFXDLL" "E:\Space\C\支持多种图片\gdi+\GLYGame_gdi+_A星修改算法_MFCDll\GLYGame.rc"" 
+Creating temporary file "C:\Users\GLY\AppData\Local\Temp\RSP4876.tmp" with contents
+[
+/nologo /MDd /W3 /Gm /GX /ZI /Od /I ".\Dll" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_AFXDLL" /FR"Debug/" /Fp"Debug/GLYGame.pch" /Yu"stdafx.h" /Fo"Debug/" /Fd"Debug/" /FD /GZ /c 
+"E:\Space\C\支持多种图片\gdi+\GLYGame_gdi+_A星修改算法_MFCDll\Astar.cpp"
+"E:\Space\C\支持多种图片\gdi+\GLYGame_gdi+_A星修改算法_MFCDll\Avatar.cpp"
+"E:\Space\C\支持多种图片\gdi+\GLYGame_gdi+_A星修改算法_MFCDll\BackGround.cpp"
+"E:\Space\C\支持多种图片\gdi+\GLYGame_gdi+_A星修改算法_MFCDll\Coordiante.cpp"
+"E:\Space\C\支持多种图片\gdi+\GLYGame_gdi+_A星修改算法_MFCDll\GamePoint.cpp"
+"E:\Space\C\支持多种图片\gdi+\GLYGame_gdi+_A星修改算法_MFCDll\GLYGame.cpp"
+"E:\Space\C\支持多种图片\gdi+\GLYGame_gdi+_A星修改算法_MFCDll\GLYGameDlg.cpp"
+"E:\Space\C\支持多种图片\gdi+\GLYGame_gdi+_A星修改算法_MFCDll\Image.cpp"
+"E:\Space\C\支持多种图片\gdi+\GLYGame_gdi+_A星修改算法_MFCDll\INode.cpp"
+"E:\Space\C\支持多种图片\gdi+\GLYGame_gdi+_A星修改算法_MFCDll\ISearchable.cpp"
+"E:\Space\C\支持多种图片\gdi+\GLYGame_gdi+_A星修改算法_MFCDll\Isometric.cpp"
+"E:\Space\C\支持多种图片\gdi+\GLYGame_gdi+_A星修改算法_MFCDll\Item.cpp"
+"E:\Space\C\支持多种图片\gdi+\GLYGame_gdi+_A星修改算法_MFCDll\ItemDefinition.cpp"
+"E:\Space\C\支持多种图片\gdi+\GLYGame_gdi+_A星修改算法_MFCDll\MapUtil.cpp"
+"E:\Space\C\支持多种图片\gdi+\GLYGame_gdi+_A星修改算法_MFCDll\Path.cpp"
+"E:\Space\C\支持多种图片\gdi+\GLYGame_gdi+_A星修改算法_MFCDll\PriorityQueue.cpp"
+"E:\Space\C\支持多种图片\gdi+\GLYGame_gdi+_A星修改算法_MFCDll\RenderGrid.cpp"
+"E:\Space\C\支持多种图片\gdi+\GLYGame_gdi+_A星修改算法_MFCDll\SearchResults.cpp"
+"E:\Space\C\支持多种图片\gdi+\GLYGame_gdi+_A星修改算法_MFCDll\Sort.cpp"
+"E:\Space\C\支持多种图片\gdi+\GLYGame_gdi+_A星修改算法_MFCDll\Speed.cpp"
+"E:\Space\C\支持多种图片\gdi+\GLYGame_gdi+_A星修改算法_MFCDll\Tile.cpp"
+"E:\Space\C\支持多种图片\gdi+\GLYGame_gdi+_A星修改算法_MFCDll\XmlUtil.cpp"
+]
+Creating command line "cl.exe @C:\Users\GLY\AppData\Local\Temp\RSP4876.tmp" 
+Creating temporary file "C:\Users\GLY\AppData\Local\Temp\RSP4877.tmp" with contents
+[
+/nologo /MDd /W3 /Gm /GX /ZI /Od /I ".\Dll" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_AFXDLL" /FR"Debug/" /Fp"Debug/GLYGame.pch" /Yc"stdafx.h" /Fo"Debug/" /Fd"Debug/" /FD /GZ /c 
+"E:\Space\C\支持多种图片\gdi+\GLYGame_gdi+_A星修改算法_MFCDll\StdAfx.cpp"
+]
+Creating command line "cl.exe @C:\Users\GLY\AppData\Local\Temp\RSP4877.tmp" 
+Creating temporary file "C:\Users\GLY\AppData\Local\Temp\RSP4878.tmp" with contents
+[
+/nologo /subsystem:windows /incremental:yes /pdb:"Debug/GLYGame.pdb" /debug /machine:I386 /out:"Debug/GLYGame.exe" /pdbtype:sept 
+".\Debug\Astar.obj"
+".\Debug\Avatar.obj"
+".\Debug\BackGround.obj"
+".\Debug\Coordiante.obj"
+".\Debug\GamePoint.obj"
+".\Debug\GLYGame.obj"
+".\Debug\GLYGameDlg.obj"
+".\Debug\Image.obj"
+".\Debug\INode.obj"
+".\Debug\ISearchable.obj"
+".\Debug\Isometric.obj"
+".\Debug\Item.obj"
+".\Debug\ItemDefinition.obj"
+".\Debug\MapUtil.obj"
+".\Debug\Path.obj"
+".\Debug\PriorityQueue.obj"
+".\Debug\RenderGrid.obj"
+".\Debug\SearchResults.obj"
+".\Debug\Sort.obj"
+".\Debug\Speed.obj"
+".\Debug\StdAfx.obj"
+".\Debug\Tile.obj"
+".\Debug\XmlUtil.obj"
+".\Debug\GLYGame.res"
+]
+Creating command line "link.exe @C:\Users\GLY\AppData\Local\Temp\RSP4878.tmp"
+<h3>Output Window</h3>
+Compiling resources...
+Compiling...
+StdAfx.cpp
+Compiling...
+Astar.cpp
+Avatar.cpp
+BackGround.cpp
+Coordiante.cpp
+GamePoint.cpp
+GLYGame.cpp
+GLYGameDlg.cpp
+Image.cpp
+INode.cpp
+ISearchable.cpp
+Isometric.cpp
+Item.cpp
+ItemDefinition.cpp
+MapUtil.cpp
+Path.cpp
+PriorityQueue.cpp
+RenderGrid.cpp
+SearchResults.cpp
+Sort.cpp
+Speed.cpp
+Generating Code...
+Compiling...
+Tile.cpp
+XmlUtil.cpp
+Generating Code...
+Linking...
+Creating temporary file "C:\Users\GLY\AppData\Local\Temp\RSP56EA.tmp" with contents
+[
+/nologo /o"Debug/GLYGame.bsc" 
+".\Debug\StdAfx.sbr"
+".\Debug\Astar.sbr"
+".\Debug\Avatar.sbr"
+".\Debug\BackGround.sbr"
+".\Debug\Coordiante.sbr"
+".\Debug\GamePoint.sbr"
+".\Debug\GLYGame.sbr"
+".\Debug\GLYGameDlg.sbr"
+".\Debug\Image.sbr"
+".\Debug\INode.sbr"
+".\Debug\ISearchable.sbr"
+".\Debug\Isometric.sbr"
+".\Debug\Item.sbr"
+".\Debug\ItemDefinition.sbr"
+".\Debug\MapUtil.sbr"
+".\Debug\Path.sbr"
+".\Debug\PriorityQueue.sbr"
+".\Debug\RenderGrid.sbr"
+".\Debug\SearchResults.sbr"
+".\Debug\Sort.sbr"
+".\Debug\Speed.sbr"
+".\Debug\Tile.sbr"
+".\Debug\XmlUtil.sbr"]
+Creating command line "bscmake.exe @C:\Users\GLY\AppData\Local\Temp\RSP56EA.tmp"
+Creating browse info file...
+<h3>Output Window</h3>
+
+
+
+<h3>Results</h3>
+GLYGame.exe - 0 error(s), 0 warning(s)
+</pre>
+</body>
+</html>
