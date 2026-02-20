@@ -1,5 +1,5 @@
 # Overview
-GLYGame is developed using Visual Studio 2022.
+GLYGame is a 2.5D character and scene showcase built with C++ and Visual Studio 2022. It features character animation and pseudo-3D map rendering.
 # Dependency Installation
 This project uses gdiplus.dll and msxml4.dll. Typically, gdiplus.dll is included during Windows operating system installation. If it is missing from your system, please install it manually.
 
@@ -13,5 +13,5 @@ This project requires the MSXML 4.0 component for Windows to parse XML configura
 
 After installation, simply restart this project.
 # Direct Execution
-Click on gly/cpp/GLYGame/Release/GLYGame.exe
+Click on GLYGame/Release/GLYGame.exe
 
