@@ -199,7 +199,6 @@
     <CustomBuild Include="res\GLYGame.rc2">
       <FileType>RC</FileType>
     </CustomBuild>
-    <CustomBuild Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="resource\map\gly.xml" />
