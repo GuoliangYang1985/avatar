@@ -37,19 +37,19 @@ CAvatar::~CAvatar()
  */
 void CAvatar::Init()
 {
-	m_fX = 0;
-	m_fY = 0;
-	m_nWidth = 0;
-	m_nHeight = 0;
-	m_nOffsetX = 0;
-	m_nOffsetY = 0;
-	m_nRow = 0;
-	m_nCol = 0;
-	m_nRows = 1;
-	m_nCols = 1;
-	m_nCurCol = 0;
-	m_nDrect = 0;
-	m_bWalking = false;
+	mX = 0;
+	mY = 0;
+	mWidth = 0;
+	mHeight = 0;
+	mOffsetX = 0;
+	mOffsetY = 0;
+	mRow = 0;
+	mCol = 0;
+	mRows = 1;
+	mCols = 1;
+	mCurCol = 0;
+	mDrect = 0;
+	mWalking = false;
 }
 
 /**
@@ -60,10 +60,10 @@ bool CAvatar::Load(CString strFileName)
 {
 	CImage::Load(strFileName);
 	//计算一帧动画的宽高和偏移量
-	m_nWidth = m_pImage->GetWidth() / COLS;
-	m_nHeight = m_pImage->GetHeight() / ROWS;
-	m_nOffsetX = m_nWidth / 2;
-	m_nOffsetY = m_nHeight - 8;
+	mWidth = m_pImage->GetWidth() / COLS;
+	mHeight = m_pImage->GetHeight() / ROWS;
+	mOffsetX = mWidth / 2;
+	mOffsetY = mHeight - 8;
 	return m_bIsReady;
 }
 
@@ -73,10 +73,10 @@ bool CAvatar::Load(CString strFileName)
 void CAvatar::UnLoad()
 {
 	CImage::UnLoad();
-	m_nWidth = 0;
-	m_nHeight = 0;
-	m_nOffsetX = 0;
-	m_nOffsetY = 0;
+	mWidth = 0;
+	mHeight = 0;
+	mOffsetX = 0;
+	mOffsetY = 0;
 }
 
 void CAvatar::StartWalk(CPath* pPath)
@@ -86,9 +86,9 @@ void CAvatar::StartWalk(CPath* pPath)
 		vector<INode*> nodes = pPath->GetNodes();
 		delete pPath;
 		pPath = NULL;
-		m_arrCurWalkPath.clear();
-		m_arrCurWalkPath = nodes;
-		m_arrCurWalkPath.erase(m_arrCurWalkPath.begin());
+		mCurWalkPath.clear();
+		mCurWalkPath = nodes;
+		mCurWalkPath.erase(mCurWalkPath.begin());
 		Walk();
 	}
 }
@@ -98,15 +98,15 @@ void CAvatar::StartWalk(CPath* pPath)
  */
 void CAvatar::Walk()
 {
-	if (m_arrCurWalkPath.size() > 0)
+	if (mCurWalkPath.size() > 0)
 	{
-		m_bWalking = true;
-		INode* pNode = *(m_arrCurWalkPath.begin());
-		m_arrCurWalkPath.erase(m_arrCurWalkPath.begin());
+		mWalking = true;
+		INode* pNode = *(mCurWalkPath.begin());
+		mCurWalkPath.erase(mCurWalkPath.begin());
 		CGamePoint p = CMapUtil::GetScreenCoordinate(pNode->GetCol(), pNode->GetRow());
-		p.m_fX = p.m_fX - m_nMapOffSetX;
-		p.m_fY = p.m_fY - m_nMapOffSetY;
-		m_nDrect = GetDirection(p);
+		p.m_fX = p.m_fX - mMapOffSetX;
+		p.m_fY = p.m_fY - mMapOffSetY;
+		mDrect = GetDirection(p);
 	}
 }
 
@@ -120,9 +120,9 @@ int CAvatar::GetDirection(CGamePoint point)
 	float fX = point.m_fX - GetViewX();
 	float fY = point.m_fY - GetViewY();
 	//得到弧度制角度
-	m_fRadian = atan2f(fY, fX);
-	float angle = (float)(m_fRadian * 180 / PI);
-	m_fDistance = sqrtf(fX * fX + fY * fY);
+	mRadian = atan2f(fY, fX);
+	float angle = (float)(mRadian * 180 / PI);
+	mDistance = sqrtf(fX * fX + fY * fY);
 	unsigned int dir = FindAngleIndex(angle);
 	if (dir >= ROWS)
 		dir = 0;
@@ -167,20 +167,20 @@ void CAvatar::CalculatePosition()
 {
 	//下一步移动距离
 	CSpeed nextSpeed = GetNextDistance();
-	m_fX += nextSpeed.m_fX;
-	m_fY += nextSpeed.m_fY;
-	m_fDistance -= nextSpeed.m_fInstance;
-	if (m_fDistance <= 0)
+	mX += nextSpeed.m_fX;
+	mY += nextSpeed.m_fY;
+	mDistance -= nextSpeed.m_fInstance;
+	if (mDistance <= 0)
 	{
-		m_fDistance = 0;
-		if (m_arrCurWalkPath.size() > 0)
+		mDistance = 0;
+		if (mCurWalkPath.size() > 0)
 		{
 			Walk();
 		}
 		else
 		{
-			m_bWalking = false;
-			m_nCurCol = 0;
+			mWalking = false;
+			mCurCol = 0;
 			//AfxMessageBox("结束");
 		}
 	}
@@ -188,12 +188,12 @@ void CAvatar::CalculatePosition()
 
 float CAvatar::GetNextMoveDistance()
 {
-	if (m_fDistance > 0)
+	if (mDistance > 0)
 	{
 		float curDistance;
-		if (m_fDistance < SPEED)
+		if (mDistance < SPEED)
 		{
-			curDistance = m_fDistance;
+			curDistance = mDistance;
 		}
 		else
 		{
@@ -213,17 +213,29 @@ CSpeed CAvatar::GetNextDistance()
 	point.m_fInstance = GetNextMoveDistance();
 	if (point.m_fInstance > 0)
 	{
-		point.m_fX = point.m_fInstance * cosf(m_fRadian);
-		point.m_fY = point.m_fInstance * sinf(m_fRadian);
+		point.m_fX = point.m_fInstance * cosf(mRadian);
+		point.m_fY = point.m_fInstance * sinf(mRadian);
 	}
 	return point;
+}
+
+void CAvatar::NextFrameIndex()
+{
+	if (mWalking)
+	{
+		++mCurCol; //指向要绘制的帧
+	}
+	if (mCurCol >= COLS)
+	{
+		mCurCol = 0;
+	}
 }
 
 int CAvatar::GetCol()
 {
 	CGamePoint p;
-	p.m_fX = GetViewX() + m_nMapOffSetX;
-	p.m_fY = GetViewY() + m_nMapOffSetY;
+	p.m_fX = GetViewX() + mMapOffSetX;
+	p.m_fY = GetViewY() + mMapOffSetY;
 	CPoint point = CMapUtil::GetMapPointByScreen(p.m_fX, p.m_fY);
 	return point.x + 1;
 }
@@ -231,18 +243,18 @@ int CAvatar::GetCol()
 int CAvatar::GetRow()
 {
 	CGamePoint p;
-	p.m_fX = GetViewX() + m_nMapOffSetX;
-	p.m_fY = GetViewY() + m_nMapOffSetY;
+	p.m_fX = GetViewX() + mMapOffSetX;
+	p.m_fY = GetViewY() + mMapOffSetY;
 	CPoint point = CMapUtil::GetMapPointByScreen(p.m_fX, p.m_fY);
 	return point.y + 1;
 }
 
 float CAvatar::GetViewX()
 {
-	return m_fX + m_nOffsetX;
+	return mX + mOffsetX;
 }
 
 float CAvatar::GetViewY()
 {
-	return  m_fY + m_nOffsetY;
+	return  mY + mOffsetY;
 }

@@ -166,8 +166,8 @@ void CGLYGameDlg::OnPaint()
 		if (mAvatar.m_bIsReady)
 		{
 			CGamePoint p = CMapUtil::GetScreenCoordinate(mBackGround.m_nStartCol, mBackGround.m_nStartRow);
-			mAvatar.m_fX = p.m_fX - mBackGround.m_offsetX - mAvatar.m_nOffsetX;
-			mAvatar.m_fY = p.m_fY - mBackGround.m_offsetY - mAvatar.m_nOffsetY;
+			mAvatar.mX = p.m_fX - mBackGround.m_offsetX - mAvatar.mOffsetX;
+			mAvatar.mY = p.m_fY - mBackGround.m_offsetY - mAvatar.mOffsetY;
 		}
 	}
 	GamePaint();
@@ -212,30 +212,22 @@ void CGLYGameDlg::RenderAll()
 	graphics.DrawImage(mBack, 0, 0, bWidth, bHeight);
 	graphics.ReleaseHDC(mMapDC.GetSafeHdc());
 
-	Image* pAvatar = mAvatar.m_pImage;
-	if (mAvatar.m_bWalking)
-	{
-		++mAvatar.m_nCurCol; //指向要绘制的帧
-	}
-	if (mAvatar.m_nCurCol >= COLS)
-	{
-		mAvatar.m_nCurCol = 0;
-	}
-	int ax = int(mAvatar.m_fX);
-	int ay = int(mAvatar.m_fY);
-	Rect r1(ax, ay, mAvatar.m_nWidth, mAvatar.m_nHeight);
+	
+	mAvatar.NextFrameIndex();
+	int ax = int(mAvatar.mX);
+	int ay = int(mAvatar.mY);
+	Rect r1(ax, ay, mAvatar.mWidth, mAvatar.mHeight);
 	BOOL bFinded = false;
-	vector<CItem*>::iterator iter;
-	for (iter = mArrItems->begin(); iter != mArrItems->end(); ++iter)
+	Image* pAvatar = mAvatar.m_pImage;
+	for (CItem* item : *mArrItems)
 	{
-		CItem* item = *iter;
 		if (!bFinded)
 		{
 			if (mAvatar.GetCol() < item->m_nCol + item->m_nCols && mAvatar.GetRow() < item->m_nRow + item->m_nRows)
 			{
 				bFinded = true;
-				graphics.DrawImage(pAvatar, r1, mAvatar.m_nWidth * mAvatar.m_nCurCol, mAvatar.m_nHeight * mAvatar.m_nDrect,
-					mAvatar.m_nWidth, mAvatar.m_nHeight, UnitPixel);
+				graphics.DrawImage(pAvatar, r1, mAvatar.mWidth * mAvatar.mCurCol, mAvatar.mHeight * mAvatar.mDrect,
+					mAvatar.mWidth, mAvatar.mHeight, UnitPixel);
 			}
 		}
 		float offsetX = float(item->GetX() + item->m_nOffsetX - mBackGround.m_offsetX); // Offset in the X-axis direction.
@@ -245,19 +237,20 @@ void CGLYGameDlg::RenderAll()
 	}
 	if (!bFinded)
 	{
-		graphics.DrawImage(pAvatar, r1, mAvatar.m_nWidth * mAvatar.m_nCurCol, mAvatar.m_nHeight * mAvatar.m_nDrect,
-			mAvatar.m_nWidth, mAvatar.m_nHeight, UnitPixel);
+		graphics.DrawImage(pAvatar, r1, mAvatar.mWidth * mAvatar.mCurCol, mAvatar.mHeight * mAvatar.mDrect,
+			mAvatar.mWidth, mAvatar.mHeight, UnitPixel);
 	}
 	mMapX = (rect.Width() - bWidth) / 2.0f - ax - mBackGround.m_offsetX;
 	mMapY = (rect.Height() - bHeight) / 2.0f - ay + 800;
 
-	CBrush blackBrush(RGB(0, 0, 0));   // 创建黑色画刷
-	mBackDC.FillRect(&rect, &blackBrush); // 填充为黑色
+	// Use the window's background color to fill the map background.
+	CBrush blackBrush(::GetSysColor(COLOR_WINDOW));
+	mBackDC.FillRect(&rect, &blackBrush);
 	mBackDC.BitBlt(mMapX, mMapY, bWidth, bHeight, &mMapDC, 0, 0, SRCCOPY);
 
 	hdc->BitBlt(0, 0, rect.Width(), rect.Height(), &mBackDC, 0, 0, SRCCOPY);
 	graphics.ReleaseHDC(mBackDC.GetSafeHdc());
-	if (mAvatar.m_bWalking)
+	if (mAvatar.mWalking)
 	{
 		mAvatar.GetNextDistance();
 		mAvatar.CalculatePosition();
@@ -416,8 +409,8 @@ void CGLYGameDlg::LoadMapData()
 	CString	strMapPath = GetAttribute(mXmlMapConfig, "map/background", "file");
 	mBackGround.m_strBackPath = strDir + strMapPath;
 	mBackGround.m_offsetX = GetAttributeF(mXmlMapConfig, "map/background", "x_offset");
-	mAvatar.m_nMapOffSetX = (int)mBackGround.m_offsetX;
-	mAvatar.m_nMapOffSetY = (int)mBackGround.m_offsetY;
+	mAvatar.mMapOffSetX = (int)mBackGround.m_offsetX;
+	mAvatar.mMapOffSetY = (int)mBackGround.m_offsetY;
 	mBackGround.m_offsetY = GetAttributeF(mXmlMapConfig, "map/background", "y_offset");
 	mCols = mBackGround.m_nCols = (int)GetAttributeF(mXmlMapConfig, "map/background", "cols");
 	mRows = mBackGround.m_nRows = (int)GetAttributeF(mXmlMapConfig, "map/background", "rows");
@@ -587,7 +580,7 @@ void CGLYGameDlg::OnTimer(int id)
 	if (id == 1)
 	{
 		GamePaint();
-		if (!mAvatar.m_bWalking)
+		if (!mAvatar.mWalking)
 		{
 			RenderAll();
 			KillTimer(id);

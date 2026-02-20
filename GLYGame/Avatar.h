@@ -99,6 +99,12 @@ public:
 	 * 得到下一步移动距离
 	 */
 	float GetNextMoveDistance();
+
+	/**
+	 * 计算下一个帧索引。
+	 */
+	void NextFrameIndex();
+
 	int GetCol();
 	int GetRow();
 
@@ -113,57 +119,57 @@ public:
 	float GetViewY();
 public:
 	//角色的宽度。
-	unsigned int m_nWidth;
+	unsigned int mWidth;
 
 	//角色的高度。
-	unsigned int m_nHeight;
+	unsigned int mHeight;
 
 	//角色X轴上的偏移量
-	unsigned int m_nOffsetX;
+	unsigned int mOffsetX;
 
 	//角色Y轴上的偏移量
-	unsigned int m_nOffsetY;
+	unsigned int mOffsetY;
 
 	//角色所占行数。
-	unsigned int m_nCols;
+	unsigned int mCols;
 
 	//角色所占列数。
-	unsigned int m_nRows;
+	unsigned int mRows;
 
 	//角色当前方向。
-	int m_nDrect;
+	int mDrect;
 
 	//角色当前列数
-	int m_nCurCol;
+	int mCurCol;
 
 	//弧度制方向。
-	float m_fRadian;
+	float mRadian;
 
 	//距离。
-	float m_fDistance;
+	float mDistance;
 
 	//绘制位置x。
-	float m_fX;
+	float mX;
 
 	//绘制位置y。
-	float m_fY;
+	float mY;
 
 	//地图x偏移量。
-	int m_nMapOffSetX;
+	int mMapOffSetX;
 
-	int m_nMapOffSetY;
+	int mMapOffSetY;
 
 	//当前行走路径。
-	vector<INode*> m_arrCurWalkPath;
+	vector<INode*> mCurWalkPath;
 
 	//角色是否在行走
-	bool m_bWalking;
+	bool mWalking;
 private:
 	//角色所在列数。
-	unsigned int m_nCol;
+	unsigned int mCol;
 
 	//角色所在行数。
-	unsigned int m_nRow;
+	unsigned int mRow;
 public:
 	//角色方向
 	enum
