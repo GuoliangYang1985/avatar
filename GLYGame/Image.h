@@ -33,10 +33,10 @@ public:
 	Image * GetImage();
 public:
 	//初始化是否完成。
-	bool m_bIsReady;
+	bool mIsReady;
 
 	//角色动画数据。
-	Image *m_pImage;
+	Image *mImage;
 };
 
 #endif // !defined(AFX_IMAGE_H__7E030E84_2983_4D6E_BC03_B69CC2729F7F__INCLUDED_)

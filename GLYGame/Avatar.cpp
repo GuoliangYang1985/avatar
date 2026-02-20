@@ -60,11 +60,11 @@ bool CAvatar::Load(CString strFileName)
 {
 	CImage::Load(strFileName);
 	//计算一帧动画的宽高和偏移量
-	mWidth = m_pImage->GetWidth() / COLS;
-	mHeight = m_pImage->GetHeight() / ROWS;
+	mWidth = mImage->GetWidth() / COLS;
+	mHeight = mImage->GetHeight() / ROWS;
 	mOffsetX = mWidth / 2;
 	mOffsetY = mHeight - 8;
-	return m_bIsReady;
+	return mIsReady;
 }
 
 /**
@@ -229,6 +229,12 @@ void CAvatar::NextFrameIndex()
 	{
 		mCurCol = 0;
 	}
+}
+
+void CAvatar::Render(Graphics& graphics)
+{
+	Rect r1(mX, mY, mWidth, mHeight);
+	graphics.DrawImage(mImage, r1, mWidth * mCurCol, mHeight * mDrect, mWidth, mHeight, UnitPixel);
 }
 
 int CAvatar::GetCol()

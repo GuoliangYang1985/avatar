@@ -11,16 +11,16 @@
 
 CImage::CImage()
 {
-	m_bIsReady = false;
-	m_pImage = NULL;
+	mIsReady = false;
+	mImage = NULL;
 }
 
 CImage::~CImage()
 {	
-	if (m_pImage != NULL)
+	if (mImage != NULL)
 	{	
-		::delete m_pImage;
-		m_pImage = NULL;
+		::delete mImage;
+		mImage = NULL;
 	}
 }
 
@@ -33,9 +33,9 @@ bool CImage::Load(CString strFileName)
 	//角色行走动画。
 	int len=strFileName.GetLength()+1;
 	wchar_t *pwText = new wchar_t[len];
-	m_pImage = ::new Image(strFileName, false);
-	m_bIsReady = true;
-	return m_bIsReady;
+	mImage = ::new Image(strFileName, false);
+	mIsReady = true;
+	return mIsReady;
 }
 
 /**
@@ -43,12 +43,12 @@ bool CImage::Load(CString strFileName)
  */
 void CImage::UnLoad()
 {
-	if (m_pImage != NULL)
+	if (mImage != NULL)
 	{	
-		::delete m_pImage;
-		m_pImage = NULL;
+		::delete mImage;
+		mImage = NULL;
 	}
-	m_bIsReady = false;
+	mIsReady = false;
 }
 
 /**
@@ -57,5 +57,5 @@ void CImage::UnLoad()
  */
 Image *CImage::GetImage()
 {
-	return m_pImage;
+	return mImage;
 }

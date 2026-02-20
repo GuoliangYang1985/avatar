@@ -160,10 +160,10 @@ void CGLYGameDlg::OnPaint()
 		mRenderGrid.ParseTileXML(mXmlMapConfig);
 	}
 
-	if (!mAvatar.m_bIsReady)
+	if (!mAvatar.mIsReady)
 	{
 		mAvatar.Load("resource/avatar/male.png");
-		if (mAvatar.m_bIsReady)
+		if (mAvatar.mIsReady)
 		{
 			CGamePoint p = CMapUtil::GetScreenCoordinate(mBackGround.m_nStartCol, mBackGround.m_nStartRow);
 			mAvatar.mX = p.m_fX - mBackGround.m_offsetX - mAvatar.mOffsetX;
@@ -212,13 +212,9 @@ void CGLYGameDlg::RenderAll()
 	graphics.DrawImage(mBack, 0, 0, bWidth, bHeight);
 	graphics.ReleaseHDC(mMapDC.GetSafeHdc());
 
-	
 	mAvatar.NextFrameIndex();
-	int ax = int(mAvatar.mX);
-	int ay = int(mAvatar.mY);
-	Rect r1(ax, ay, mAvatar.mWidth, mAvatar.mHeight);
 	BOOL bFinded = false;
-	Image* pAvatar = mAvatar.m_pImage;
+	Image* pAvatar = mAvatar.mImage;
 	for (CItem* item : *mArrItems)
 	{
 		if (!bFinded)
@@ -226,8 +222,7 @@ void CGLYGameDlg::RenderAll()
 			if (mAvatar.GetCol() < item->m_nCol + item->m_nCols && mAvatar.GetRow() < item->m_nRow + item->m_nRows)
 			{
 				bFinded = true;
-				graphics.DrawImage(pAvatar, r1, mAvatar.mWidth * mAvatar.mCurCol, mAvatar.mHeight * mAvatar.mDrect,
-					mAvatar.mWidth, mAvatar.mHeight, UnitPixel);
+				mAvatar.Render(graphics);
 			}
 		}
 		float offsetX = float(item->GetX() + item->m_nOffsetX - mBackGround.m_offsetX); // Offset in the X-axis direction.
@@ -237,11 +232,10 @@ void CGLYGameDlg::RenderAll()
 	}
 	if (!bFinded)
 	{
-		graphics.DrawImage(pAvatar, r1, mAvatar.mWidth * mAvatar.mCurCol, mAvatar.mHeight * mAvatar.mDrect,
-			mAvatar.mWidth, mAvatar.mHeight, UnitPixel);
+		mAvatar.Render(graphics);
 	}
-	mMapX = (rect.Width() - bWidth) / 2.0f - ax - mBackGround.m_offsetX;
-	mMapY = (rect.Height() - bHeight) / 2.0f - ay + 800;
+	mMapX = (rect.Width() - bWidth) / 2.0f - mAvatar.mX - mBackGround.m_offsetX;
+	mMapY = (rect.Height() - bHeight) / 2.0f - mAvatar.mY + 800;
 
 	// Use the window's background color to fill the map background.
 	CBrush blackBrush(::GetSysColor(COLOR_WINDOW));
@@ -468,7 +462,7 @@ CTile* CGLYGameDlg::GetTile(int col, int row)
  */
 void CGLYGameDlg::CreateBackGroud()
 {
-	if (!mBackGround.m_bIsReady)
+	if (!mBackGround.mIsReady)
 	{
 		mBackGround.Load(mBackGround.m_strBackPath);
 	}

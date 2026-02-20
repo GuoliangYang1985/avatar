@@ -85,7 +85,7 @@ void CItem::FromXml(MSXML2::IXMLDOMElementPtr itemNode)
  */
 void CItem::SetItemDefinition(CItemDefinition *pValue)
 {
-	m_pImage = pValue->m_pImage;
+	m_pImage = pValue->mImage;
 	m_nCols = pValue->m_nCols;
 	m_nRows = pValue->m_nRows;
 	m_nOffsetX = pValue->m_nOffsetX;

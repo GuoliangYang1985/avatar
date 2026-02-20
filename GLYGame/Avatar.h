@@ -105,6 +105,12 @@ public:
 	 */
 	void NextFrameIndex();
 
+	/**
+	 * 渲染当前帧
+	 * @param graphics GDI+ 图形对象，用于执行绘制操作。
+	 */
+	void Render(Graphics& graphics);
+
 	int GetCol();
 	int GetRow();
 
@@ -157,6 +163,7 @@ public:
 	//地图x偏移量。
 	int mMapOffSetX;
 
+	//地图y偏移量。
 	int mMapOffSetY;
 
 	//当前行走路径。
