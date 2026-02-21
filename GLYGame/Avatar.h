@@ -106,10 +106,16 @@ public:
 	void NextFrameIndex();
 
 	/**
-	 * 渲染当前帧
-	 * @param graphics GDI+ 图形对象，用于执行绘制操作。
+	 * Draw the current frame.
+	 * @param graphics GDI+ graphics object used to perform drawing operations.
 	 */
-	void Render(Graphics& graphics);
+	void ShowFrame(Graphics& graphics);
+
+	/**
+	 * Draw the next frame.
+	 * @param graphics GDI+ graphics object used to perform drawing operations.
+	 */
+	void ShowNextFrame(Graphics& graphics);
 
 	int GetCol();
 	int GetRow();

@@ -231,10 +231,16 @@ void CAvatar::NextFrameIndex()
 	}
 }
 
-void CAvatar::Render(Graphics& graphics)
+void CAvatar::ShowFrame(Graphics& graphics)
 {
 	Rect rect(mX, mY, mWidth, mHeight);
 	graphics.DrawImage(mImage, rect, mWidth * mCurCol, mHeight * mDrect, mWidth, mHeight, UnitPixel);
+}
+
+void CAvatar::ShowNextFrame(Graphics& graphics)
+{
+	NextFrameIndex();
+	ShowFrame(graphics);
 }
 
 int CAvatar::GetCol()

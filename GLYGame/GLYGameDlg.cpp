@@ -212,7 +212,6 @@ void CGLYGameDlg::RenderAll()
 	graphics.DrawImage(mBack, 0, 0, bWidth, bHeight);
 	graphics.ReleaseHDC(mMapDC.GetSafeHdc());
 
-	mAvatar.NextFrameIndex();
 	BOOL bFinded = false;
 	Image* pAvatar = mAvatar.mImage;
 	for (CItem* item : *mArrItems)
@@ -222,7 +221,7 @@ void CGLYGameDlg::RenderAll()
 			if (mAvatar.GetCol() < item->m_nCol + item->m_nCols && mAvatar.GetRow() < item->m_nRow + item->m_nRows)
 			{
 				bFinded = true;
-				mAvatar.Render(graphics);
+				mAvatar.ShowNextFrame(graphics);
 			}
 		}
 		float offsetX = float(item->GetX() + item->m_nOffsetX - mBackGround.m_offsetX); // Offset in the X-axis direction.
@@ -232,7 +231,7 @@ void CGLYGameDlg::RenderAll()
 	}
 	if (!bFinded)
 	{
-		mAvatar.Render(graphics);
+		mAvatar.ShowNextFrame(graphics);
 	}
 	mMapX = (rect.Width() - bWidth) / 2.0f - mAvatar.mX - mBackGround.m_offsetX;
 	mMapY = (rect.Height() - bHeight) / 2.0f - mAvatar.mY + 800;
