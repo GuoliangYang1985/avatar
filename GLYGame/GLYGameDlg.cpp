@@ -213,7 +213,6 @@ void CGLYGameDlg::RenderAll()
 	graphics.ReleaseHDC(mMapDC.GetSafeHdc());
 
 	BOOL bFinded = false;
-	Image* pAvatar = mAvatar.mImage;
 	for (CItem* item : *mArrItems)
 	{
 		if (!bFinded)
@@ -243,11 +242,6 @@ void CGLYGameDlg::RenderAll()
 
 	hdc->BitBlt(0, 0, rect.Width(), rect.Height(), &mBackDC, 0, 0, SRCCOPY);
 	graphics.ReleaseHDC(mBackDC.GetSafeHdc());
-	if (mAvatar.mWalking)
-	{
-		mAvatar.GetNextDistance();
-		mAvatar.CalculatePosition();
-	}
 }
 
 /**

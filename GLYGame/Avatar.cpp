@@ -239,7 +239,12 @@ void CAvatar::ShowFrame(Graphics& graphics)
 
 void CAvatar::ShowNextFrame(Graphics& graphics)
 {
-	NextFrameIndex();
+	if (mWalking)
+	{
+		NextFrameIndex();
+		GetNextDistance();
+		CalculatePosition();
+	}
 	ShowFrame(graphics);
 }
 
