@@ -109,13 +109,13 @@ public:
 	 * Draw the current frame.
 	 * @param graphics GDI+ graphics object used to perform drawing operations.
 	 */
-	void ShowFrame(Graphics& graphics);
+	void DrawFrame(Graphics& graphics);
 
 	/**
 	 * Draw the next frame.
 	 * @param graphics GDI+ graphics object used to perform drawing operations.
 	 */
-	void ShowNextFrame(Graphics& graphics);
+	void DrawNextFrame(Graphics& graphics);
 
 	int GetCol();
 	int GetRow();

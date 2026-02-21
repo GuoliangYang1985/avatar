@@ -37,7 +37,7 @@ public:
 	 */
 	CItemDefinition* GetItemDefinition();
 
-	void Show(Graphics& graphics, float backOffsetX, float backOffsetY);
+	void Draw(Graphics& graphics, float backOffsetX, float backOffsetY);
 public:
 	//ËùÔÚÁĞ
 	int mCol;

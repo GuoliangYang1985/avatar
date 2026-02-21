@@ -107,7 +107,7 @@ vector<CTile*>* CItem::GetTile()
 	return mArrTiles;
 }
 
-void CItem::Show(Graphics& graphics, float backOffsetX, float backOffsetY)
+void CItem::Draw(Graphics& graphics, float backOffsetX, float backOffsetY)
 {
 	float offsetX = float(GetX() + mOffsetX - backOffsetX); // Offset in the X-axis direction.
 	float offsetY = float(GetY() + mOffsetY - backOffsetY); // Offset in the Y-axis direction.

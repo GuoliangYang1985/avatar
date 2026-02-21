@@ -231,13 +231,13 @@ void CAvatar::NextFrameIndex()
 	}
 }
 
-void CAvatar::ShowFrame(Graphics& graphics)
+void CAvatar::DrawFrame(Graphics& graphics)
 {
 	Rect rect(mX, mY, mWidth, mHeight);
 	graphics.DrawImage(mImage, rect, mWidth * mCurCol, mHeight * mDrect, mWidth, mHeight, UnitPixel);
 }
 
-void CAvatar::ShowNextFrame(Graphics& graphics)
+void CAvatar::DrawNextFrame(Graphics& graphics)
 {
 	if (mWalking)
 	{
@@ -245,7 +245,7 @@ void CAvatar::ShowNextFrame(Graphics& graphics)
 		GetNextDistance();
 		CalculatePosition();
 	}
-	ShowFrame(graphics);
+	DrawFrame(graphics);
 }
 
 int CAvatar::GetCol()

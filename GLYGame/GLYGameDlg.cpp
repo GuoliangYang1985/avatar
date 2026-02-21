@@ -182,7 +182,7 @@ void CGLYGameDlg::GamePaint()
 {
 	CreateAllItemDefination();
 	DrawSortedAll();
-	RenderAll();
+	Show();
 }
 
 void CGLYGameDlg::DrawSortedAll()
@@ -191,11 +191,11 @@ void CGLYGameDlg::DrawSortedAll()
 	{
 		CreateAllItem();
 		SortPosition();
-		RenderAll();
+		Show();
 	}
 }
 
-void CGLYGameDlg::RenderAll()
+void CGLYGameDlg::Show()
 {
 	CRect rect;
 	GetClientRect(&rect); // Get client area range.
@@ -211,25 +211,7 @@ void CGLYGameDlg::RenderAll()
 	}
 
 	Graphics graphics(mMapDC.GetSafeHdc());
-	graphics.DrawImage(mBack, 0, 0, bWidth, bHeight);
-
-	BOOL bFinded = false;
-	for (CItem* item : *mArrItems)
-	{
-		if (!bFinded)
-		{
-			if (mAvatar.GetCol() < item->mCol + item->mCols && mAvatar.GetRow() < item->mRow + item->mRows)
-			{
-				bFinded = true;
-				mAvatar.ShowNextFrame(graphics);
-			}
-		}
-		item->Show(graphics, mBackGround.m_offsetX, mBackGround.m_offsetY);
-	}
-	if (!bFinded)
-	{
-		mAvatar.ShowNextFrame(graphics);
-	}
+	DrawMap(graphics);
 
 	// Use the window's background color to fill the map background.
 	CBrush blackBrush(::GetSysColor(COLOR_WINDOW));
@@ -245,6 +227,33 @@ void CGLYGameDlg::RenderAll()
 
 	graphics.ReleaseHDC(mBackDC.GetSafeHdc());
 	graphics.ReleaseHDC(mMapDC.GetSafeHdc());
+}
+
+void CGLYGameDlg::DrawMap(Graphics& graphics)
+{
+	// Draw the map.
+	int bWidth = mBack->GetWidth();
+	int bHeight = mBack->GetHeight();
+	graphics.DrawImage(mBack, 0, 0, bWidth, bHeight);
+
+	// Draw all elements within the map.
+	BOOL bFinded = false;
+	for (CItem* item : *mArrItems)
+	{
+		if (!bFinded)
+		{
+			if (mAvatar.GetCol() < item->mCol + item->mCols && mAvatar.GetRow() < item->mRow + item->mRows)
+			{
+				bFinded = true;
+				mAvatar.DrawNextFrame(graphics);
+			}
+		}
+		item->Draw(graphics, mBackGround.m_offsetX, mBackGround.m_offsetY);
+	}
+	if (!bFinded)
+	{
+		mAvatar.DrawNextFrame(graphics);
+	}
 }
 
 /**
@@ -572,7 +581,7 @@ void CGLYGameDlg::OnTimer(int id)
 		GamePaint();
 		if (!mAvatar.mWalking)
 		{
-			RenderAll();
+			Show();
 			KillTimer(id);
 		}
 	}

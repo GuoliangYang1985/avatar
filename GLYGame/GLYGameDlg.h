@@ -49,7 +49,16 @@ public:
 	 * 画出所有有序元素。
 	 */
 	void DrawSortedAll();
-	void RenderAll();
+
+	/**
+	 * Show the entire scene.
+	 */
+	void Show();
+	/**
+	 * Draw the map and all elements within the map.
+	 * @param graphics GDI+ graphics object used to perform drawing operations.
+	 */
+	void DrawMap(Graphics& graphics);
 	/**
 	 * 解析所有素材定义数据并创建与之对应的对象。
 	 */
