@@ -166,8 +166,10 @@ void CGLYGameDlg::OnPaint()
 		if (mAvatar.mIsReady)
 		{
 			CGamePoint p = CMapUtil::GetScreenCoordinate(mBackGround.m_nStartCol, mBackGround.m_nStartRow);
-			mAvatar.mX = p.m_fX - mBackGround.m_offsetX - mAvatar.mOffsetX;
-			mAvatar.mY = p.m_fY - mBackGround.m_offsetY - mAvatar.mOffsetY;
+			mAvatar.mStartX = p.m_fX - mBackGround.m_offsetX - mAvatar.mOffsetX;
+			mAvatar.mStartY = p.m_fY - mBackGround.m_offsetY - mAvatar.mOffsetY;
+			mAvatar.mX = mAvatar.mStartX;
+			mAvatar.mY = mAvatar.mStartY;
 		}
 	}
 	GamePaint();
@@ -210,7 +212,7 @@ void CGLYGameDlg::RenderAll()
 
 	Graphics graphics(mMapDC.GetSafeHdc());
 	graphics.DrawImage(mBack, 0, 0, bWidth, bHeight);
-	
+
 	BOOL bFinded = false;
 	for (CItem* item : *mArrItems)
 	{
@@ -234,8 +236,8 @@ void CGLYGameDlg::RenderAll()
 	mBackDC.FillRect(&rect, &blackBrush);
 
 	// Draw the map.
-	mMapX = (rect.Width() - bWidth) / 2.0f - mAvatar.mX - mBackGround.m_offsetX;
-	mMapY = (rect.Height() - bHeight) / 2.0f - mAvatar.mY + 800;
+	mMapX = (rect.Width() - bWidth) / 2.0f - mAvatar.mX + mAvatar.mStartX;
+	mMapY = (rect.Height() - bHeight) / 2.0f - mAvatar.mY + mAvatar.mStartX;
 	mBackDC.BitBlt(mMapX, mMapY, bWidth, bHeight, &mMapDC, 0, 0, SRCCOPY);
 
 	// Draw the scene background and the map.

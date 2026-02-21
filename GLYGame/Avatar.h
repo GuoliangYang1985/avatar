@@ -177,6 +177,12 @@ public:
 
 	//角色是否在行走
 	bool mWalking;
+
+	// Avatar at initial X position.
+	float mStartX;
+
+	// Avatar at initial Y position.
+	float mStartY;
 private:
 	//角色所在列数。
 	unsigned int mCol;
