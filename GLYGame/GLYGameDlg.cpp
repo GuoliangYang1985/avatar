@@ -196,8 +196,8 @@ void CGLYGameDlg::DrawSortedAll()
 void CGLYGameDlg::RenderAll()
 {
 	CRect rect;
-	GetClientRect(&rect);// 获取客户端范围
-	CDC* hdc = GetDC();// 获取源设备DC
+	GetClientRect(&rect); // Get client area range.
+	CDC* hdc = GetDC(); // Get source device context (DC).
 
 	int bWidth = mBack->GetWidth();
 	int bHeight = mBack->GetHeight();
@@ -205,43 +205,44 @@ void CGLYGameDlg::RenderAll()
 	if (mMap.GetSafeHandle() == NULL)
 	{
 		mMap.CreateCompatibleBitmap(hdc, bWidth, bHeight);
-		mMapDC.SelectObject(&mMap);// 兼容DC选入赚容位图
+		mMapDC.SelectObject(&mMap); // Select a compatible bitmap into the compatible DC.
 	}
 
 	Graphics graphics(mMapDC.GetSafeHdc());
 	graphics.DrawImage(mBack, 0, 0, bWidth, bHeight);
-	graphics.ReleaseHDC(mMapDC.GetSafeHdc());
-
+	
 	BOOL bFinded = false;
 	for (CItem* item : *mArrItems)
 	{
 		if (!bFinded)
 		{
-			if (mAvatar.GetCol() < item->m_nCol + item->m_nCols && mAvatar.GetRow() < item->m_nRow + item->m_nRows)
+			if (mAvatar.GetCol() < item->mCol + item->mCols && mAvatar.GetRow() < item->mRow + item->mRows)
 			{
 				bFinded = true;
 				mAvatar.ShowNextFrame(graphics);
 			}
 		}
-		float offsetX = float(item->GetX() + item->m_nOffsetX - mBackGround.m_offsetX); // Offset in the X-axis direction.
-		float offsetY = float(item->GetY() + item->m_nOffsetY - mBackGround.m_offsetY); // Offset in the Y-axis direction.
-		Image* pImage = item->m_pImage;
-		graphics.DrawImage(pImage, offsetX, offsetY, (Gdiplus::REAL)pImage->GetWidth(), (Gdiplus::REAL)pImage->GetHeight());
+		item->Show(graphics, mBackGround.m_offsetX, mBackGround.m_offsetY);
 	}
 	if (!bFinded)
 	{
 		mAvatar.ShowNextFrame(graphics);
 	}
-	mMapX = (rect.Width() - bWidth) / 2.0f - mAvatar.mX - mBackGround.m_offsetX;
-	mMapY = (rect.Height() - bHeight) / 2.0f - mAvatar.mY + 800;
 
 	// Use the window's background color to fill the map background.
 	CBrush blackBrush(::GetSysColor(COLOR_WINDOW));
 	mBackDC.FillRect(&rect, &blackBrush);
+
+	// Draw the map.
+	mMapX = (rect.Width() - bWidth) / 2.0f - mAvatar.mX - mBackGround.m_offsetX;
+	mMapY = (rect.Height() - bHeight) / 2.0f - mAvatar.mY + 800;
 	mBackDC.BitBlt(mMapX, mMapY, bWidth, bHeight, &mMapDC, 0, 0, SRCCOPY);
 
+	// Draw the scene background and the map.
 	hdc->BitBlt(0, 0, rect.Width(), rect.Height(), &mBackDC, 0, 0, SRCCOPY);
+
 	graphics.ReleaseHDC(mBackDC.GetSafeHdc());
+	graphics.ReleaseHDC(mMapDC.GetSafeHdc());
 }
 
 /**
@@ -325,12 +326,12 @@ void CGLYGameDlg::CreateAllItem()
 
 			pItem->FromXml(itemNode);
 			CItemDefinition* pItemDef;
-			m_itemDefinitions.Lookup(pItem->m_strSource, pItemDef);
+			m_itemDefinitions.Lookup(pItem->mSource, pItemDef);
 			pItem->SetItemDefinition(pItemDef);
 			mArrItems->push_back(pItem);
-			for (int i = pItem->m_nCol; i < pItem->m_nCol + pItem->m_nCols; ++i)
+			for (int i = pItem->mCol; i < pItem->mCol + pItem->mCols; ++i)
 			{
-				for (int j = pItem->m_nRow; j < pItem->m_nRow + pItem->m_nRows; ++j)
+				for (int j = pItem->mRow; j < pItem->mRow + pItem->mRows; ++j)
 				{
 					CTile* t = GetTile(i, j);
 					t->AddItem(pItem);
@@ -360,7 +361,7 @@ void CGLYGameDlg::SortPosition()
 			for (iter1 = pArrItems->begin(); iter1 != pArrItems->end(); ++iter1)
 			{
 				CItem* si = *iter1;
-				if (nsi->m_nCol < (si->m_nCol + si->m_nCols - 1) && nsi->m_nRow < (si->m_nRow + si->m_nRows - 1))
+				if (nsi->mCol < (si->mCol + si->mCols - 1) && nsi->mRow < (si->mRow + si->mRows - 1))
 				{
 					pArrItems->insert(iter1, 1, nsi);
 					added = true;

@@ -9,7 +9,7 @@
 #include "Tile.h"
 #ifdef _DEBUG
 #undef THIS_FILE
-static char THIS_FILE[]=__FILE__;
+static char THIS_FILE[] = __FILE__;
 #define new DEBUG_NEW
 #endif
 
@@ -19,52 +19,52 @@ static char THIS_FILE[]=__FILE__;
 
 CItem::CItem()
 {
-	m_nCol = 0;
-	m_nRow = 0;
-	m_nCols = 0;
-	m_nRows = 0;
-	m_nOffsetX = 0;
-	m_nOffsetY = 0;
-	m_strSource = "";
-	m_pImage = NULL;
-	m_pItemDefinition = NULL;
-	m_pArrTiles = new vector<CTile *>;
-	m_bInWorld = false;
+	mCol = 0;
+	mRow = 0;
+	mCols = 0;
+	mRows = 0;
+	mOffsetX = 0;
+	mOffsetY = 0;
+	mSource = "";
+	mImage = NULL;
+	mItemDefinition = NULL;
+	mArrTiles = new vector<CTile*>;
+	mInWorld = false;
 }
 
 CItem::~CItem()
 {
-	m_pImage = NULL;
+	mImage = NULL;
 
-	if (m_pArrTiles != NULL)
+	if (mArrTiles != NULL)
 	{
-		delete m_pArrTiles;
-		m_pArrTiles = NULL;
+		delete mArrTiles;
+		mArrTiles = NULL;
 	}
 
-	if (m_pItemDefinition != NULL)
+	if (mItemDefinition != NULL)
 	{
 		//不在此处创建，不在此处释放。
 		//delete m_pItemDefinition;
-		m_pItemDefinition = NULL;
+		mItemDefinition = NULL;
 	}
 }
 
-void CItem::AddTile(CTile *t)
+void CItem::AddTile(CTile* t)
 {
-	m_pArrTiles->push_back(t);
-	m_bInWorld = true;
+	mArrTiles->push_back(t);
+	mInWorld = true;
 }
 
 float CItem::GetX()
 {
-	CGamePoint point = CMapUtil::GetScreenCoordinate(m_nCol, m_nRow);
+	CGamePoint point = CMapUtil::GetScreenCoordinate(mCol, mRow);
 	return point.m_fX;
 }
 
 float CItem::GetY()
 {
-	CGamePoint point = CMapUtil::GetScreenCoordinate(m_nCol, m_nRow);
+	CGamePoint point = CMapUtil::GetScreenCoordinate(mCol, mRow);
 	return point.m_fY;
 }
 
@@ -74,35 +74,42 @@ float CItem::GetY()
  */
 void CItem::FromXml(MSXML2::IXMLDOMElementPtr itemNode)
 {
-	m_strSource = CXmlUtil::GetAttributeToCString(itemNode, "source");
-	m_nCol = CXmlUtil::GetAttributeToInt(itemNode, "col");
-	m_nRow = CXmlUtil::GetAttributeToInt(itemNode, "row");
-	m_bInWorld = false;//CXmlUtil::GetAttributeToBool(itemNode, "isInWorld");
+	mSource = CXmlUtil::GetAttributeToCString(itemNode, "source");
+	mCol = CXmlUtil::GetAttributeToInt(itemNode, "col");
+	mRow = CXmlUtil::GetAttributeToInt(itemNode, "row");
+	mInWorld = false;//CXmlUtil::GetAttributeToBool(itemNode, "isInWorld");
 }
 
 /**
  * 设置item的定义。
  */
-void CItem::SetItemDefinition(CItemDefinition *pValue)
+void CItem::SetItemDefinition(CItemDefinition* pValue)
 {
-	m_pImage = pValue->mImage;
-	m_nCols = pValue->m_nCols;
-	m_nRows = pValue->m_nRows;
-	m_nOffsetX = pValue->m_nOffsetX;
-	m_nOffsetY = pValue->m_nOffsetY;
-	m_pItemDefinition = pValue;
+	mImage = pValue->mImage;
+	mCols = pValue->m_nCols;
+	mRows = pValue->m_nRows;
+	mOffsetX = pValue->m_nOffsetX;
+	mOffsetY = pValue->m_nOffsetY;
+	mItemDefinition = pValue;
 	pValue = NULL;
 }
 
 /**
  * 得到item的定义。
  */
-CItemDefinition * CItem::GetItemDefinition()
+CItemDefinition* CItem::GetItemDefinition()
 {
-	return m_pItemDefinition;
+	return mItemDefinition;
 }
 
-vector<CTile *> * CItem::GetTile()
+vector<CTile*>* CItem::GetTile()
 {
-	return m_pArrTiles;
+	return mArrTiles;
+}
+
+void CItem::Show(Graphics& graphics, float backOffsetX, float backOffsetY)
+{
+	float offsetX = float(GetX() + mOffsetX - backOffsetX); // Offset in the X-axis direction.
+	float offsetY = float(GetY() + mOffsetY - backOffsetY); // Offset in the Y-axis direction.
+	graphics.DrawImage(mImage, offsetX, offsetY, (Gdiplus::REAL)mImage->GetWidth(), (Gdiplus::REAL)mImage->GetHeight());
 }

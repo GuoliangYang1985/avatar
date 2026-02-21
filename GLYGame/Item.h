@@ -13,14 +13,14 @@
 using namespace std;
 #endif // _MSC_VER > 1000
 class CTile;
-class CItem  
+class CItem
 {
 public:
 	CItem();
 	virtual ~CItem();
 public:
-	void AddTile(CTile *t);
-	vector<CTile *> * GetTile();
+	void AddTile(CTile* t);
+	vector<CTile*>* GetTile();
 	float GetX();
 	float GetY();
 	/**
@@ -31,33 +31,35 @@ public:
 	/**
 	 * 设置item的定义。
 	 */
-	void SetItemDefinition(CItemDefinition *pValue);
+	void SetItemDefinition(CItemDefinition* pValue);
 	/**
 	 * 得到item的定义。
 	 */
-	CItemDefinition * GetItemDefinition();
+	CItemDefinition* GetItemDefinition();
+
+	void Show(Graphics& graphics, float backOffsetX, float backOffsetY);
 public:
 	//所在列
-	int m_nCol;
+	int mCol;
 	//所在行
-	int m_nRow;
+	int mRow;
 	//所占列数
-	int m_nCols;
+	int mCols;
 	//所占行数
-	int m_nRows;
+	int mRows;
 	//x方向上的偏移量
-	int m_nOffsetX;
+	int mOffsetX;
 	//y方向上的偏移量
-	int m_nOffsetY;
+	int mOffsetY;
 	//对应ItemDefintion
-	CString m_strSource;
+	CString mSource;
 	//图片
-	Image *m_pImage;
+	Image* mImage;
 	//item定义。
-	CItemDefinition *m_pItemDefinition;
+	CItemDefinition* mItemDefinition;
 private:
-	vector<CTile *> *m_pArrTiles;
-	bool m_bInWorld;
+	vector<CTile*>* mArrTiles;
+	bool mInWorld;
 };
 
 #endif // !defined(AFX_ITEM_H__CC38F86F_7FB7_46C8_91E2_1DDDD92E0E8F__INCLUDED_)
