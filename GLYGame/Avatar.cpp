@@ -233,25 +233,19 @@ void CAvatar::NextFrameIndex()
 
 void CAvatar::Render(Graphics& graphics)
 {
-	Rect r1(mX, mY, mWidth, mHeight);
-	graphics.DrawImage(mImage, r1, mWidth * mCurCol, mHeight * mDrect, mWidth, mHeight, UnitPixel);
+	Rect rect(mX, mY, mWidth, mHeight);
+	graphics.DrawImage(mImage, rect, mWidth * mCurCol, mHeight * mDrect, mWidth, mHeight, UnitPixel);
 }
 
 int CAvatar::GetCol()
 {
-	CGamePoint p;
-	p.m_fX = GetViewX() + mMapOffSetX;
-	p.m_fY = GetViewY() + mMapOffSetY;
-	CPoint point = CMapUtil::GetMapPointByScreen(p.m_fX, p.m_fY);
+	CPoint point = CMapUtil::GetMapPointByScreen(GetViewX() + mMapOffSetX, GetViewY() + mMapOffSetY);
 	return point.x + 1;
 }
 
 int CAvatar::GetRow()
 {
-	CGamePoint p;
-	p.m_fX = GetViewX() + mMapOffSetX;
-	p.m_fY = GetViewY() + mMapOffSetY;
-	CPoint point = CMapUtil::GetMapPointByScreen(p.m_fX, p.m_fY);
+	CPoint point = CMapUtil::GetMapPointByScreen(GetViewX() + mMapOffSetX, GetViewY() + mMapOffSetY);
 	return point.y + 1;
 }
 
