@@ -91,10 +91,12 @@
 		</Item>
 		<Item source="carBlackRight.png" col="42" row="19"/>
 		<Item source="light0.png" col="19" row="30"/>
+		<Item id="XY" source="go.png" col="9" row="4" type="GoItem" onStop="resource/map/teaching.xml"/>
+		<Item id="library" source="go.png" col="38" row="18" type="GoItem" onStop="resource/map/library.xml"/>
 		<Item source="navigation.png" col="29" row="31" type="MultiNavigationItem">
 			<title text="文化区" x="-26" y="-96" font_size="16" font_color="0x000000" font_family="微软雅黑"></title>
-			<menu  text="杨老师学堂" url="resource/map/learn1.xml"  x="-42" y="-60" font_size="14" font_color="0xCCCCCC" font_family="黑体" over_color="0x2B8FD1" out_color="0x000000" idBlod="true"></menu>
-			<menu  text="杨老师图书馆" url="resource/map/learn1.xml"  x="-42" y="-34" font_size="14" font_color="0xCCCCCC" font_family="黑体" over_color="0x2B8FD1" out_color="0x000000" idBlod="true"></menu>
+			<menu  text="杨老师学堂" url="resource/map/teaching.xml"  x="-42" y="-60" font_size="14" font_color="0xCCCCCC" font_family="黑体" over_color="0x2B8FD1" out_color="0x000000" idBlod="true"></menu>
+			<menu  text="杨老师图书馆" url="resource/map/library.xml"  x="-42" y="-34" font_size="14" font_color="0xCCCCCC" font_family="黑体" over_color="0x2B8FD1" out_color="0x000000" idBlod="true"></menu>
 		</Item>
 	</Items>
 	<Tiles>
