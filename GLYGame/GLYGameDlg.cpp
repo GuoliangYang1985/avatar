@@ -165,9 +165,9 @@ void CGLYGameDlg::OnPaint()
 		mAvatar.Load("resource/avatar/male.png");
 		if (mAvatar.mIsReady)
 		{
-			CGamePoint p = CMapUtil::GetScreenCoordinate(mBackGround.m_nStartCol, mBackGround.m_nStartRow);
-			mAvatar.mStartX = p.m_fX - mBackGround.m_offsetX - mAvatar.mOffsetX;
-			mAvatar.mStartY = p.m_fY - mBackGround.m_offsetY - mAvatar.mOffsetY;
+			CGamePoint p = CMapUtil::GetScreenCoordinate(mBackGround.mStartCol, mBackGround.mStartRow);
+			mAvatar.mStartX = p.m_fX - mBackGround.mOffsetX - mAvatar.mOffsetX;
+			mAvatar.mStartY = p.m_fY - mBackGround.mOffsetY - mAvatar.mOffsetY;
 			mAvatar.mX = mAvatar.mStartX;
 			mAvatar.mY = mAvatar.mStartY;
 		}
@@ -218,8 +218,8 @@ void CGLYGameDlg::Show()
 	mBackDC.FillRect(&rect, &blackBrush);
 
 	// Draw the map.
-	mMapX = (rect.Width() - bWidth) / 2.0f - mAvatar.mX + mAvatar.mStartX;
-	mMapY = (rect.Height() - bHeight) / 2.0f - mAvatar.mY + mAvatar.mStartX;
+	mMapX = (rect.Width() - bWidth) / 2.0f - (mAvatar.GetViewX() - mAvatar.mStartX);
+	mMapY = (rect.Height() - bHeight) / 2.0f - (mAvatar.GetViewY() - mAvatar.mStartY);
 	mBackDC.BitBlt(mMapX, mMapY, bWidth, bHeight, &mMapDC, 0, 0, SRCCOPY);
 
 	// Draw the scene background and the map.
@@ -248,7 +248,7 @@ void CGLYGameDlg::DrawMap(Graphics& graphics)
 				mAvatar.DrawNextFrame(graphics);
 			}
 		}
-		item->Draw(graphics, mBackGround.m_offsetX, mBackGround.m_offsetY);
+		item->Draw(graphics, mBackGround.mOffsetX, mBackGround.mOffsetY);
 	}
 	if (!bFinded)
 	{
@@ -406,13 +406,13 @@ void CGLYGameDlg::LoadMapData()
 	CString strDir = GetAttribute(mXmlMapConfig, "map", "dir");
 	mBaseDir = strDir;
 	CString	strMapPath = GetAttribute(mXmlMapConfig, "map/background", "file");
-	mBackGround.m_strBackPath = strDir + strMapPath;
-	mBackGround.m_offsetX = GetAttributeF(mXmlMapConfig, "map/background", "x_offset");
-	mAvatar.mMapOffSetX = (int)mBackGround.m_offsetX;
-	mAvatar.mMapOffSetY = (int)mBackGround.m_offsetY;
-	mBackGround.m_offsetY = GetAttributeF(mXmlMapConfig, "map/background", "y_offset");
-	mCols = mBackGround.m_nCols = (int)GetAttributeF(mXmlMapConfig, "map/background", "cols");
-	mRows = mBackGround.m_nRows = (int)GetAttributeF(mXmlMapConfig, "map/background", "rows");
+	mBackGround.mBackPath = strDir + strMapPath;
+	mBackGround.mOffsetX = GetAttributeF(mXmlMapConfig, "map/background", "x_offset");
+	mAvatar.mMapOffSetX = (int)mBackGround.mOffsetX;
+	mAvatar.mMapOffSetY = (int)mBackGround.mOffsetY;
+	mBackGround.mOffsetY = GetAttributeF(mXmlMapConfig, "map/background", "y_offset");
+	mCols = mBackGround.mCols = (int)GetAttributeF(mXmlMapConfig, "map/background", "cols");
+	mRows = mBackGround.mRows = (int)GetAttributeF(mXmlMapConfig, "map/background", "rows");
 	mAstar.Init(this);
 }
 
@@ -469,7 +469,7 @@ void CGLYGameDlg::CreateBackGroud()
 {
 	if (!mBackGround.mIsReady)
 	{
-		mBackGround.Load(mBackGround.m_strBackPath);
+		mBackGround.Load(mBackGround.mBackPath);
 	}
 }
 
@@ -499,13 +499,13 @@ void CGLYGameDlg::LButtonDown(UINT modKeys, CPoint point)
 {
 	//计算起始点。
 	CGamePoint p;
-	p.m_fX = mAvatar.GetViewX() + mBackGround.m_offsetX;
-	p.m_fY = mAvatar.GetViewY() + mBackGround.m_offsetY;
+	p.m_fX = mAvatar.GetViewX() + mBackGround.mOffsetX;
+	p.m_fY = mAvatar.GetViewY() + mBackGround.mOffsetY;
 	CTile* pStartNode = GetTileFromScreenCoordinate(p.m_fX, p.m_fY);
 
 	//计算终点。
-	point.x += (long)mBackGround.m_offsetX - mMapX;
-	point.y += (long)mBackGround.m_offsetY - mMapY;
+	point.x += (long)mBackGround.mOffsetX - mMapX;
+	point.y += (long)mBackGround.mOffsetY - mMapY;
 
 	CTile* pGoalNode = GetTileFromScreenCoordinate((float)point.x, (float)point.y);
 

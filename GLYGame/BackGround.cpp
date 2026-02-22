@@ -20,13 +20,13 @@ static char THIS_FILE[]=__FILE__;
 //////////////////////////////////////////////////////////////////////
 CBackGround::CBackGround()
 {
-	m_nStartCol = 30;
-	m_nStartRow = 30;
-	m_nCols = 0;
-	m_nRows = 0;
-	m_offsetX = 0.0;
-	m_offsetY = 0.0;
-	m_strBackPath = "";
+	mStartCol = 30;
+	mStartRow = 30;
+	mCols = 0;
+	mRows = 0;
+	mOffsetX = 0.0;
+	mOffsetY = 0.0;
+	mBackPath = "";
 }
 
 CBackGround::~CBackGround()

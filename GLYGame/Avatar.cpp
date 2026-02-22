@@ -47,7 +47,7 @@ void CAvatar::Init()
 	mCol = 0;
 	mRows = 1;
 	mCols = 1;
-	mCurCol = 0;
+	mCurCol = 2;
 	mDrect = 0;
 	mWalking = false;
 }

@@ -19,7 +19,7 @@
 		<ItemDefinition id="train.png" file="train.png" x_offset="-384" y_offset="-263" rows="17" cols="7" walkable="false" overlap="true"/>
 		<ItemDefinition id="teaching.png" file="teaching.png" x_offset="-825" y_offset="-40" rows="1" cols="1" walkable="false" overlap="true"/>
 		<ItemDefinition id="go.png" file="go.png" x_offset="-39" y_offset="12" rows="2" cols="2" walkable="true" overlap="true"/>
-		<ItemDefinition id="navigation.png" file="navigation.png" x_offset="-60" y_offset="-110" rows="2" cols="2" walkable="false" overlap="true"/>
+		<ItemDefinition id="navigation.png" file="navigation.png" x_offset="-60" y_offset="-180" rows="2" cols="2" walkable="false" overlap="true"/>
 		<ItemDefinition id="npc1.png" file="npc1.png" x_offset="-30" y_offset="-80" rows="1" cols="1" walkable="false" overlap="true"/>
 	</ItemDefinitions>
 	<Items>
