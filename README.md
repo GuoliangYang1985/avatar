@@ -13,5 +13,5 @@ This project requires the MSXML 4.0 component for Windows to parse XML configura
 
 After installation, simply restart this project.
 # Direct Execution
-Click on GLYGame/Release/GLYGame.exe
+The executable file can be found in the official release versions. For example, download Release.zip from https://github.com/GuoliangYang1985/avatar/releases/tag/v1.0.0 and extract it. The GLYGame.exe contained within is the executable for version v1.0.0.
 
