@@ -86,7 +86,7 @@ END
 IDD_GLYGAME_DIALOG DIALOGEX 0, 0, 538, 365
 STYLE DS_SETFONT | DS_MODALFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
 EXSTYLE WS_EX_APPWINDOW
-CAPTION "GLYGame"
+CAPTION "GLYGame1.0.0"
 FONT 9, "宋体", 0, 0, 0x1
 BEGIN
 END
@@ -112,7 +112,7 @@ VS_VERSION_INFO VERSIONINFO
 BEGIN
     BLOCK "StringFileInfo"
     BEGIN
-        BLOCK "080404B0"
+        BLOCK "080404b0"
         BEGIN
             VALUE "FileDescription", "GLYGame Microsoft 基础类应用程序"
             VALUE "FileVersion", "1, 0, 0, 1"
@@ -180,7 +180,7 @@ END
 
 STRINGTABLE
 BEGIN
-    IDS_ABOUTBOX            "关于 GLYGame(&A)..."
+    IDS_ABOUTBOX            "关于 GLYGame1.0.0(&A)..."
 END
 
 #endif    // 中文(简体，中国) resources
