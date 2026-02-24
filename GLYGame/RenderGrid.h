@@ -1,47 +1,54 @@
 // RenderGrid.h: interface for the CRenderGrid class.
-//
-//////////////////////////////////////////////////////////////////////
-
-#if !defined(AFX_RENDERGRID_H__58BD4DDC_15CB_489C_9985_E1D4BE762BF9__INCLUDED_)
-#define AFX_RENDERGRID_H__58BD4DDC_15CB_489C_9985_E1D4BE762BF9__INCLUDED_
-
-#if _MSC_VER > 1000
 #pragma once
+
 #include "Item.h"
 #include "Tile.h"
-#endif // _MSC_VER > 1000
+#include <vector>
+#include <memory>
 
-class CRenderGrid  
+class CRenderGrid
 {
 public:
 	CRenderGrid();
-	virtual ~CRenderGrid();
+	virtual ~CRenderGrid() = default;
+
+	// Disable copy semantics (unique_ptr members are move-only)
+	CRenderGrid(const CRenderGrid&) = delete;
+	CRenderGrid& operator=(const CRenderGrid&) = delete;
+
+	// Enable move semantics for efficiency
+	CRenderGrid(CRenderGrid&&) = default;
+	CRenderGrid& operator=(CRenderGrid&&) = default;
+
 public:
 	/**
-	 * 创建格子二维数组。
+	 * Creates a 2D grid of tiles.
+	 * @param cols Number of columns.
+	 * @param rows Number of rows.
 	 */
 	void CreateGrid(int cols, int rows);
-	
+
 	/**
-	 * 得到单元格的行和列对就的单元格。
-	 * @param col 当前的列值。
-	 * @param row 当前的行值。
-	 * @return 指定行列所对应的单元格。
+	 * Gets the tile at the specified column and row.
+	 * @param col The column index.
+	 * @param row The row index.
+	 * @return Pointer to the tile, or nullptr if indices are out of bounds.
 	 */
-	CTile *GetTile(int col, int row);
+	CTile* GetTile(int col, int row) const;
+
 	/**
-	 * 从地图中获取数值赋给格子。
+	 * Parses tile data from the XML configuration and assigns values to the grid.
+	 * @param config XML document pointer containing tile definitions.
 	 */
 	void ParseTileXML(MSXML2::IXMLDOMDocumentPtr config);
-public:
-	//格子的列数。
-	int m_nCols;
-	//格子的行数。
-	int m_nRows;
-	//格子数组。
-	CTile ***m_pArrGrid;
-	//初始化完成。
-	bool m_bIsReady;
-};
 
-#endif // !defined(AFX_RENDERGRID_H__58BD4DDC_15CB_489C_9985_E1D4BE762BF9__INCLUDED_)
+public:
+	// Number of columns in the grid.
+	int mCols = 0;
+	// Number of rows in the grid.
+	int mRows = 0;
+	// 2D array of tiles managed by unique_ptr.
+	std::vector<std::vector<std::unique_ptr<CTile>>> mGrid;
+	// Flag indicating whether the grid has been initialized.
+	bool mIsReady = false;
+};

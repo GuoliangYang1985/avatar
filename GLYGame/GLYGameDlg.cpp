@@ -154,7 +154,7 @@ void CGLYGameDlg::OnPaint()
 	CreateBackGroud();//创建背景
 
 	//如果网格没有初始化，则初始化。
-	if (!mRenderGrid.m_bIsReady)
+	if (!mRenderGrid.mIsReady)
 	{
 		mRenderGrid.CreateGrid(mCols, mRows);
 		mRenderGrid.ParseTileXML(mXmlMapConfig);
