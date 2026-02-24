@@ -417,20 +417,41 @@ void CGLYGameDlg::LoadMapData()
 }
 
 /**
- * 得到CString类型的属性值。
- * @param pXmlMapConfig xml配置文件。
- * @bstrtNode 节点名。
- * @bstrtAttribute 属性名。
- * @return CString类型的属性值。
+ * Retrieves the string value of a specified attribute from an XML node.
+ * @param pXmlMapConfig XML document pointer (smart pointer)
+ * @param bstrtNode Node XPath or name
+ * @param bstrtAttribute Attribute name
+ * @return Attribute value as CString, or empty string if not found or on error
  */
-CString CGLYGameDlg::GetAttribute(MSXML2::IXMLDOMDocumentPtr pXmlMapConfig, _bstr_t bstrtNode, _bstr_t bstrtAttribute)
+CString CGLYGameDlg::GetAttribute(MSXML2::IXMLDOMDocumentPtr pXmlMapConfig,
+	_bstr_t bstrtNode,
+	_bstr_t bstrtAttribute)
 {
-	MSXML2::IXMLDOMElementPtr childNode;
-	childNode = (MSXML2::IXMLDOMElementPtr)(pXmlMapConfig->selectSingleNode(bstrtNode));
-	VARIANT varDir;
-	varDir = childNode->getAttribute(bstrtAttribute);
-	CString strDir = (char*)(_bstr_t)varDir;
-	return strDir;
+	if (!pXmlMapConfig)
+		return CString();
+	try
+	{
+		// Locate the node (automatically cast to element pointer; becomes null if not an element)
+		MSXML2::IXMLDOMElementPtr childNode = pXmlMapConfig->selectSingleNode(bstrtNode);
+		if (!childNode)
+			return CString();
+
+		// Retrieve attribute value; _variant_t automatically manages the VARIANT resource
+		_variant_t varValue = childNode->getAttribute(bstrtAttribute);
+
+		// Check if attribute is missing or null
+		if (varValue.vt == VT_EMPTY || varValue.vt == VT_NULL)
+			return CString();
+
+		// Convert to BSTR and construct CString (adapts to Unicode/MBCS project settings)
+		_bstr_t bstrValue(varValue);       // may throw _com_error, caught below
+		return CString((LPCTSTR)bstrValue);
+	}
+	catch (const _com_error&)
+	{
+		// Any COM exception (e.g., invalid XPath, type conversion failure) yields empty string
+		return CString();
+	}
 }
 
 /**
