@@ -392,7 +392,7 @@ void CGLYGameDlg::SortPosition()
 }
 
 /**
- * 加载地图数据
+ * Load map data.
  */
 void CGLYGameDlg::LoadMapData()
 {
@@ -400,13 +400,16 @@ void CGLYGameDlg::LoadMapData()
 	HRESULT	hResult = mXmlMapConfig.CreateInstance(__uuidof(DOMDocument30));
 	if (!SUCCEEDED(hResult))
 	{
-		//MessageBox("创建DOMDocument对象，请检查是否安装了MS XML Parser运行库！");
+		//MessageBox("Create DOMDocument object. Please check if the MS XML Parser runtime library is installed!");
 	}
-	mXmlMapConfig->load("resource/map/gly.xml");
-	CString strDir = GetAttribute(mXmlMapConfig, "map", "dir");
-	mBaseDir = strDir;
+	mXmlMapConfig->load("resource/map/data/gly.xml");
+	mBaseDir = GetAttribute(mXmlMapConfig, "map", "dir");
+	if (mBaseDir.IsEmpty())
+	{
+		mBaseDir = _T("resource/map/assets/");   // Specify the default directory.
+	}
 	CString	strMapPath = GetAttribute(mXmlMapConfig, "map/background", "file");
-	mBackGround.mBackPath = strDir + strMapPath;
+	mBackGround.mBackPath = mBaseDir + strMapPath;
 	mBackGround.mOffsetX = GetAttributeF(mXmlMapConfig, "map/background", "x_offset");
 	mAvatar.mMapOffSetX = (int)mBackGround.mOffsetX;
 	mAvatar.mMapOffSetY = (int)mBackGround.mOffsetY;
