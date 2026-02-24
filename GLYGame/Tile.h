@@ -1,69 +1,83 @@
-// Tile.h: interface for the CTile class.
-//
-//////////////////////////////////////////////////////////////////////
-
-#if !defined(AFX_TILE_H__B9000307_4C73_4A8A_A73B_22A51321BA11__INCLUDED_)
-#define AFX_TILE_H__B9000307_4C73_4A8A_A73B_22A51321BA11__INCLUDED_
-
-#if _MSC_VER > 1000
+// Tile.h
+// Declaration of the CTile class, representing a tile in the game grid.
 #pragma once
-#include"INode.h"
-#include"Item.h"
-#endif // _MSC_VER > 1000
-class CTile:public INode
+
+#include "INode.h"
+#include "Item.h"
+#include <vector>
+
+// Forward declarations
+class CItem;
+using namespace std; // 或者使用 std::vector
+
+class CTile : public INode
 {
 public:
 	CTile();
 	virtual ~CTile();
-public:
-	void AddItem(CItem *pItem);
+
+	// Item management
+	void AddItem(CItem* pItem);
+
+	// Initialization from XML
 	void FromXml(MSXML2::IXMLDOMElementPtr pItemDefNode);
-	void DeterminePlaceability();
-	void Disable();
+
+	// Tile state
 	void Enable();
-	bool Equal(INode *n);
+	void Disable();
+	void DeterminePlaceability();
+
+	// INode interface implementation
+	virtual bool Equal(INode* n) override;
+	virtual int GetCol() override;
+	virtual int GetRow() override;
+	virtual void SetCol(int value) override;
+	virtual void SetRow(int value) override;
+	virtual double GetHeuristic() override;
+	virtual void SetHeuristic(double h) override;
+	virtual CString GetNodeId() override;
+	virtual vector<INode*>* GetNeighbors() override;
+	virtual void SetNeighbors(vector<INode*>* pArr) override;
+	virtual bool GetWalkable();
+
+	// Base properties accessors
 	bool GetBasePlaceability();
-	int GetCol();
-	int GetRow();	
-	void SetCol(int value);
-	void SetRow(int value);
-	double GetHeuristic();
-	vector<INode*> *GetNeighbors();
-	CString GetNodeId();
-	bool GetWalkable();
-	void SetHeuristic(double h);
-	void SetNeighbors(vector<INode*> *pArr);
-	void SetBaseWalkability(bool value);
-	bool GetBaseWalkablity();
 	void SetBasePlaceability(bool value);
+	bool GetBaseWalkablity();
+	void SetBaseWalkability(bool value);
+
+	// Public member variables (consider making private with accessors in future)
+	// Column index of the tile
+	int mCol;
+	// Row index of the tile
+	int mRow;
+	// Type of the node
+	CString mNodeType;
+	// Unique identifier
+	CString mNodeId;
+	// Collection of items on this tile
+	vector<CItem*>* mArrItems;
+	// Static counter for generating unique IDs
+	static int IDS;
+
 private:
+	// Internal methods
 	/**
-	 * 是否可行走的判断
+	 * Recalculates walkability based on items and base flag
 	 */
 	void DetermineWalkability();
-public:
-	//当前格子的列数。
-	int m_nCol;
-	//当前格子的行数。
-	int m_nRow;
-	CString m_strNodeType;
-	//ID
-	CString m_strNodeId;
-	//场景中所有素材的集合。
-	vector<CItem*> *m_pArrItems;
-private:
-	//临近数组
-	vector<INode *> *m_pArrNeighbors;
-	bool m_bEnabled;
-	//当前格子是否可以行走。
-	bool m_bBaseWalkability;
-	//当前格子是否可以摆置。
-	bool m_bBasePlaceability;
-	double m_fH;
-	//是否是障碍。
-	bool m_bWalkable;
-public:
-	static int IDS;
-};
 
-#endif // !defined(AFX_TILE_H__B9000307_4C73_4A8A_A73B_22A51321BA11__INCLUDED_)
+	// Private members
+	// Neighboring nodes for pathfinding
+	vector<INode*>* mArrNeighbors;
+	// Whether the tile is enabled
+	bool mEnabled;
+	// Base walkability flag
+	bool mBaseWalkability;
+	// Base placeability flag
+	bool mBasePlaceability;
+	// Heuristic value for A* search
+	double mH;
+	// Actual walkability after considering items
+	bool mWalkable;
+};

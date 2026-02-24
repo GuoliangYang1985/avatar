@@ -1,194 +1,165 @@
-// Tile.cpp: implementation of the CTile class.
-//
-//////////////////////////////////////////////////////////////////////
+// Tile.cpp
+// Implementation of the CTile class.
 
 #include "stdafx.h"
 #include "GLYGame.h"
 #include "Tile.h"
-using namespace std;
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[]=__FILE__;
-#define new DEBUG_NEW
-#endif
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
-int CTile::IDS= 0;
+// Initialize static member
+int CTile::IDS = 0;
+
 CTile::CTile()
+	: mArrItems(new std::vector<CItem*>()),
+	mArrNeighbors(nullptr),
+	mEnabled(true),
+	mBaseWalkability(true),
+	mBasePlaceability(true),
+	mH(0.0),
+	mWalkable(true),
+	mCol(0),
+	mRow(0)
 {
 	++IDS;
-	m_strNodeId.Format(_T("%d"), IDS);
-	m_strNodeType="normal";
-
-	m_pArrItems = new vector<CItem *>();
-	m_bBaseWalkability = true;
-	m_bBasePlaceability = true;
-	m_bWalkable = true;
-	m_bEnabled = true;
-	m_pArrNeighbors = NULL;
-	m_fH = 0;
-	m_nCol = 0;
-	m_nRow = 0;
+	mNodeId.Format(_T("%d"), IDS);
+	mNodeType = _T("normal");
 }
 
 CTile::~CTile()
 {
-	if (m_pArrNeighbors != NULL)
-	{
-		delete m_pArrNeighbors;
-		m_pArrNeighbors = NULL;
-	}
-
-	if (m_pArrItems != NULL)
-	{
-		delete m_pArrItems;
-		m_pArrItems = NULL;
-	}
+	delete mArrNeighbors;
+	delete mArrItems;
 }
 
-void CTile::AddItem(CItem *pItem)
+void CTile::AddItem(CItem* pItem)
 {
-	m_pArrItems->push_back(pItem);
+	mArrItems->push_back(pItem);
 	DeterminePlaceability();
 	DetermineWalkability();
 }
 
 void CTile::FromXml(MSXML2::IXMLDOMElementPtr pItemDefNode)
 {
-	 m_bBaseWalkability = CXmlUtil::GetAttributeToBool(pItemDefNode, "walkability");
-	 m_bBasePlaceability = CXmlUtil::GetAttributeToBool(pItemDefNode, "placeability");
-	 m_bWalkable = m_bBaseWalkability;
+	mBaseWalkability = CXmlUtil::GetAttributeToBool(pItemDefNode, "walkability");
+	mBasePlaceability = CXmlUtil::GetAttributeToBool(pItemDefNode, "placeability");
+	mWalkable = mBaseWalkability;
 }
-
 
 void CTile::Enable()
 {
-	m_bEnabled = true;
-}
-
-/**
- * basePlaceability控制
- */ 
-void CTile::DeterminePlaceability()
-{
-	bool bAllows = m_bBasePlaceability;
-	if (bAllows)
-	{
-		for (vector<CItem *>::iterator iter=m_pArrItems->begin(); iter != m_pArrItems->end(); ++iter)
-		{
-			CItem *pItem = (CItem *)*iter;
-			if (!pItem->GetItemDefinition()->GetOverlap())
-			{
-				bAllows = false;
-				break;
-			}
-		}
-	}
-	m_bBasePlaceability = m_bEnabled && bAllows;
-}
-
-/**
- * 是否可行走的判断
- */ 
-void CTile::DetermineWalkability()
-{
-	bool w = m_bBaseWalkability;
-	if (w)
-	{
-		for (vector<CItem *>::iterator iter=m_pArrItems->begin(); iter != m_pArrItems->end(); ++iter)
-		{
-			CItem *pItem = (CItem *)*iter;
-			if (!pItem->GetItemDefinition()->GetWalkable())
-			{
-				w = false;
-				break;
-			}
-		}
-	}
-	m_bWalkable = m_bEnabled && w;
-}
-
-
-void CTile::SetBaseWalkability(bool value)
-{
-	m_bBaseWalkability = value;
-}
-
-bool CTile::GetBaseWalkablity()
-{
-	return m_bBaseWalkability;
-}	
-
-bool CTile::GetWalkable()
-{
-	return m_bWalkable;
-}
-
-void CTile::SetBasePlaceability(bool value)
-{
-	m_bBasePlaceability = value;
-}
-
-bool CTile::GetBasePlaceability()
-{
-	return m_bBasePlaceability;
+	mEnabled = true;
 }
 
 void CTile::Disable()
 {
-	m_bEnabled = false;
+	mEnabled = false;
+}
+
+void CTile::DeterminePlaceability()
+{
+	bool allowsPlacement = mBasePlaceability;
+	if (allowsPlacement)
+	{
+		for (CItem* pItem : *mArrItems)
+		{
+			if (!pItem->GetItemDefinition()->GetOverlap())
+			{
+				allowsPlacement = false;
+				break;
+			}
+		}
+	}
+	mBasePlaceability = mEnabled && allowsPlacement;
+}
+
+void CTile::DetermineWalkability()
+{
+	bool allowsWalk = mBaseWalkability;
+	if (allowsWalk)
+	{
+		for (CItem* pItem : *mArrItems)
+		{
+			if (!pItem->GetItemDefinition()->GetWalkable())
+			{
+				allowsWalk = false;
+				break;
+			}
+		}
+	}
+	mWalkable = mEnabled && allowsWalk;
+}
+
+void CTile::SetBaseWalkability(bool value)
+{
+	mBaseWalkability = value;
+}
+
+bool CTile::GetBaseWalkablity()  // Note: intentional misspelling
+{
+	return mBaseWalkability;
+}
+
+bool CTile::GetWalkable()
+{
+	return mWalkable;
+}
+
+void CTile::SetBasePlaceability(bool value)
+{
+	mBasePlaceability = value;
+}
+
+bool CTile::GetBasePlaceability()
+{
+	return mBasePlaceability;
 }
 
 int CTile::GetCol()
 {
-	return m_nCol;
+	return mCol;
 }
 
 int CTile::GetRow()
 {
-	return m_nRow;
+	return mRow;
 }
+
 void CTile::SetCol(int value)
 {
-	m_nCol = value;
+	mCol = value;
 }
+
 void CTile::SetRow(int value)
 {
-	m_nRow = value;
+	mRow = value;
 }
+
 double CTile::GetHeuristic()
 {
-	return m_fH;
+	return mH;
 }
 
 void CTile::SetHeuristic(double h)
 {
-	m_fH = h;
+	mH = h;
 }
 
 CString CTile::GetNodeId()
 {
-	return m_strNodeId;
+	return mNodeId;
 }
 
-bool CTile::Equal(INode *n)
+bool CTile::Equal(INode* n)
 {
-	bool isEqual = true;
-	if (n->GetCol() != m_nCol || n->GetRow() != m_nRow)
-	{
-		isEqual = false;
-	}
-	return isEqual;
+	return (n->GetCol() == mCol && n->GetRow() == mRow);
 }
 
-void CTile::SetNeighbors(vector<INode*> *pArr)
+void CTile::SetNeighbors(std::vector<INode*>* pArr)
 {
-	m_pArrNeighbors = pArr;
+	// Note: assumes ownership of the pointer; previous neighbor list is not deleted.
+	mArrNeighbors = pArr;
 }
 
-vector<INode*> *CTile::GetNeighbors()
+std::vector<INode*>* CTile::GetNeighbors()
 {
-	return m_pArrNeighbors;
+	return mArrNeighbors;
 }

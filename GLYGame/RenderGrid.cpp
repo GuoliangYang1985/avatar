@@ -17,8 +17,8 @@ void CRenderGrid::CreateGrid(int cols, int rows)
 		for (int j = 0; j < rows; ++j)
 		{
 			auto tile = std::make_unique<CTile>();
-			tile->m_nCol = i;
-			tile->m_nRow = j;
+			tile->mCol = i;
+			tile->mRow = j;
 			mGrid[i][j] = std::move(tile);
 		}
 	}
