@@ -9,6 +9,7 @@
 #include "Sort.h"
 #include "GoItem.h"
 
+
 /**
  * CGLYGameDlg dialog
  */
@@ -376,80 +377,81 @@ void CGLYGameDlg::SortPosition()
  */
 void CGLYGameDlg::LoadMapData()
 {
-	CoInitialize(NULL);
-	HRESULT	hResult = mXmlMapConfig.CreateInstance(__uuidof(DOMDocument30));
-	if (!SUCCEEDED(hResult))
+	// Initialize COM for this thread (should ideally be done once at program startup)
+	HRESULT hr = CoInitialize(NULL);
+	if (FAILED(hr))
 	{
-		//MessageBox("Create DOMDocument object. Please check if the MS XML Parser runtime library is installed!");
+		// Log or handle error (e.g., throw exception)
+		TRACE(_T("CoInitialize failed\n"));
+		return;
 	}
-	mXmlMapConfig->load("resource/map/data/gly.xml");
-	mBaseDir = GetAttribute(mXmlMapConfig, "map", "dir");
+
+	// Create XML document instance
+	hr = mXmlMapConfig.CreateInstance(__uuidof(MSXML2::DOMDocument30));
+	if (FAILED(hr))
+	{
+		// MessageBox("Failed to create DOMDocument. Please install MS XML Parser.");
+		CoUninitialize();
+		return;
+	}
+
+	// Load map configuration file
+	VARIANT_BOOL success = mXmlMapConfig->load(_T("resource/map/data/gly.xml"));
+	if (success != VARIANT_TRUE)
+	{
+		// Handle load failure (e.g., file not found)
+		TRACE(_T("Failed to load map XML file\n"));
+		mXmlMapConfig.Release();
+		CoUninitialize();
+		return;
+	}
+
+	// Get root node <map> once
+	MSXML2::IXMLDOMElementPtr mapNode = mXmlMapConfig->documentElement;
+	if (!mapNode)
+	{
+		TRACE(_T("Missing root node <map>\n"));
+		return;
+	}
+
+	// Get <background> child node once
+	MSXML2::IXMLDOMElementPtr bgNode = mapNode->selectSingleNode(_T("background"));
+	if (!bgNode)
+	{
+		TRACE(_T("Missing <background> node\n"));
+		return;
+	}
+
+	// Read attributes from <map> node
+	mBackGround.mStartCol = CXmlUtil::GetAttributeToInt(mapNode, _T("start_col"));
+	mBackGround.mStartRow = CXmlUtil::GetAttributeToInt(mapNode, _T("start_row"));
+	mBaseDir = CXmlUtil::GetAttributeToCString(mapNode, _T("dir"));
 	if (mBaseDir.IsEmpty())
 	{
-		mBaseDir = _T("resource/map/assets/");   // Specify the default directory.
+		mBaseDir = _T("resource/map/assets/");   // Default directory
 	}
-	CString	strMapPath = GetAttribute(mXmlMapConfig, "map/background", "file");
+
+	// Read attributes from <background> node
+	CString strMapPath = CXmlUtil::GetAttributeToCString(bgNode, _T("file"));
 	mBackGround.mBackPath = mBaseDir + strMapPath;
-	mBackGround.mOffsetX = GetAttributeF(mXmlMapConfig, "map/background", "x_offset");
-	mAvatar.mMapOffSetX = (int)mBackGround.mOffsetX;
-	mAvatar.mMapOffSetY = (int)mBackGround.mOffsetY;
-	mBackGround.mOffsetY = GetAttributeF(mXmlMapConfig, "map/background", "y_offset");
-	mCols = mBackGround.mCols = (int)GetAttributeF(mXmlMapConfig, "map/background", "cols");
-	mRows = mBackGround.mRows = (int)GetAttributeF(mXmlMapConfig, "map/background", "rows");
-	mBackGround.mStartCol = (int)GetAttributeF(mXmlMapConfig, "map", "start_col");
-	mBackGround.mStartRow = (int)GetAttributeF(mXmlMapConfig, "map", "start_row");
-	mAstar.Init(this);
+
+	// Read background offsets and grid dimensions
+	mBackGround.mOffsetX = CXmlUtil::GetAttributeToFloat(bgNode, _T("x_offset"));
+	mBackGround.mOffsetY = CXmlUtil::GetAttributeToFloat(bgNode, _T("y_offset"));
+	mBackGround.mCols = CXmlUtil::GetAttributeToInt(bgNode, _T("cols"));
+	mBackGround.mRows = CXmlUtil::GetAttributeToInt(bgNode, _T("rows"));
+
+	// Update avatar's map offsets (ensure both X and Y are set after both offsets are read)
+	mAvatar.mMapOffSetX = static_cast<int>(mBackGround.mOffsetX);
+	mAvatar.mMapOffSetY = static_cast<int>(mBackGround.mOffsetY);
+
+	// Also store grid dimensions in dialog members if needed elsewhere
+	mCols = mBackGround.mCols;
+	mRows = mBackGround.mRows;
+
+	mAstar.Init(this); // Initialize A* pathfinding with this dialog
 }
 
-/**
- * Retrieves the string value of a specified attribute from an XML node.
- * @param pXmlMapConfig XML document pointer (smart pointer)
- * @param bstrtNode Node XPath or name
- * @param bstrtAttribute Attribute name
- * @return Attribute value as CString, or empty string if not found or on error
- */
-CString CGLYGameDlg::GetAttribute(MSXML2::IXMLDOMDocumentPtr pXmlMapConfig,
-	_bstr_t bstrtNode,
-	_bstr_t bstrtAttribute)
-{
-	if (!pXmlMapConfig)
-		return CString();
-	try
-	{
-		// Locate the node (automatically cast to element pointer; becomes null if not an element)
-		MSXML2::IXMLDOMElementPtr childNode = pXmlMapConfig->selectSingleNode(bstrtNode);
-		if (!childNode)
-			return CString();
-
-		// Retrieve attribute value; _variant_t automatically manages the VARIANT resource
-		_variant_t varValue = childNode->getAttribute(bstrtAttribute);
-
-		// Check if attribute is missing or null
-		if (varValue.vt == VT_EMPTY || varValue.vt == VT_NULL)
-			return CString();
-
-		// Convert to BSTR and construct CString (adapts to Unicode/MBCS project settings)
-		_bstr_t bstrValue(varValue);       // may throw _com_error, caught below
-		return CString((LPCTSTR)bstrValue);
-	}
-	catch (const _com_error&)
-	{
-		// Any COM exception (e.g., invalid XPath, type conversion failure) yields empty string
-		return CString();
-	}
-}
-
-/**
- * Get the attribute value as a float.
- * @param pXmlMapConfig The XML configuration file.
- * @param bstrNode The node name.
- * @param bstrAttribute The attribute name.
- * @return The attribute value as a float.
- */
-float CGLYGameDlg::GetAttributeF(MSXML2::IXMLDOMDocumentPtr pXmlMapConfig, _bstr_t bstrtNode, _bstr_t bstrtAttribute)
-{
-	return (float)_ttoi(GetAttribute(pXmlMapConfig, bstrtNode, bstrtAttribute));
-}
 
 /**
  * Get the cell.
