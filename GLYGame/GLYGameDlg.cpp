@@ -8,13 +8,6 @@
 #include "XmlUtil.h"
 #include "Sort.h"
 #include "GoItem.h"
-using namespace std;
-
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
 
 /**
  * CGLYGameDlg dialog
@@ -165,11 +158,14 @@ void CGLYGameDlg::OnPaint()
 		mAvatar.Load("resource/avatar/male.png");
 		if (mAvatar.mIsReady)
 		{
-			CGamePoint p = CMapUtil::GetScreenCoordinate(mBackGround.mStartCol, mBackGround.mStartRow);
-			mAvatar.mStartX = p.m_fX - mBackGround.mOffsetX - mAvatar.mOffsetX;
-			mAvatar.mStartY = p.m_fY - mBackGround.mOffsetY - mAvatar.mOffsetY;
-			mAvatar.mX = mAvatar.mStartX;
-			mAvatar.mY = mAvatar.mStartY;
+			if (mBackGround.mStartCol > 0 && mBackGround.mStartRow > 0)
+			{
+				CGamePoint p = CMapUtil::GetScreenCoordinate(mBackGround.mStartCol, mBackGround.mStartRow);
+				mAvatar.mStartX = p.m_fX - mBackGround.mOffsetX - mAvatar.mOffsetX;
+				mAvatar.mStartY = p.m_fY - mBackGround.mOffsetY - mAvatar.mOffsetY;
+				mAvatar.mX = mAvatar.mStartX;
+				mAvatar.mY = mAvatar.mStartY;
+			}
 		}
 	}
 	GamePaint();
@@ -204,11 +200,20 @@ void CGLYGameDlg::Show()
 	int bWidth = mBack->GetWidth();
 	int bHeight = mBack->GetHeight();
 
+	if (mAvatar.mStartX <= 0 && mAvatar.mStartY <= 0)
+	{
+		mAvatar.mStartX = bWidth / 2.0f;// -mAvatar.mOffsetX + mBackGround.mOffsetX;
+		mAvatar.mStartY = bHeight / 2.0f;// -mAvatar.mOffsetY - mBackGround.mOffsetY;
+		mAvatar.mX = mAvatar.mStartX;
+		mAvatar.mY = mAvatar.mStartY;
+	}
+
 	if (mMap.GetSafeHandle() == NULL)
 	{
 		mMap.CreateCompatibleBitmap(hdc, bWidth, bHeight);
 		mMapDC.SelectObject(&mMap); // Select a compatible bitmap into the compatible DC.
 	}
+
 
 	Graphics graphics(mMapDC.GetSafeHdc());
 	DrawMap(graphics);
@@ -416,6 +421,8 @@ void CGLYGameDlg::LoadMapData()
 	mBackGround.mOffsetY = GetAttributeF(mXmlMapConfig, "map/background", "y_offset");
 	mCols = mBackGround.mCols = (int)GetAttributeF(mXmlMapConfig, "map/background", "cols");
 	mRows = mBackGround.mRows = (int)GetAttributeF(mXmlMapConfig, "map/background", "rows");
+	mBackGround.mStartCol = (int)GetAttributeF(mXmlMapConfig, "map", "start_col");
+	mBackGround.mStartRow = (int)GetAttributeF(mXmlMapConfig, "map", "start_row");
 	mAstar.Init(this);
 }
 

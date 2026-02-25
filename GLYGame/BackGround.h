@@ -5,39 +5,34 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#if !defined(AFX_BACKGROUND_H__2BD13712_8734_4859_8F53_15CFDCE09E59__INCLUDED_)
-#define AFX_BACKGROUND_H__2BD13712_8734_4859_8F53_15CFDCE09E59__INCLUDED_
-
-#if _MSC_VER > 1000
 #pragma once
+
 #include "Image.h"
-#endif // _MSC_VER > 1000
 
 /**
- * 地图背景。
- * 创建人：杨国梁。
- * 创建时间：2011-10-26。
+ * Map background.
+ * Created by: Guoliang Yang.
+ * Creation date: 2011-10-26.
  */
-class CBackGround:public CImage
+class CBackGround : public CImage
 {
 public:
 	CBackGround();
 	virtual ~CBackGround();
+
 public:
-	//背景路径
+	// Path to the background image.
 	CString mBackPath;
-	//在x轴上的偏移量
+	// Offset along the X axis.
 	float mOffsetX;
-	//在y轴上的偏移量
+	// Offset along the Y axis.
 	float mOffsetY;
-	//所占的列数。
-	int mCols; 
-	//所占的行数。
+	// Number of columns occupied.
+	int mCols;
+	// Number of rows occupied.
 	int mRows;
-	//人物初始位置col。
+	// Starting column for the character.
 	int mStartCol;
-	//人物初始位置row。
+	// Starting row for the character.
 	int mStartRow;
 };
-
-#endif // !defined(AFX_BACKGROUND_H__2BD13712_8734_4859_8F53_15CFDCE09E59__INCLUDED_)

@@ -9,23 +9,15 @@
 #include "GLYGame.h"
 #include "BackGround.h"
 
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[]=__FILE__;
-#define new DEBUG_NEW
-#endif
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
 CBackGround::CBackGround()
 {
-	mStartCol = 30;
-	mStartRow = 30;
+	mStartCol = 0;
+	mStartRow = 0;
 	mCols = 0;
 	mRows = 0;
-	mOffsetX = 0.0;
-	mOffsetY = 0.0;
+	mOffsetX = 0.0f;
+	mOffsetY = 0.0f;
 	mBackPath = "";
 }
 

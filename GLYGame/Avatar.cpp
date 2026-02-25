@@ -9,12 +9,8 @@
 #include "GLYGame.h"
 #include "Avatar.h"
 #include "MapUtil.h"
+
 using namespace std;
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#define new DEBUG_NEW
-#endif
 
 /**
  * ¹¹Ôìº¯Êý¡£
@@ -49,6 +45,8 @@ void CAvatar::Init()
 	mCols = 1;
 	mCurCol = 2;
 	mDrect = 0;
+	mStartX = 0;
+	mStartY = 0;
 	mWalking = false;
 }
 
