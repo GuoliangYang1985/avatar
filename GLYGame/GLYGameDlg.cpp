@@ -112,6 +112,10 @@ void CGLYGameDlg::OnWindowSizeChanged(CRect rect)
 		mBackMap.DeleteObject();
 		mBackMap.CreateCompatibleBitmap(&dc, rect.Width(), rect.Height());
 		mBackDC.SelectObject(&mBackMap);
+		if (mCols > 0 && mRows > 0)
+		{
+			Show();
+		}
 	}
 }
 
@@ -172,17 +176,12 @@ void CGLYGameDlg::OnPaint()
 void CGLYGameDlg::GamePaint()
 {
 	CreateAllItemDefination();
-	DrawSortedAll();
-	Show();
-}
-
-void CGLYGameDlg::DrawSortedAll()
-{
 	if (mArrItems->size() <= 0)
 	{
 		CreateAllItem();
 		SortPosition();
 	}
+	Show();
 }
 
 void CGLYGameDlg::Show()
@@ -257,7 +256,7 @@ void CGLYGameDlg::DrawMap(Graphics& graphics)
  */
 void CGLYGameDlg::CreateAllItemDefination()
 {
-	if (m_itemDefinitions.IsEmpty())
+	if (mItemDefinitions.IsEmpty())
 	{
 		MSXML2::IXMLDOMElementPtr itemDefsNode = (MSXML2::IXMLDOMElementPtr)mXmlMapConfig->selectSingleNode("map/ItemDefinitions");
 		MSXML2::IXMLDOMNodeListPtr itemDefList = itemDefsNode->GetchildNodes();
@@ -273,7 +272,7 @@ void CGLYGameDlg::CreateAllItemDefination()
 				pItemDef->FromXml(itemDefNode);
 				CString strFileUrl = pItemDef->m_strBaseDirectory + pItemDef->m_strFile;
 				pItemDef->Load(strFileUrl);
-				m_itemDefinitions.SetAt(pItemDef->m_defId, pItemDef);
+				mItemDefinitions.SetAt(pItemDef->m_defId, pItemDef);
 				pItemDef = NULL;
 			}
 		}
@@ -285,17 +284,17 @@ void CGLYGameDlg::CreateAllItemDefination()
  */
 void CGLYGameDlg::DeleteAllItemDefination()
 {
-	if (!m_itemDefinitions.IsEmpty())
+	if (!mItemDefinitions.IsEmpty())
 	{
-		POSITION pos = m_itemDefinitions.GetStartPosition();
+		POSITION pos = mItemDefinitions.GetStartPosition();
 		while (pos != NULL)
 		{
 			CString strKey = "";
 			CItemDefinition* pItemDef = NULL;
-			m_itemDefinitions.GetNextAssoc(pos, strKey, pItemDef);
+			mItemDefinitions.GetNextAssoc(pos, strKey, pItemDef);
 			if (pItemDef != NULL)
 			{
-				m_itemDefinitions.RemoveKey(strKey);
+				mItemDefinitions.RemoveKey(strKey);
 				pItemDef->UnLoad();
 				delete pItemDef;
 				pItemDef = NULL;
@@ -333,7 +332,7 @@ void CGLYGameDlg::CreateAllItem()
 
 			pItem->FromXml(itemNode);
 			CItemDefinition* pItemDef;
-			m_itemDefinitions.Lookup(pItem->mSource, pItemDef);
+			mItemDefinitions.Lookup(pItem->mSource, pItemDef);
 			pItem->SetItemDefinition(pItemDef);
 			mArrItems->push_back(pItem);
 			for (int i = pItem->mCol; i < pItem->mCol + pItem->mCols; ++i)
@@ -603,7 +602,6 @@ void CGLYGameDlg::OnTimer(int id)
 		GamePaint();
 		if (!mAvatar.mWalking)
 		{
-			Show();
 			KillTimer(id);
 		}
 	}

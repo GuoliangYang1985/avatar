@@ -40,11 +40,6 @@ public:
 	void GamePaint();
 
 	/**
-	 * Draw all elements within the map.
-	 */
-	void DrawSortedAll();
-
-	/**
 	 * Show the entire scene.
 	 */
 	void Show();
@@ -123,7 +118,7 @@ public:
 	//物件实例。
 	vector<CItem*>* mArrItems;
 	//物件定义。
-	CMap<CString, LPCTSTR, CItemDefinition*, CItemDefinition*> m_itemDefinitions;
+	CMap<CString, LPCTSTR, CItemDefinition*, CItemDefinition*> mItemDefinitions;
 	//网格层。
 	CRenderGrid mRenderGrid;
 	//游戏所占的列数。
