@@ -12,15 +12,14 @@
 /**
  * CGLYGameDlg dialog
  */
-CGLYGameDlg::CGLYGameDlg(CWnd* pParent /*=NULL*/)
-	: CDialog(CGLYGameDlg::IDD, pParent)
+CGLYGameDlg::CGLYGameDlg(CWnd* pParent) : CDialog(CGLYGameDlg::IDD, pParent)
 {
 	mIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
-	m_bIsReady = false;
+	mIsReady = false;
 	mArrItems = new vector<CItem*>();
 
 	GdiplusStartup(&mGdiToken, &mGdiplusStartupInput, NULL);
-	mMapDC.CreateCompatibleDC(NULL);// 创建兼容DC
+	mMapDC.CreateCompatibleDC(NULL);
 	mBackDC.CreateCompatibleDC(NULL);
 }
 
@@ -52,7 +51,7 @@ CGLYGameDlg::~CGLYGameDlg()
 	mBackGround.UnLoad();
 	mBackDC.DeleteDC();
 	mMapDC.DeleteDC();
-	GdiplusShutdown(mGdiToken);//卸载gdi+
+	GdiplusShutdown(mGdiToken);
 }
 
 void CGLYGameDlg::DoDataExchange(CDataExchange* pDX)
@@ -86,19 +85,17 @@ BOOL CGLYGameDlg::OnInitDialog()
 	SetIcon(mIcon, FALSE);		// Set small icon
 
 
-	//窗口最大化
-	ShowWindow(SW_MAXIMIZE);
-	//加载地图数据
-	LoadMapData();
+	ShowWindow(SW_MAXIMIZE); // Set window to maximized state.
+	LoadMapData();// Load map data.
 	return true;  // return TRUE  unless you set the focus to a control
 }
 
 void CGLYGameDlg::OnSize(UINT nType, int cx, int cy)
 {
 	CDialog::OnSize(nType, cx, cy);
-	if (nType != SIZE_MINIMIZED) // 最小化时通常无需处理
+	if (nType != SIZE_MINIMIZED) // No processing needed when minimized.
 	{
-		CRect rect(0, 0, cx, cy); // 直接用传入的 cx, cy
+		CRect rect(0, 0, cx, cy);
 		OnWindowSizeChanged(rect);
 	}
 }
@@ -107,7 +104,7 @@ void CGLYGameDlg::OnWindowSizeChanged(CRect rect)
 {
 	if (mBackDC.GetSafeHdc())
 	{
-		// 重新创建与窗口大小匹配的位图
+		// Recreate a bitmap matching the window size.
 		CClientDC dc(this);
 		mBackMap.DeleteObject();
 		mBackMap.CreateCompatibleBitmap(&dc, rect.Width(), rect.Height());
@@ -148,9 +145,9 @@ void CGLYGameDlg::OnPaint()
 		CDialog::OnPaint();
 	}
 
-	CreateBackGroud();//创建背景
+	CreateBackGroud();
 
-	//如果网格没有初始化，则初始化。
+	// If the grid is not initialized, initialize it.
 	if (!mRenderGrid.mIsReady)
 	{
 		mRenderGrid.CreateGrid(mCols, mRows);
@@ -213,8 +210,8 @@ void CGLYGameDlg::Show()
 	mBackDC.FillRect(&rect, &blackBrush);
 
 	// Draw the map.
-	mMapX = rect.Width()/ 2.0f - mAvatar.GetViewX();
-	mMapY = rect.Height()/ 2.0f - mAvatar.GetViewY() ;
+	mMapX = rect.Width() / 2.0f - mAvatar.GetViewX();
+	mMapY = rect.Height() / 2.0f - mAvatar.GetViewY();
 	mBackDC.BitBlt(mMapX, mMapY, bWidth, bHeight, &mMapDC, 0, 0, SRCCOPY);
 
 	// Draw the scene background and the map.
@@ -251,9 +248,6 @@ void CGLYGameDlg::DrawMap(Graphics& graphics)
 	}
 }
 
-/**
- * 解析所有素材定义数据并创建与之对应ItemDefination。
- */
 void CGLYGameDlg::CreateAllItemDefination()
 {
 	if (mItemDefinitions.IsEmpty())
@@ -279,9 +273,6 @@ void CGLYGameDlg::CreateAllItemDefination()
 	}
 }
 
-/**
- * 删除ItemDefination。
- */
 void CGLYGameDlg::DeleteAllItemDefination()
 {
 	if (!mItemDefinitions.IsEmpty())
@@ -303,9 +294,6 @@ void CGLYGameDlg::DeleteAllItemDefination()
 	}
 }
 
-/**
- * 解析所有素材数据并创建与之对应的对象。
- */
 void CGLYGameDlg::CreateAllItem()
 {
 	mBack = mBackGround.GetImage();
@@ -319,7 +307,7 @@ void CGLYGameDlg::CreateAllItem()
 		MSXML2::DOMNodeType nodeType = itemNode->nodeType;
 		if (nodeType == MSXML2::NODE_ELEMENT)
 		{
-			CString type = CXmlUtil::GetAttributeToCString(itemNode, "type");// 得到NPC类型。
+			CString type = CXmlUtil::GetAttributeToCString(itemNode, "type"); // Get the NPC type.
 			CItem* pItem = NULL;
 			if (type == "GoItem")
 			{
@@ -350,9 +338,6 @@ void CGLYGameDlg::CreateAllItem()
 	}
 }
 
-/**
- * 排序
- */
 void CGLYGameDlg::SortPosition()
 {
 	if (mArrItems->size() > 0)
@@ -455,11 +440,11 @@ CString CGLYGameDlg::GetAttribute(MSXML2::IXMLDOMDocumentPtr pXmlMapConfig,
 }
 
 /**
- * 得到float类型的属性值。
- * @param pXmlMapConfig xml配置文件。
- * @bstrtNode 节点名。
- * @bstrtAttribute 属性名。
- * @return float类型的属性值。
+ * Get the attribute value as a float.
+ * @param pXmlMapConfig The XML configuration file.
+ * @param bstrNode The node name.
+ * @param bstrAttribute The attribute name.
+ * @return The attribute value as a float.
  */
 float CGLYGameDlg::GetAttributeF(MSXML2::IXMLDOMDocumentPtr pXmlMapConfig, _bstr_t bstrtNode, _bstr_t bstrtAttribute)
 {
@@ -467,10 +452,10 @@ float CGLYGameDlg::GetAttributeF(MSXML2::IXMLDOMDocumentPtr pXmlMapConfig, _bstr
 }
 
 /**
- * 获取单元格。
- * @param tx 屏幕的x轴坐标。
- * @param ty 屏幕的y轴坐标。
- * @return 得到对应的单元格。
+ * Get the cell.
+ * @param tx The x-coordinate on the screen.
+ * @param ty The y-coordinate on the screen.
+ * @return The corresponding cell.
  */
 CTile* CGLYGameDlg::GetTileFromScreenCoordinate(float tx, float ty)
 {
@@ -483,9 +468,6 @@ CTile* CGLYGameDlg::GetTile(int col, int row)
 	return mRenderGrid.GetTile(col, row);
 }
 
-/**
- * 创建背景
- */
 void CGLYGameDlg::CreateBackGroud()
 {
 	if (!mBackGround.mIsReady)
@@ -494,14 +476,11 @@ void CGLYGameDlg::CreateBackGroud()
 	}
 }
 
-/**
- * 事件处理
- */
 LRESULT CGLYGameDlg::WindowProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch (uMsg)
 	{
-	case WM_LBUTTONDOWN: //按下鼠标左键
+	case WM_LBUTTONDOWN: // Left mouse button pressed.
 		LButtonDown(wParam, CPoint(lParam));
 		break;
 	case WM_TIMER:
@@ -514,17 +493,17 @@ LRESULT CGLYGameDlg::WindowProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 }
 
 /**
- * 	鼠标左键按下处理。
+ * Left mouse button press handling.
  */
 void CGLYGameDlg::LButtonDown(UINT modKeys, CPoint point)
 {
-	//计算起始点。
+	// Calculate the starting point.
 	CGamePoint p;
 	p.m_fX = mAvatar.GetViewX() + mBackGround.mOffsetX;
 	p.m_fY = mAvatar.GetViewY() + mBackGround.mOffsetY;
 	CTile* pStartNode = GetTileFromScreenCoordinate(p.m_fX, p.m_fY);
 
-	//计算终点。
+	// Calculate the end point.
 	point.x += (long)mBackGround.mOffsetX - mMapX;
 	point.y += (long)mBackGround.mOffsetY - mMapY;
 
@@ -532,19 +511,19 @@ void CGLYGameDlg::LButtonDown(UINT modKeys, CPoint point)
 
 	if (!pGoalNode->GetWalkable())
 	{
-		OutputDebugString(_T("点的地方不可以行走!\n"));
+		OutputDebugString(_T("The clicked point is not walkable!\n"));
 		return;
 	}
 
 	if (pStartNode->Equal(pGoalNode))
 	{
-		OutputDebugString(_T("当前位置就是要到达的位置!"));
+		OutputDebugString(_T("The current position is the target position."));
 		return;
 	}
 	CSearchResults result = mAstar.Search(pStartNode, pGoalNode);
 	if (!result.GetIsSuccess())
 	{
-		OutputDebugString(_T("没有寻到可行走路径!\n"));
+		OutputDebugString(_T("No walkable path found!\n"));
 		return;
 	}
 	StartTimer();
@@ -552,16 +531,13 @@ void CGLYGameDlg::LButtonDown(UINT modKeys, CPoint point)
 	mAvatar.StartWalk(pPath);
 }
 
-/**
- * 开始计时器
- */
 void CGLYGameDlg::StartTimer()
 {
 	SetTimer(1, 70, NULL);
 }
 
 /**
- * 画指定透明度的矩形
+ * Draw a rectangle with specified transparency.
  */
 void CGLYGameDlg::DrawAlphaRect(CDC* pDC, CRect& r, COLORREF clr, unsigned char alpha)
 {
@@ -593,7 +569,7 @@ float CGLYGameDlg::GetNodeTransitionCost(INode* n1, INode* n2)
 }
 
 /**
- * 时间处理
+ * Time event handling.
  */
 void CGLYGameDlg::OnTimer(int id)
 {

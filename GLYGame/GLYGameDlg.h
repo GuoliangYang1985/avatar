@@ -21,19 +21,41 @@ public:
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV support
 public:
-	//创建背景。
+	/**
+	 * Create map background.
+	 */
 	void CreateBackGroud();
-	//事件处理。
+	/**
+	 * Handles window events.
+	 * @param uMsg The message identifier.
+	 * @param wParam Additional message-specific information.
+	 * @param lParam Additional message-specific information.
+	 * @return The result of the message processing; depends on the message.
+	 */
 	LRESULT WindowProc(UINT uMsg, WPARAM wParam, LPARAM lParam);
-	//鼠标左键按下处理。
+	/**
+	 * Handles left mouse button press.
+	 * @param modKeys Flags indicating modifier keys (Ctrl, Shift, etc.).
+	 * @param point The cursor coordinates (client area).
+	 */
 	void LButtonDown(UINT modKeys, CPoint point);
-	//开始计时器。
+	/**
+	 * Starts the timer.
+	 */
 	void StartTimer();
-	//时间处理。
+	/**
+	 * Handles timer events.
+	 * @param id The timer identifier.
+	 */
 	void OnTimer(int id);
-	//画指定alpha值的矩形。
+	/**
+	 * Draws a rectangle with specified alpha transparency.
+	 * @param pDC Pointer to the device context.
+	 * @param r The rectangle to draw (client coordinates).
+	 * @param clr The color of the rectangle.
+	 * @param alpha The alpha value (0 = transparent, 255 = opaque).
+	 */
 	void DrawAlphaRect(CDC* pDC, CRect& r, COLORREF clr, unsigned char alpha);
-
 	/**
 	 * Refresh the game screen.
 	 */
@@ -51,88 +73,126 @@ public:
 	void DrawMap(Graphics& graphics);
 
 	/**
-	 * 解析所有素材定义数据并创建与之对应的对象。
+	 * Parses all material definition data and creates corresponding objects.
 	 */
 	void CreateAllItemDefination();
+
 	/**
-	 * 删除ItemDefination。
+	 * Deletes all item definitions.
 	 */
 	void DeleteAllItemDefination();
+
 	/**
-	 * 解析所有素材数据并创建与之对应的对象。
+	 * Parses all material data and creates corresponding objects.
 	 */
 	void CreateAllItem();
+
 	/**
-	 * 加载地图数据。
+	 * Loads map data.
 	 */
 	void LoadMapData();
+
 	/**
-	 * 得到CString类型的属性值。
-	 * @param pXmlMapConfig xml配置文件。
-	 * @bstrtNode 节点名。
-	 * @bstrtAttribute 属性名。
-	 * @return CString类型的属性值。
+	 * Retrieves an attribute value as CString.
+	 * @param pXmlMapConfig XML document pointer.
+	 * @param bstrtNode Node name or XPath.
+	 * @param bstrtAttribute Attribute name.
+	 * @return Attribute value as CString, or empty string if not found.
 	 */
 	CString GetAttribute(MSXML2::IXMLDOMDocumentPtr pXmlMapConfig, _bstr_t bstrtNode, _bstr_t bstrtAttribute);
+
 	/**
-	 * 得到float类型的属性值。
-	 * @param pXmlMapConfig xml配置文件。
-	 * @bstrtNode 节点名。
-	 * @bstrtAttribute 属性名。
-	 * @return float类型的属性值。
+	 * Retrieves an attribute value as float.
+	 * @param pXmlMapConfig XML document pointer.
+	 * @param bstrtNode Node name or XPath.
+	 * @param bstrtAttribute Attribute name.
+	 * @return Attribute value as float, or 0.0f if not found or conversion fails.
 	 */
 	float GetAttributeF(MSXML2::IXMLDOMDocumentPtr pXmlMapConfig, _bstr_t bstrtNode, _bstr_t bstrtAttribute);
+
 	/**
-	 * 获取单元格。
-	 * @param tx 屏幕的x轴坐标。
-	 * @param ty 屏幕的y轴坐标。
-	 * @return 得到对应的单元格。
+	 * Gets the tile corresponding to the given screen coordinates.
+	 * @param tx Screen X coordinate.
+	 * @param ty Screen Y coordinate.
+	 * @return Pointer to the tile at the specified screen position, or nullptr if out of bounds.
 	 */
 	CTile* GetTileFromScreenCoordinate(float tx, float ty);
-	CTile* GetTile(int col, int row);
-	float GetNodeTransitionCost(INode* n1, INode* n2);
+
 	/**
-	 * 排序。
+	 * Gets the tile at the specified grid column and row.
+	 * @param col Column index.
+	 * @param row Row index.
+	 * @return Pointer to the tile, or nullptr if indices are invalid.
+	 */
+	CTile* GetTile(int col, int row);
+
+	/**
+	 * Calculates the transition cost between two nodes for pathfinding.
+	 * @param n1 Pointer to the first node.
+	 * @param n2 Pointer to the second node.
+	 * @return The cost value (e.g., distance or movement cost).
+	 */
+	float GetNodeTransitionCost(INode* n1, INode* n2);
+
+	/**
+	 * Sorts positions (e.g., for rendering order or A* pathfinding).
 	 */
 	void SortPosition();
 
-	int GetCols();
-	int GetRows();
-	INode* GetNode(int col, int row);
 	/**
-	 * 窗口大小发生变化处理。
+	 * Gets the number of columns in the grid.
+	 * @return Total column count.
+	 */
+	int GetCols();
+
+	/**
+	 * Gets the number of rows in the grid.
+	 * @return Total row count.
+	 */
+	int GetRows();
+
+	/**
+	 * Gets the node at the specified grid column and row.
+	 * @param col Column index.
+	 * @param row Row index.
+	 * @return Pointer to the node (likely a CTile or pathfinding node), or nullptr if invalid.
+	 */
+	INode* GetNode(int col, int row);
+
+	/**
+	 * Handles window size changes.
+	 * @param rect The new client rectangle of the window.
 	 */
 	void OnWindowSizeChanged(CRect rect);
 public:
-	//角色。
+	// Character.
 	CAvatar mAvatar;
-	//背景。
+	// Background.
 	CBackGround mBackGround;
-	//是否初始化完成。
-	bool m_bIsReady;
-	//地图配置信息。
+	// Initialization complete flag.
+	bool mIsReady;
+	// Map configuration information.
 	MSXML2::IXMLDOMDocumentPtr mXmlMapConfig;
-	//素材存放根路径。
+	// Base path for asset storage.
 	CString mBaseDir;
 	Image* mBack;
-	//物件实例。
+	// Object instances.
 	vector<CItem*>* mArrItems;
-	//物件定义。
+	// Object definitions.
 	CMap<CString, LPCTSTR, CItemDefinition*, CItemDefinition*> mItemDefinitions;
-	//网格层。
+	// Grid layer.
 	CRenderGrid mRenderGrid;
-	//游戏所占的列数。
+	// Number of columns occupied by the game.
 	int mCols;
-	//游戏所占的行数。
+	// Number of rows occupied by the game.
 	int mRows;
-	//用于寻路。
+	// Used for pathfinding.
 	CAstar mAstar;
-
 	GdiplusStartupInput mGdiplusStartupInput;
 	ULONG_PTR mGdiToken;
-	//地图和背景。
+	// Map and background.
 	CDC mBackDC;
-	//地图的所有内容。
+	// All content of the map.。
 	CDC mMapDC;
 	CBitmap mBackMap;
 	CBitmap mMap;
