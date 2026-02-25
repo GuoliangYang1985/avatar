@@ -1,10 +1,5 @@
-////////////////////////////////////////////////////////////////////// 
-//
-// Copyright (C) Guoliang Yang. All rights reserved.
+// Copyright (C) Guoliang Yang
 // Avatar.h: interface for the CAvatar class.
-//
-//////////////////////////////////////////////////////////////////////
-
 
 #pragma once
 #include "GamePoint.h"
@@ -16,6 +11,7 @@
 const unsigned int ROWS = 8;
 //角色的总列数。
 const unsigned int COLS = 8;
+
 /**
  * 角色类，实现角色的各种动作。
  * 创建人：杨国梁。
@@ -86,15 +82,15 @@ public:
 	void CalculatePosition();
 
 	/**
-	 * 得到下一步要行走的距离
-	 * @return 下一步要行走的距离
+	 * Get the distance for the next step.
+	 * @return The distance for the next step.
 	 */
-	CSpeed GetNextDistance();
+	CSpeed GetNextDistance() const;
 
 	/**
-	 * 得到下一步移动距离
+	 * Get the next step movement distance.
 	 */
-	float GetNextMoveDistance();
+	float GetNextMoveDistance() const;
 
 	/**
 	 * 计算下一个帧索引。

@@ -177,7 +177,7 @@ void CGLYGameDlg::GamePaint()
 	if (mArrItems->size() <= 0)
 	{
 		CreateAllItem();
-		SortPosition();
+		*mArrItems = CSort::SortPosition(*mArrItems);
 	}
 	Show();
 }
@@ -336,39 +336,6 @@ void CGLYGameDlg::CreateAllItem()
 			pItem = NULL;
 			pItemDef = NULL;
 		}
-	}
-}
-
-void CGLYGameDlg::SortPosition()
-{
-	if (mArrItems->size() > 0)
-	{
-		vector<CItem*>* pArrItems = new vector<CItem*>();
-		vector<CItem*>::iterator iter;
-		for (iter = mArrItems->begin(); iter != mArrItems->end(); ++iter)
-		{
-			CItem* nsi = *iter;
-			bool added = false;
-			vector<CItem*>::iterator iter1;
-			for (iter1 = pArrItems->begin(); iter1 != pArrItems->end(); ++iter1)
-			{
-				CItem* si = *iter1;
-				if (nsi->mCol < (si->mCol + si->mCols - 1) && nsi->mRow < (si->mRow + si->mRows - 1))
-				{
-					pArrItems->insert(iter1, 1, nsi);
-					added = true;
-					break;
-				}
-			}
-			if (!added)
-			{
-				pArrItems->push_back(nsi);
-			}
-		}
-
-		delete mArrItems;
-		mArrItems = pArrItems;
-		pArrItems = NULL;
 	}
 }
 
@@ -536,28 +503,6 @@ void CGLYGameDlg::LButtonDown(UINT modKeys, CPoint point)
 void CGLYGameDlg::StartTimer()
 {
 	SetTimer(1, 70, NULL);
-}
-
-/**
- * Draw a rectangle with specified transparency.
- */
-void CGLYGameDlg::DrawAlphaRect(CDC* pDC, CRect& r, COLORREF clr, unsigned char alpha)
-{
-	CDC memdc;
-	memdc.CreateCompatibleDC(pDC);
-	memdc.FillSolidRect(0, 0, r.Width(), r.Height(), clr);
-
-	BLENDFUNCTION bf;
-	bf.BlendOp = AC_SRC_OVER;
-	bf.BlendFlags = 0;
-	bf.SourceConstantAlpha = alpha;
-	bf.AlphaFormat = 0;
-
-	CBitmap bmp;
-	bmp.CreateCompatibleBitmap(pDC, r.Width(), r.Height());
-	CBitmap* pOldBitmap = memdc.SelectObject(&bmp);
-	::AlphaBlend(pDC->m_hDC, r.left, r.top, r.Width(), r.Height(), memdc.m_hDC, 0, 0, r.Width(), r.Height(), bf);
-	memdc.SelectObject(pOldBitmap);
 }
 
 float CGLYGameDlg::GetNodeTransitionCost(INode* n1, INode* n2)

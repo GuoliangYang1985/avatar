@@ -52,15 +52,6 @@ public:
 	void OnTimer(int id);
 
 	/**
-	 * Draws a rectangle with specified alpha transparency.
-	 * @param pDC Pointer to the device context.
-	 * @param r The rectangle to draw (client coordinates).
-	 * @param clr The color of the rectangle.
-	 * @param alpha The alpha value (0 = transparent, 255 = opaque).
-	 */
-	void DrawAlphaRect(CDC* pDC, CRect& r, COLORREF clr, unsigned char alpha);
-
-	/**
 	 * Refresh the game screen.
 	 */
 	void GamePaint();
@@ -119,11 +110,6 @@ public:
 	 * @return The cost value (e.g., distance or movement cost).
 	 */
 	float GetNodeTransitionCost(INode* n1, INode* n2);
-
-	/**
-	 * Sorts positions (e.g., for rendering order or A* pathfinding).
-	 */
-	void SortPosition();
 
 	/**
 	 * Gets the number of columns in the grid.

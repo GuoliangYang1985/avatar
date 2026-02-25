@@ -1,9 +1,6 @@
-//////////////////////////////////////////////////////////////////////
-// 
-// Copyright (C) Guoliang Yang. All rights reserved.
+// Copyright (C) Guoliang Yang.
 // Avatar.cpp: implementation of the CAvatar class.
-//
-//////////////////////////////////////////////////////////////////////
+
 #include <math.h>
 #include "stdafx.h"
 #include "GLYGame.h"
@@ -180,28 +177,16 @@ void CAvatar::CalculatePosition()
 	}
 }
 
-float CAvatar::GetNextMoveDistance()
+float CAvatar::GetNextMoveDistance() const
 {
-	if (mDistance > 0)
-	{
-		float curDistance;
-		if (mDistance < SPEED)
-		{
-			curDistance = mDistance;
-		}
-		else
-		{
-			curDistance = (float)SPEED;
-		}
-		return curDistance;
-	}
-	else
-	{
-		return 0;
-	}
+	if (mDistance <= 0.0f)
+		return 0.0f;
+
+	// Return the smaller value: remaining distance or speed
+	return min(mDistance, static_cast<float>(SPEED));
 }
 
-CSpeed CAvatar::GetNextDistance()
+CSpeed CAvatar::GetNextDistance() const
 {
 	CSpeed point;
 	point.m_fInstance = GetNextMoveDistance();
