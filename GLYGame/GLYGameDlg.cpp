@@ -161,10 +161,8 @@ void CGLYGameDlg::OnPaint()
 			if (mBackGround.mStartCol > 0 && mBackGround.mStartRow > 0)
 			{
 				CGamePoint p = CMapUtil::GetScreenCoordinate(mBackGround.mStartCol, mBackGround.mStartRow);
-				mAvatar.mStartX = p.m_fX - mBackGround.mOffsetX - mAvatar.mOffsetX;
-				mAvatar.mStartY = p.m_fY - mBackGround.mOffsetY - mAvatar.mOffsetY;
-				mAvatar.mX = mAvatar.mStartX;
-				mAvatar.mY = mAvatar.mStartY;
+				mAvatar.mX = p.m_fX - mBackGround.mOffsetX - mAvatar.mOffsetX;
+				mAvatar.mY = p.m_fY - mBackGround.mOffsetY - mAvatar.mOffsetY;
 			}
 		}
 	}
@@ -200,12 +198,10 @@ void CGLYGameDlg::Show()
 	int bWidth = mBack->GetWidth();
 	int bHeight = mBack->GetHeight();
 
-	if (mAvatar.mStartX <= 0 && mAvatar.mStartY <= 0)
+	if (mAvatar.mX <= 0 && mAvatar.mY <= 0)
 	{
-		mAvatar.mStartX = bWidth / 2.0f;// -mAvatar.mOffsetX + mBackGround.mOffsetX;
-		mAvatar.mStartY = bHeight / 2.0f;// -mAvatar.mOffsetY - mBackGround.mOffsetY;
-		mAvatar.mX = mAvatar.mStartX;
-		mAvatar.mY = mAvatar.mStartY;
+		mAvatar.mX = bWidth / 2.0f;
+		mAvatar.mY = bHeight / 2.0f;
 	}
 
 	if (mMap.GetSafeHandle() == NULL)
@@ -213,7 +209,6 @@ void CGLYGameDlg::Show()
 		mMap.CreateCompatibleBitmap(hdc, bWidth, bHeight);
 		mMapDC.SelectObject(&mMap); // Select a compatible bitmap into the compatible DC.
 	}
-
 
 	Graphics graphics(mMapDC.GetSafeHdc());
 	DrawMap(graphics);
@@ -223,8 +218,8 @@ void CGLYGameDlg::Show()
 	mBackDC.FillRect(&rect, &blackBrush);
 
 	// Draw the map.
-	mMapX = (rect.Width() - bWidth) / 2.0f - (mAvatar.GetViewX() - mAvatar.mStartX);
-	mMapY = (rect.Height() - bHeight) / 2.0f - (mAvatar.GetViewY() - mAvatar.mStartY);
+	mMapX = rect.Width()/ 2.0f - mAvatar.GetViewX();
+	mMapY = rect.Height()/ 2.0f - mAvatar.GetViewY() ;
 	mBackDC.BitBlt(mMapX, mMapY, bWidth, bHeight, &mMapDC, 0, 0, SRCCOPY);
 
 	// Draw the scene background and the map.

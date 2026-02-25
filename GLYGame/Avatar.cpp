@@ -10,8 +10,6 @@
 #include "Avatar.h"
 #include "MapUtil.h"
 
-using namespace std;
-
 /**
  * ¹¹Ôìº¯Êý¡£
  */
@@ -45,8 +43,6 @@ void CAvatar::Init()
 	mCols = 1;
 	mCurCol = 2;
 	mDrect = 0;
-	mStartX = 0;
-	mStartY = 0;
 	mWalking = false;
 }
 

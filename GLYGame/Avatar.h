@@ -5,16 +5,12 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#if !defined(AFX_AVATAR_H__D486AAC9_7611_4190_B1B6_8F6B2C01F659__INCLUDED_)
-#define AFX_AVATAR_H__D486AAC9_7611_4190_B1B6_8F6B2C01F659__INCLUDED_
 
-#if _MSC_VER > 1000
 #pragma once
 #include "GamePoint.h"
 #include "Path.h"
 #include "Speed.h"
-#include "Image.h"
-#endif 
+#include "Image.h" 
 
 //角色的总行数。
 const unsigned int ROWS = 8;
@@ -177,12 +173,6 @@ public:
 
 	//角色是否在行走
 	bool mWalking;
-
-	// Avatar at initial X position.
-	float mStartX;
-
-	// Avatar at initial Y position.
-	float mStartY;
 private:
 	//角色所在列数。
 	unsigned int mCol;
@@ -198,11 +188,10 @@ public:
 		DOWN,		//2			下
 		LEFT_DOWN,	//3			左下
 		LEFT,		//4			左
-		LEFT_UP,	//5			左上
+		LEFT_UP,		//5			左上
 		UP,			//6			上
 		RIGHT_UP,	//7			右上
 
 		SPEED = 10, //行走单位速度
 	};
 };
-#endif
