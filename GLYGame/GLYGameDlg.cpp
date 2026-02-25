@@ -169,9 +169,6 @@ void CGLYGameDlg::OnPaint()
 	GamePaint();
 }
 
-/**
- * Ë¢ÐÂÓÎÏ·»­Ãæ
- */
 void CGLYGameDlg::GamePaint()
 {
 	CreateAllItemDefination();
@@ -185,7 +182,6 @@ void CGLYGameDlg::DrawSortedAll()
 	{
 		CreateAllItem();
 		SortPosition();
-		Show();
 	}
 }
 

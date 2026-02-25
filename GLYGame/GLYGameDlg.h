@@ -1,10 +1,6 @@
 // GLYGameDlg.h : header file
 //
 
-#if !defined(AFX_GLYGAMEDLG_H__C2D68685_30D8_4E6D_B7A3_49B9DDEB3446__INCLUDED_)
-#define AFX_GLYGAMEDLG_H__C2D68685_30D8_4E6D_B7A3_49B9DDEB3446__INCLUDED_
-
-#if _MSC_VER > 1000
 #pragma once
 #include <afxtempl.h>
 #include "Avatar.h"
@@ -14,16 +10,10 @@
 #include "RenderGrid.h"
 #include "Astar.h"
 #import "msxml4.dll"
-using namespace MSXML2;
-#endif
 
-
-/////////////////////////////////////////////////////////////////////////////
 // CGLYGameDlg dialog
-
 class CGLYGameDlg : public CDialog, public ISearchable
 {
-	// Construction
 public:
 	CGLYGameDlg(CWnd* pParent = NULL);	// standard constructor
 	virtual ~CGLYGameDlg();
@@ -43,10 +33,14 @@ public:
 	void OnTimer(int id);
 	//画指定alpha值的矩形。
 	void DrawAlphaRect(CDC* pDC, CRect& r, COLORREF clr, unsigned char alpha);
-	//刷新游戏画面。
-	void GamePaint();
+
 	/**
-	 * 画出所有有序元素。
+	 * Refresh the game screen.
+	 */
+	void GamePaint();
+
+	/**
+	 * Draw all elements within the map.
 	 */
 	void DrawSortedAll();
 
@@ -54,11 +48,13 @@ public:
 	 * Show the entire scene.
 	 */
 	void Show();
+
 	/**
 	 * Draw the map and all elements within the map.
 	 * @param graphics GDI+ graphics object used to perform drawing operations.
 	 */
 	void DrawMap(Graphics& graphics);
+
 	/**
 	 * 解析所有素材定义数据并创建与之对应的对象。
 	 */
@@ -156,5 +152,3 @@ public:
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
 };
-
-#endif
