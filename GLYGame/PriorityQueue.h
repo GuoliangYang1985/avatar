@@ -1,28 +1,52 @@
 // PriorityQueue.h: interface for the CPriorityQueue class.
-//
-//////////////////////////////////////////////////////////////////////
 
-#if !defined(AFX_PRIORITYQUEUE_H__5AB1D533_E120_4B2C_B90E_94B00AEE9221__INCLUDED_)
-#define AFX_PRIORITYQUEUE_H__5AB1D533_E120_4B2C_B90E_94B00AEE9221__INCLUDED_
-
-#if _MSC_VER > 1000
 #pragma once
-#include "Path.h"
-#include <afxtempl.h>
-#endif // _MSC_VER > 1000
 
-class CPriorityQueue  
+#include "Path.h"
+#include <vector>
+#include <memory>   // for std::unique_ptr
+#include <algorithm> // for std::push_heap, std::pop_heap
+
+/**
+ * Priority queue for CPath objects, ordered by their F value (lowest first).
+ * The queue owns the CPath objects and automatically deletes them when destroyed.
+ */
+class CPriorityQueue
 {
 public:
-	CPriorityQueue();
-	virtual ~CPriorityQueue();
-public:
-	bool HasNextItem();
-	CPath *GetNextItem();
-public:
-	void Enqueue(CPath *p);
-public:
-	vector<CPath*> *m_pArrItems;
-};
+    CPriorityQueue();
+    // No need for virtual destructor unless used polymorphically
+    ~CPriorityQueue();
 
-#endif // !defined(AFX_PRIORITYQUEUE_H__5AB1D533_E120_4B2C_B90E_94B00AEE9221__INCLUDED_)
+    // Disable copy (unique_ptr cannot be copied)
+    CPriorityQueue(const CPriorityQueue&) = delete;
+    CPriorityQueue& operator=(const CPriorityQueue&) = delete;
+
+    // Allow move
+    CPriorityQueue(CPriorityQueue&&) = default;
+    CPriorityQueue& operator=(CPriorityQueue&&) = default;
+
+    /**
+     * Checks if the queue contains any items.
+     * @return true if at least one item exists, false otherwise.
+     */
+    bool HasNextItem() const;
+
+    /**
+     * Retrieves and removes the item with the smallest F value.
+     * @return Pointer to the CPath object. The caller does NOT take ownership;
+     *         the object is removed from the queue and will be destroyed when the queue is cleared.
+     * @pre HasNextItem() must be true.
+     */
+    CPath* GetNextItem();
+
+    /**
+     * Inserts a CPath object into the queue. The queue takes ownership.
+     * @param p Raw pointer to a CPath object allocated with new.
+     */
+    void Enqueue(CPath* p);
+
+private:
+    // Internal storage: vector of unique_ptr ensures automatic cleanup.
+    std::vector<std::unique_ptr<CPath>> mItems;
+};

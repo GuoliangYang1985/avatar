@@ -1,75 +1,49 @@
 // PriorityQueue.cpp: implementation of the CPriorityQueue class.
-//
-//////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
 #include "GLYGame.h"
 #include "PriorityQueue.h"
-using namespace std;
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[]=__FILE__;
-#define new DEBUG_NEW
-#endif
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+// Comparison functor for heap ordering (min-heap based on F value)
+struct ComparePathPtr
+{
+    bool operator()(const std::unique_ptr<CPath>& a, const std::unique_ptr<CPath>& b) const
+    {
+        // We want a min-heap, so return true if a's F is greater than b's F.
+        return a->GetF() > b->GetF();
+    }
+};
 
 CPriorityQueue::CPriorityQueue()
 {
-	m_pArrItems = new vector<CPath *>();
 }
 
 CPriorityQueue::~CPriorityQueue()
 {
-	if (m_pArrItems != NULL)
-	{
-		for (vector<CPath *>::iterator iter = m_pArrItems->begin(); iter != m_pArrItems->end(); ++iter)
-		{
-			if (*iter != NULL)
-			{
-				delete *iter;
-				*iter = NULL;
-			}
-		}
-		m_pArrItems->clear();
-		delete m_pArrItems;
-		m_pArrItems = NULL;
-	}
+    // unique_ptr will automatically delete all contained CPath objects.
+    // No explicit cleanup needed.
 }
 
-bool CPriorityQueue::HasNextItem()
+bool CPriorityQueue::HasNextItem() const
 {
-	return m_pArrItems->size() > 0;
+    return !mItems.empty();
 }
 
-CPath *CPriorityQueue::GetNextItem()
+CPath* CPriorityQueue::GetNextItem()
 {
-	CPath * p= *(m_pArrItems->begin());
-	m_pArrItems->erase(m_pArrItems->begin());
-	return p;
+    // Move the smallest element to the back of the heap.
+    std::pop_heap(mItems.begin(), mItems.end(), ComparePathPtr());
+    // Transfer ownership from the back element to a raw pointer,
+    // then remove it from the vector.
+    CPath* result = mItems.back().release();
+    mItems.pop_back();
+    return result;
 }
 
-/**
- * 添加路径到队列。
- */
-void CPriorityQueue::Enqueue(CPath *p)
+void CPriorityQueue::Enqueue(CPath* p)
 {
-	double val = p->GetF();
-	bool added = false;
-	for (vector<CPath *>::iterator iter = m_pArrItems->begin(); iter != m_pArrItems->end(); ++iter)
-	{
-		CPath *curr = *iter;
-		if (val < curr->GetF())
-		{
-			m_pArrItems->insert(iter, 1, p);
-			added = true;
-			break;
-		}
-	}
-	if (!added)
-	{
-		m_pArrItems->push_back(p);
-	}
+    // Wrap the raw pointer in a unique_ptr and add to vector.
+    mItems.push_back(std::unique_ptr<CPath>(p));
+    // Re-establish heap property.
+    std::push_heap(mItems.begin(), mItems.end(), ComparePathPtr());
 }
