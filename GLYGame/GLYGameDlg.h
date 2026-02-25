@@ -1,5 +1,4 @@
 // GLYGameDlg.h : header file
-//
 
 #pragma once
 #include <afxtempl.h>
@@ -11,7 +10,6 @@
 #include "Astar.h"
 #import "msxml4.dll"
 
-// CGLYGameDlg dialog
 class CGLYGameDlg : public CDialog, public ISearchable
 {
 public:
@@ -25,6 +23,7 @@ public:
 	 * Create map background.
 	 */
 	void CreateBackGroud();
+
 	/**
 	 * Handles window events.
 	 * @param uMsg The message identifier.
@@ -33,21 +32,25 @@ public:
 	 * @return The result of the message processing; depends on the message.
 	 */
 	LRESULT WindowProc(UINT uMsg, WPARAM wParam, LPARAM lParam);
+
 	/**
 	 * Handles left mouse button press.
 	 * @param modKeys Flags indicating modifier keys (Ctrl, Shift, etc.).
 	 * @param point The cursor coordinates (client area).
 	 */
 	void LButtonDown(UINT modKeys, CPoint point);
+
 	/**
 	 * Starts the timer.
 	 */
 	void StartTimer();
+
 	/**
 	 * Handles timer events.
 	 * @param id The timer identifier.
 	 */
 	void OnTimer(int id);
+
 	/**
 	 * Draws a rectangle with specified alpha transparency.
 	 * @param pDC Pointer to the device context.
@@ -56,6 +59,7 @@ public:
 	 * @param alpha The alpha value (0 = transparent, 255 = opaque).
 	 */
 	void DrawAlphaRect(CDC* pDC, CRect& r, COLORREF clr, unsigned char alpha);
+
 	/**
 	 * Refresh the game screen.
 	 */
@@ -91,24 +95,6 @@ public:
 	 * Loads map data.
 	 */
 	void LoadMapData();
-
-	/**
-	 * Retrieves an attribute value as CString.
-	 * @param pXmlMapConfig XML document pointer.
-	 * @param bstrtNode Node name or XPath.
-	 * @param bstrtAttribute Attribute name.
-	 * @return Attribute value as CString, or empty string if not found.
-	 */
-	CString GetAttribute(MSXML2::IXMLDOMDocumentPtr pXmlMapConfig, _bstr_t bstrtNode, _bstr_t bstrtAttribute);
-
-	/**
-	 * Retrieves an attribute value as float.
-	 * @param pXmlMapConfig XML document pointer.
-	 * @param bstrtNode Node name or XPath.
-	 * @param bstrtAttribute Attribute name.
-	 * @return Attribute value as float, or 0.0f if not found or conversion fails.
-	 */
-	float GetAttributeF(MSXML2::IXMLDOMDocumentPtr pXmlMapConfig, _bstr_t bstrtNode, _bstr_t bstrtAttribute);
 
 	/**
 	 * Gets the tile corresponding to the given screen coordinates.
