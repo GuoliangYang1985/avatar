@@ -93,7 +93,7 @@ public:
 	 * @param ty Screen Y coordinate.
 	 * @return Pointer to the tile at the specified screen position, or nullptr if out of bounds.
 	 */
-	CTile* GetTileFromScreenCoordinate(float tx, float ty);
+	CTile* GetTileFromScreenCoordinate(float tx, float ty) const;
 
 	/**
 	 * Gets the tile at the specified grid column and row.
@@ -101,7 +101,7 @@ public:
 	 * @param row Row index.
 	 * @return Pointer to the tile, or nullptr if indices are invalid.
 	 */
-	CTile* GetTile(int col, int row);
+	CTile* GetTile(int col, int row) const;
 
 	/**
 	 * Calculates the transition cost between two nodes for pathfinding.

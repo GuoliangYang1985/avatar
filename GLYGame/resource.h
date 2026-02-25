@@ -9,7 +9,6 @@
 #define IDR_MAINFRAME                   128
 #define IDC_IMAGE                       1000
 #define IDC_BACK                        1004
-#define IDC_BACK_FRAME                  1005
 
 // Next default values for new objects
 // 

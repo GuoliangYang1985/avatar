@@ -93,7 +93,7 @@ void CTile::SetBaseWalkability(bool value)
 	mBaseWalkability = value;
 }
 
-bool CTile::GetBaseWalkablity()  // Note: intentional misspelling
+bool CTile::GetBaseWalkablity() const  // Note: intentional misspelling
 {
 	return mBaseWalkability;
 }
@@ -108,7 +108,7 @@ void CTile::SetBasePlaceability(bool value)
 	mBasePlaceability = value;
 }
 
-bool CTile::GetBasePlaceability()
+bool CTile::GetBasePlaceability() const
 {
 	return mBasePlaceability;
 }

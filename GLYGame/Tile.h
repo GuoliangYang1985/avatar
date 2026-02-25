@@ -41,9 +41,9 @@ public:
 	virtual bool GetWalkable();
 
 	// Base properties accessors
-	bool GetBasePlaceability();
+	bool GetBasePlaceability() const;
 	void SetBasePlaceability(bool value);
-	bool GetBaseWalkablity();
+	bool GetBaseWalkablity() const;
 	void SetBaseWalkability(bool value);
 
 	// Public member variables (consider making private with accessors in future)

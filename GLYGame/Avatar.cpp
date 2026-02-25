@@ -239,12 +239,12 @@ int CAvatar::GetRow()
 	return point.y + 1;
 }
 
-float CAvatar::GetViewX()
+float CAvatar::GetViewX() const
 {
 	return mX + mOffsetX;
 }
 
-float CAvatar::GetViewY()
+float CAvatar::GetViewY() const
 {
 	return  mY + mOffsetY;
 }

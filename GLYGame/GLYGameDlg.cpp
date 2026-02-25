@@ -426,13 +426,13 @@ void CGLYGameDlg::LoadMapData()
  * @param ty The y-coordinate on the screen.
  * @return The corresponding cell.
  */
-CTile* CGLYGameDlg::GetTileFromScreenCoordinate(float tx, float ty)
+CTile* CGLYGameDlg::GetTileFromScreenCoordinate(float tx, float ty) const
 {
 	CPoint point = CMapUtil::GetMapPointByScreen(tx, ty);
 	return mRenderGrid.GetTile(point.x, point.y);
 }
 
-CTile* CGLYGameDlg::GetTile(int col, int row)
+CTile* CGLYGameDlg::GetTile(int col, int row) const
 {
 	return mRenderGrid.GetTile(col, row);
 }

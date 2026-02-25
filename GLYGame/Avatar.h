@@ -113,14 +113,14 @@ public:
 	int GetRow();
 
 	/**
-	 * 计算视图位置的X坐标。
+	 * Calculate the X-coordinate of the view position.
 	 */
-	float GetViewX();
+	float GetViewX() const;
 
 	/**
-	 * 计算视图位置的Y坐标。
+	 * Calculate the Y-coordinate of the view position.
 	 */
-	float GetViewY();
+	float GetViewY() const;
 public:
 	//角色的宽度。
 	unsigned int mWidth;
