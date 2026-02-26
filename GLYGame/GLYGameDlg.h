@@ -15,14 +15,27 @@ class CGLYGameDlg : public CDialog, public ISearchable
 public:
 	CGLYGameDlg(CWnd* pParent = NULL);	// standard constructor
 	virtual ~CGLYGameDlg();
+
+	/**
+	 * Releases resources associated with the current scene.
+	 * Cleans up COM objects, item definitions, items, and graphic resources.
+	 */
+	void ReleaseScene();
 	enum { IDD = IDD_GLYGAME_DIALOG };
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV support
 public:
 	/**
-	 * Create map background.
+	 * Enter a scene.
+	 * @param xmlSource The XML source to load.
 	 */
-	void CreateBackGroud();
+	void EntryScene(const CString& xmlSource);
+
+	/**
+	 * Loads map data from an XML source.
+	 * @param xmlSource The XML source to load.
+	 */
+	void LoadMapData(const CString& xmlSource);
 
 	/**
 	 * Handles window events.
@@ -83,12 +96,6 @@ public:
 	void CreateAllItem();
 
 	/**
-	 * Loads map data from an XML source.
-	 * @param xmlSource The XML source to load.
-	 */
-	void LoadMapData(const CString& xmlSource);
-
-	/**
 	 * Gets the tile corresponding to the given screen coordinates.
 	 * @param tx Screen X coordinate.
 	 * @param ty Screen Y coordinate.
@@ -137,8 +144,6 @@ public:
 	 * @param rect The new client rectangle of the window.
 	 */
 	void OnWindowSizeChanged(CRect rect);
-
-	void ReleaseSceen();
 public:
 	// Character.
 	CAvatar mAvatar;

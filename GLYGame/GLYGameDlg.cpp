@@ -14,43 +14,8 @@
 CGLYGameDlg::CGLYGameDlg(CWnd* pParent) : CDialog(CGLYGameDlg::IDD, pParent)
 {
 	mIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
-	mIsReady = false;
 	GdiplusStartup(&mGdiToken, &mGdiplusStartupInput, NULL);
-	mMapDC.CreateCompatibleDC(NULL);
 	mBackDC.CreateCompatibleDC(NULL);
-}
-
-CGLYGameDlg::~CGLYGameDlg()
-{
-	ReleaseSceen();
-	if (mBackMap.m_hObject != nullptr)
-		mBackMap.DeleteObject();
-
-	mBackDC.DeleteDC();
-	GdiplusShutdown(mGdiToken);
-}
-
-void CGLYGameDlg::ReleaseSceen()
-{
-	if (mXmlMapConfig != NULL)
-	{
-		mXmlMapConfig.Release();
-		mXmlMapConfig = NULL;
-		CoUninitialize();
-	}
-	DeleteAllItemDefination();
-	for (CItem* item : mArrItems)
-	{
-		delete item;
-	}
-	mArrItems.clear();
-	mRenderGrid.mIsReady = false;
-	mAvatar.UnLoad();
-	mBackGround.UnLoad();
-	if (mMap.m_hObject != nullptr)
-		mMap.DeleteObject();
-
-	mMapDC.DeleteDC();
 }
 
 void CGLYGameDlg::DoDataExchange(CDataExchange* pDX)
@@ -80,9 +45,9 @@ BOOL CGLYGameDlg::OnInitDialog()
 	//  when the application's main window is not a dialog
 	SetIcon(mIcon, TRUE);			// Set big icon
 	SetIcon(mIcon, FALSE);		// Set small icon
-
 	ShowWindow(SW_MAXIMIZE); // Set window to maximized state.
-	LoadMapData(_T("resource/map/data/gly.xml"));// Load map data.
+
+	EntryScene(_T("resource/map/data/gly.xml"));
 	return true;  // return TRUE  unless you set the focus to a control
 }
 
@@ -142,31 +107,120 @@ void CGLYGameDlg::OnPaint()
 	else
 	{
 		CDialog::OnPaint();
-
-		CreateBackGroud();
-
-		// If the grid is not initialized, initialize it.
-		if (!mRenderGrid.mIsReady)
-		{
-			mRenderGrid.CreateGrid(mCols, mRows);
-			mRenderGrid.ParseTileXML(mXmlMapConfig);
-		}
-
-		if (!mAvatar.mIsReady)
-		{
-			mAvatar.Load("resource/avatar/male.png");
-			if (mAvatar.mIsReady)
-			{
-				if (mBackGround.mStartCol > 0 && mBackGround.mStartRow > 0)
-				{
-					CGamePoint p = CMapUtil::GetScreenCoordinate(mBackGround.mStartCol, mBackGround.mStartRow);
-					mAvatar.mX = p.mX - mBackGround.mOffsetX - mAvatar.mOffsetX;
-					mAvatar.mY = p.mY - mBackGround.mOffsetY - mAvatar.mOffsetY;
-				}
-			}
-		}
 		GamePaint();
 	}
+}
+
+void CGLYGameDlg::EntryScene(const CString& xmlSource)
+{
+	mIsReady = false;
+	mMapDC.CreateCompatibleDC(NULL);
+	LoadMapData(xmlSource);
+
+	// Create map background.
+	if (!mBackGround.mIsReady)
+	{
+		mBackGround.Load(mBackGround.mBackPath);
+	}
+
+	// If the grid is not initialized, initialize it.
+	if (!mRenderGrid.mIsReady)
+	{
+		mRenderGrid.CreateGrid(mCols, mRows);
+		mRenderGrid.ParseTileXML(mXmlMapConfig);
+	}
+
+	if (!mAvatar.mIsReady)
+	{
+		mAvatar.Load("resource/avatar/male.png");
+		if (mAvatar.mIsReady)
+		{
+			if (mBackGround.mStartCol > 0 && mBackGround.mStartRow > 0)
+			{
+				CGamePoint p = CMapUtil::GetScreenCoordinate(mBackGround.mStartCol, mBackGround.mStartRow);
+				mAvatar.mX = p.mX - mBackGround.mOffsetX - mAvatar.mOffsetX;
+				mAvatar.mY = p.mY - mBackGround.mOffsetY - mAvatar.mOffsetY;
+			}
+		}
+	}
+	GamePaint();
+}
+
+void CGLYGameDlg::LoadMapData(const CString& xmlSource)
+{
+	// Initialize COM for this thread (should ideally be done once at program startup)
+	HRESULT hr = CoInitialize(NULL);
+	if (FAILED(hr))
+	{
+		// Log or handle error (e.g., throw exception)
+		TRACE(_T("CoInitialize failed\n"));
+		return;
+	}
+
+	// Create XML document instance
+	hr = mXmlMapConfig.CreateInstance(__uuidof(MSXML2::DOMDocument30));
+	if (FAILED(hr))
+	{
+		// MessageBox("Failed to create DOMDocument. Please install MS XML Parser.");
+		CoUninitialize();
+		return;
+	}
+
+	// Load map configuration file
+	VARIANT_BOOL success = mXmlMapConfig->load(_variant_t(xmlSource));
+	if (success != VARIANT_TRUE)
+	{
+		// Handle load failure (e.g., file not found)
+		TRACE(_T("Failed to load map XML file\n"));
+		mXmlMapConfig.Release();
+		CoUninitialize();
+		return;
+	}
+
+	// Get root node <map> once
+	MSXML2::IXMLDOMElementPtr mapNode = mXmlMapConfig->documentElement;
+	if (!mapNode)
+	{
+		TRACE(_T("Missing root node <map>\n"));
+		return;
+	}
+
+	// Get <background> child node once
+	MSXML2::IXMLDOMElementPtr bgNode = mapNode->selectSingleNode(_T("background"));
+	if (!bgNode)
+	{
+		TRACE(_T("Missing <background> node\n"));
+		return;
+	}
+
+	// Read attributes from <map> node
+	mBackGround.mStartCol = CXmlUtil::GetAttributeToInt(mapNode, _T("start_col"));
+	mBackGround.mStartRow = CXmlUtil::GetAttributeToInt(mapNode, _T("start_row"));
+	mBaseDir = CXmlUtil::GetAttributeToCString(mapNode, _T("dir"));
+	if (mBaseDir.IsEmpty())
+	{
+		mBaseDir = _T("resource/map/assets/");   // Default directory
+	}
+
+	// Read attributes from <background> node
+	CString strMapPath = CXmlUtil::GetAttributeToCString(bgNode, _T("file"));
+	mBackGround.mBackPath = mBaseDir + strMapPath;
+
+	// Read background offsets and grid dimensions
+	mBackGround.mOffsetX = CXmlUtil::GetAttributeToFloat(bgNode, _T("x_offset"));
+	mBackGround.mOffsetY = CXmlUtil::GetAttributeToFloat(bgNode, _T("y_offset"));
+	mBackGround.mCols = CXmlUtil::GetAttributeToInt(bgNode, _T("cols"));
+	mBackGround.mRows = CXmlUtil::GetAttributeToInt(bgNode, _T("rows"));
+
+	// Update avatar's map offsets (ensure both X and Y are set after both offsets are read)
+	mAvatar.mMapOffSetX = static_cast<int>(mBackGround.mOffsetX);
+	mAvatar.mMapOffSetY = static_cast<int>(mBackGround.mOffsetY);
+
+	// Also store grid dimensions in dialog members if needed elsewhere
+	mCols = mBackGround.mCols;
+	mRows = mBackGround.mRows;
+
+	mAstar.Init(this); // Initialize A* pathfinding with this dialog
 }
 
 void CGLYGameDlg::GamePaint()
@@ -339,87 +393,6 @@ void CGLYGameDlg::CreateAllItem()
 }
 
 /**
- * Load map data.
- */
-void CGLYGameDlg::LoadMapData(const CString& xmlSource)
-{
-	// Initialize COM for this thread (should ideally be done once at program startup)
-	HRESULT hr = CoInitialize(NULL);
-	if (FAILED(hr))
-	{
-		// Log or handle error (e.g., throw exception)
-		TRACE(_T("CoInitialize failed\n"));
-		return;
-	}
-
-	// Create XML document instance
-	hr = mXmlMapConfig.CreateInstance(__uuidof(MSXML2::DOMDocument30));
-	if (FAILED(hr))
-	{
-		// MessageBox("Failed to create DOMDocument. Please install MS XML Parser.");
-		CoUninitialize();
-		return;
-	}
-
-	// Load map configuration file
-	VARIANT_BOOL success = mXmlMapConfig->load(_variant_t(xmlSource));
-	if (success != VARIANT_TRUE)
-	{
-		// Handle load failure (e.g., file not found)
-		TRACE(_T("Failed to load map XML file\n"));
-		mXmlMapConfig.Release();
-		CoUninitialize();
-		return;
-	}
-
-	// Get root node <map> once
-	MSXML2::IXMLDOMElementPtr mapNode = mXmlMapConfig->documentElement;
-	if (!mapNode)
-	{
-		TRACE(_T("Missing root node <map>\n"));
-		return;
-	}
-
-	// Get <background> child node once
-	MSXML2::IXMLDOMElementPtr bgNode = mapNode->selectSingleNode(_T("background"));
-	if (!bgNode)
-	{
-		TRACE(_T("Missing <background> node\n"));
-		return;
-	}
-
-	// Read attributes from <map> node
-	mBackGround.mStartCol = CXmlUtil::GetAttributeToInt(mapNode, _T("start_col"));
-	mBackGround.mStartRow = CXmlUtil::GetAttributeToInt(mapNode, _T("start_row"));
-	mBaseDir = CXmlUtil::GetAttributeToCString(mapNode, _T("dir"));
-	if (mBaseDir.IsEmpty())
-	{
-		mBaseDir = _T("resource/map/assets/");   // Default directory
-	}
-
-	// Read attributes from <background> node
-	CString strMapPath = CXmlUtil::GetAttributeToCString(bgNode, _T("file"));
-	mBackGround.mBackPath = mBaseDir + strMapPath;
-
-	// Read background offsets and grid dimensions
-	mBackGround.mOffsetX = CXmlUtil::GetAttributeToFloat(bgNode, _T("x_offset"));
-	mBackGround.mOffsetY = CXmlUtil::GetAttributeToFloat(bgNode, _T("y_offset"));
-	mBackGround.mCols = CXmlUtil::GetAttributeToInt(bgNode, _T("cols"));
-	mBackGround.mRows = CXmlUtil::GetAttributeToInt(bgNode, _T("rows"));
-
-	// Update avatar's map offsets (ensure both X and Y are set after both offsets are read)
-	mAvatar.mMapOffSetX = static_cast<int>(mBackGround.mOffsetX);
-	mAvatar.mMapOffSetY = static_cast<int>(mBackGround.mOffsetY);
-
-	// Also store grid dimensions in dialog members if needed elsewhere
-	mCols = mBackGround.mCols;
-	mRows = mBackGround.mRows;
-
-	mAstar.Init(this); // Initialize A* pathfinding with this dialog
-}
-
-
-/**
  * Get the cell.
  * @param tx The x-coordinate on the screen.
  * @param ty The y-coordinate on the screen.
@@ -434,14 +407,6 @@ CTile* CGLYGameDlg::GetTileFromScreenCoordinate(float tx, float ty) const
 CTile* CGLYGameDlg::GetTile(int col, int row) const
 {
 	return mRenderGrid.GetTile(col, row);
-}
-
-void CGLYGameDlg::CreateBackGroud()
-{
-	if (!mBackGround.mIsReady)
-	{
-		mBackGround.Load(mBackGround.mBackPath);
-	}
 }
 
 LRESULT CGLYGameDlg::WindowProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -533,12 +498,9 @@ void CGLYGameDlg::OnTimer(int id)
 					CPoint point(mAvatar.GetCol(), mAvatar.GetRow());
 					if (pGoItem->HitTest(point))
 					{
-
 						CString goTo = pGoItem->mGoTo;
-						ReleaseSceen();
-						LoadMapData(goTo);
-						mMapDC.CreateCompatibleDC(NULL);
-						OnPaint();
+						ReleaseScene();
+						EntryScene(goTo);
 						break;
 					}
 				}
@@ -569,4 +531,53 @@ int CGLYGameDlg::GetRows()
 INode* CGLYGameDlg::GetNode(int col, int row)
 {
 	return GetTile(col, row);
+}
+
+void CGLYGameDlg::ReleaseScene()
+{
+	// Release COM resources (XML Document)
+	if (mXmlMapConfig != nullptr)
+	{
+		mXmlMapConfig.Release();
+		mXmlMapConfig = nullptr;
+	}
+
+	// Clean up item definitions
+	DeleteAllItemDefination(); // Ensure this function deallocates memory properly
+
+	// Clean up item instances
+	for (CItem* item : mArrItems)
+	{
+		delete item; // Ensure CItem destructor handles its own resources
+	}
+	mArrItems.clear(); // Clear the vector after deletion
+	mRenderGrid.mIsReady = false;
+
+	// Unload character and background resources
+	mAvatar.UnLoad();
+	mBackGround.UnLoad();
+
+	// Clean up GDI objects
+	if (mMap.m_hObject != nullptr)
+	{
+		mMap.DeleteObject(); // Delete the GDI object (e.g., bitmap)
+	}
+
+	// Delete the device context
+	if (mMapDC.m_hDC != nullptr)
+	{
+		mMapDC.DeleteDC();
+	}
+}
+
+CGLYGameDlg::~CGLYGameDlg()
+{
+	ReleaseScene();
+	CoUninitialize();
+	if (mBackMap.m_hObject != nullptr)
+		mBackMap.DeleteObject();
+
+	if (mBackDC.m_hDC != nullptr)
+		mBackDC.DeleteDC();
+	GdiplusShutdown(mGdiToken);
 }
