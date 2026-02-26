@@ -1,11 +1,18 @@
 #pragma once
 #include "item.h"
-class CGoItem :
-	public CItem
+
+class CGoItem :public CItem
 {
 public:
-	CGoItem(void);
+	CString mGoTo;
+public:
+	CGoItem(CString goTo);
 	~CGoItem(void);
+    /**
+	 * Checks whether a given point (in client coordinates) falls inside the item.
+	 * @param point The point to test, typically from a mouse message.
+	 * @return true if the point is within the item's interactive area.
+	 */
+    virtual bool HitTest(CPoint point);
 	void FromXml(MSXML2::IXMLDOMElementPtr itemNode);
 };
-

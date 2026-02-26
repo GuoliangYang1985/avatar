@@ -83,9 +83,10 @@ public:
 	void CreateAllItem();
 
 	/**
-	 * Loads map data.
+	 * Loads map data from an XML source.
+	 * @param xmlSource The XML source to load.
 	 */
-	void LoadMapData();
+	void LoadMapData(const CString& xmlSource);
 
 	/**
 	 * Gets the tile corresponding to the given screen coordinates.
@@ -136,6 +137,8 @@ public:
 	 * @param rect The new client rectangle of the window.
 	 */
 	void OnWindowSizeChanged(CRect rect);
+
+	void ReleaseSceen();
 public:
 	// Character.
 	CAvatar mAvatar;
@@ -149,7 +152,7 @@ public:
 	CString mBaseDir;
 	Image* mBack;
 	// Object instances.
-	vector<CItem*>* mArrItems;
+	std::vector<CItem*> mArrItems;
 	// Object definitions.
 	CMap<CString, LPCTSTR, CItemDefinition*, CItemDefinition*> mItemDefinitions;
 	// Grid layer.

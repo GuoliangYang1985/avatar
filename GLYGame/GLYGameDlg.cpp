@@ -1,5 +1,4 @@
 // GLYGameDlg.cpp : implementation file
-//
 
 #include "stdafx.h"
 #include "GLYGame.h"
@@ -9,7 +8,6 @@
 #include "Sort.h"
 #include "GoItem.h"
 
-
 /**
  * CGLYGameDlg dialog
  */
@@ -17,14 +15,22 @@ CGLYGameDlg::CGLYGameDlg(CWnd* pParent) : CDialog(CGLYGameDlg::IDD, pParent)
 {
 	mIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 	mIsReady = false;
-	mArrItems = new vector<CItem*>();
-
 	GdiplusStartup(&mGdiToken, &mGdiplusStartupInput, NULL);
 	mMapDC.CreateCompatibleDC(NULL);
 	mBackDC.CreateCompatibleDC(NULL);
 }
 
 CGLYGameDlg::~CGLYGameDlg()
+{
+	ReleaseSceen();
+	if (mBackMap.m_hObject != nullptr)
+		mBackMap.DeleteObject();
+
+	mBackDC.DeleteDC();
+	GdiplusShutdown(mGdiToken);
+}
+
+void CGLYGameDlg::ReleaseSceen()
 {
 	if (mXmlMapConfig != NULL)
 	{
@@ -33,26 +39,18 @@ CGLYGameDlg::~CGLYGameDlg()
 		CoUninitialize();
 	}
 	DeleteAllItemDefination();
-	if (mArrItems != NULL)
+	for (CItem* item : mArrItems)
 	{
-		vector<CItem*>::iterator iter;
-		for (iter = mArrItems->begin(); iter != mArrItems->end(); ++iter)
-		{
-			if (*iter != NULL)
-			{
-				delete* iter;
-				*iter = NULL;
-			}
-		}
-		mArrItems->clear();
-		delete mArrItems;
-		mArrItems = NULL;
+		delete item;
 	}
+	mArrItems.clear();
+	mRenderGrid.mIsReady = false;
 	mAvatar.UnLoad();
 	mBackGround.UnLoad();
-	mBackDC.DeleteDC();
+	if (mMap.m_hObject != nullptr)
+		mMap.DeleteObject();
+
 	mMapDC.DeleteDC();
-	GdiplusShutdown(mGdiToken);
 }
 
 void CGLYGameDlg::DoDataExchange(CDataExchange* pDX)
@@ -61,12 +59,10 @@ void CGLYGameDlg::DoDataExchange(CDataExchange* pDX)
 }
 
 BEGIN_MESSAGE_MAP(CGLYGameDlg, CDialog)
-	//{{AFX_MSG_MAP(CGLYGameDlg)
 	ON_WM_SYSCOMMAND()
 	ON_WM_SIZE()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
-	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
 /**
@@ -85,9 +81,8 @@ BOOL CGLYGameDlg::OnInitDialog()
 	SetIcon(mIcon, TRUE);			// Set big icon
 	SetIcon(mIcon, FALSE);		// Set small icon
 
-
 	ShowWindow(SW_MAXIMIZE); // Set window to maximized state.
-	LoadMapData();// Load map data.
+	LoadMapData(_T("resource/map/data/gly.xml"));// Load map data.
 	return true;  // return TRUE  unless you set the focus to a control
 }
 
@@ -107,7 +102,10 @@ void CGLYGameDlg::OnWindowSizeChanged(CRect rect)
 	{
 		// Recreate a bitmap matching the window size.
 		CClientDC dc(this);
-		mBackMap.DeleteObject();
+		if (mBackMap.m_hObject != nullptr)
+		{
+			mBackMap.DeleteObject();
+		}
 		mBackMap.CreateCompatibleBitmap(&dc, rect.Width(), rect.Height());
 		mBackDC.SelectObject(&mBackMap);
 		if (mCols > 0 && mRows > 0)
@@ -144,40 +142,40 @@ void CGLYGameDlg::OnPaint()
 	else
 	{
 		CDialog::OnPaint();
-	}
 
-	CreateBackGroud();
+		CreateBackGroud();
 
-	// If the grid is not initialized, initialize it.
-	if (!mRenderGrid.mIsReady)
-	{
-		mRenderGrid.CreateGrid(mCols, mRows);
-		mRenderGrid.ParseTileXML(mXmlMapConfig);
-	}
-
-	if (!mAvatar.mIsReady)
-	{
-		mAvatar.Load("resource/avatar/male.png");
-		if (mAvatar.mIsReady)
+		// If the grid is not initialized, initialize it.
+		if (!mRenderGrid.mIsReady)
 		{
-			if (mBackGround.mStartCol > 0 && mBackGround.mStartRow > 0)
+			mRenderGrid.CreateGrid(mCols, mRows);
+			mRenderGrid.ParseTileXML(mXmlMapConfig);
+		}
+
+		if (!mAvatar.mIsReady)
+		{
+			mAvatar.Load("resource/avatar/male.png");
+			if (mAvatar.mIsReady)
 			{
-				CGamePoint p = CMapUtil::GetScreenCoordinate(mBackGround.mStartCol, mBackGround.mStartRow);
-				mAvatar.mX = p.mX - mBackGround.mOffsetX - mAvatar.mOffsetX;
-				mAvatar.mY = p.mY - mBackGround.mOffsetY - mAvatar.mOffsetY;
+				if (mBackGround.mStartCol > 0 && mBackGround.mStartRow > 0)
+				{
+					CGamePoint p = CMapUtil::GetScreenCoordinate(mBackGround.mStartCol, mBackGround.mStartRow);
+					mAvatar.mX = p.mX - mBackGround.mOffsetX - mAvatar.mOffsetX;
+					mAvatar.mY = p.mY - mBackGround.mOffsetY - mAvatar.mOffsetY;
+				}
 			}
 		}
+		GamePaint();
 	}
-	GamePaint();
 }
 
 void CGLYGameDlg::GamePaint()
 {
 	CreateAllItemDefination();
-	if (mArrItems->size() <= 0)
+	if (mArrItems.empty())
 	{
 		CreateAllItem();
-		*mArrItems = CSort::SortPosition(*mArrItems);
+		mArrItems = CSort::SortPosition(mArrItems);
 	}
 	Show();
 }
@@ -231,7 +229,7 @@ void CGLYGameDlg::DrawMap(Graphics& graphics)
 
 	// Draw all elements within the map.
 	BOOL bFinded = false;
-	for (CItem* item : *mArrItems)
+	for (CItem* item : mArrItems)
 	{
 		if (!bFinded)
 		{
@@ -312,7 +310,8 @@ void CGLYGameDlg::CreateAllItem()
 			CItem* pItem = NULL;
 			if (type == "GoItem")
 			{
-				pItem = new CGoItem();
+				CString goToPath = CXmlUtil::GetAttributeToCString(itemNode, "onStop");
+				pItem = new CGoItem(goToPath);
 			}
 			else
 			{
@@ -323,12 +322,12 @@ void CGLYGameDlg::CreateAllItem()
 			CItemDefinition* pItemDef;
 			mItemDefinitions.Lookup(pItem->mSource, pItemDef);
 			pItem->SetItemDefinition(pItemDef);
-			mArrItems->push_back(pItem);
-			for (int i = pItem->mCol; i < pItem->mCol + pItem->mCols; ++i)
+			mArrItems.push_back(pItem);
+			for (int m = pItem->mCol; m < pItem->mCol + pItem->mCols; ++m)
 			{
-				for (int j = pItem->mRow; j < pItem->mRow + pItem->mRows; ++j)
+				for (int n = pItem->mRow; n < pItem->mRow + pItem->mRows; ++n)
 				{
-					CTile* t = GetTile(i, j);
+					CTile* t = GetTile(m, n);
 					t->AddItem(pItem);
 					pItem->AddTile(t);
 				}
@@ -342,7 +341,7 @@ void CGLYGameDlg::CreateAllItem()
 /**
  * Load map data.
  */
-void CGLYGameDlg::LoadMapData()
+void CGLYGameDlg::LoadMapData(const CString& xmlSource)
 {
 	// Initialize COM for this thread (should ideally be done once at program startup)
 	HRESULT hr = CoInitialize(NULL);
@@ -363,7 +362,7 @@ void CGLYGameDlg::LoadMapData()
 	}
 
 	// Load map configuration file
-	VARIANT_BOOL success = mXmlMapConfig->load(_T("resource/map/data/gly.xml"));
+	VARIANT_BOOL success = mXmlMapConfig->load(_variant_t(xmlSource));
 	if (success != VARIANT_TRUE)
 	{
 		// Handle load failure (e.g., file not found)
@@ -526,6 +525,24 @@ void CGLYGameDlg::OnTimer(int id)
 		if (!mAvatar.mWalking)
 		{
 			KillTimer(id);
+			for (CItem* item : mArrItems)
+			{
+				CGoItem* pGoItem = dynamic_cast<CGoItem*>(item);
+				if (pGoItem != nullptr)
+				{
+					CPoint point(mAvatar.GetCol(), mAvatar.GetRow());
+					if (pGoItem->HitTest(point))
+					{
+
+						CString goTo = pGoItem->mGoTo;
+						ReleaseSceen();
+						LoadMapData(goTo);
+						mMapDC.CreateCompatibleDC(NULL);
+						OnPaint();
+						break;
+					}
+				}
+			}
 		}
 	}
 }

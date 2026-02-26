@@ -64,10 +64,7 @@ bool CAvatar::Load(CString strFileName)
 void CAvatar::UnLoad()
 {
 	CImage::UnLoad();
-	mWidth = 0;
-	mHeight = 0;
-	mOffsetX = 0;
-	mOffsetY = 0;
+	Init();
 }
 
 void CAvatar::StartWalk(CPath* pPath)
