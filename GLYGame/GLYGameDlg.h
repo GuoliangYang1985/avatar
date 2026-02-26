@@ -26,16 +26,16 @@ protected:
 	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV support
 public:
 	/**
-	 * Enter a scene.
+	 * Create a scene.
 	 * @param xmlSource The XML source to load.
 	 */
-	void EntryScene(const CString& xmlSource);
+	void CreateScene(const CString& xmlSource);
 
 	/**
 	 * Loads map data from an XML source.
 	 * @param xmlSource The XML source to load.
 	 */
-	void LoadMapData(const CString& xmlSource);
+	bool LoadMapData(const CString& xmlSource);
 
 	/**
 	 * Handles window events.

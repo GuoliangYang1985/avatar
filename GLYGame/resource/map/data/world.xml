@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map id="WHQ" name="杨老师校园" dir="resource/map/assets/" start_row="30" start_col="30" >
+<map id="world" name="Teacher Yang's Campus" dir="resource/map/assets/" start_row="30" start_col="30" >
 	<background file="background.jpg" x_offset="-800" y_offset="0" cols="130" rows="130"/>
 	<ItemDefinitions>
 		<ItemDefinition id="greenPlants.png" file="greenPlants.png" x_offset="-36" y_offset="-77" rows="1" cols="1" walkable="false" overlap="true"/>
 		<ItemDefinition id="lightLeft.png" file="lightLeft.png" x_offset="-16" y_offset="-87" rows="1" cols="1" walkable="false" overlap="true"/>
 		<ItemDefinition id="lightRight.png" file="lightRight.png" x_offset="-15" y_offset="-85" rows="1" cols="1" walkable="false" overlap="true"/>
-		<ItemDefinition id="horse.png" file="horse.png" x_offset="-71" y_offset="-95" rows="4" cols="4" walkable="false" overlap="true"/>
+		<ItemDefinition id="horse.png" file="horse.png" x_offset="-71" y_offset="-95" rows="4" cols="4" walkable="false" overlap="true"/>
+
 		<ItemDefinition id="plantain.png" file="plantain.png" x_offset="-95" y_offset="-145" rows="1" cols="1" walkable="false" overlap="true"/>
 		<ItemDefinition id="tree.png" file="tree.png" x_offset="-105" y_offset="-130" rows="2" cols="2" walkable="false" overlap="true"/>
 		<ItemDefinition id="tussockRight.png" file="tussockRight.png" x_offset="-110" y_offset="-13" rows="4" cols="2" walkable="false" overlap="true"/>
@@ -17,30 +18,16 @@
 		<ItemDefinition id="npc1.png" file="npc1.png" x_offset="-30" y_offset="-80" rows="1" cols="1" walkable="false" overlap="true"/>
 	</ItemDefinitions>
 	<Items>
-		<Item source="npc1.png" col="35" row="22" type="QuestNpcItem" name="园丁" >
-			<onClick>
-				<quest_start id="casetree"/>
-				<quest_end id="casetree"/>
-				<quest_end id="helpGardener1"/>
-			</onClick>
-		</Item>
+		<Item source="npc1.png" col="35" row="22" type="QuestNpcItem" name="gardener" />
 		<Item source="greenPlants.png" col="42" row="17"/>
 		<Item source="greenPlants.png" col="34" row="17"/>
 		<Item source="tussockRight.png" col="7" row="10"/>
 		<Item source="tussockLeft.png" col="2" row="15"/>
 		<Item source="teaching.png" col="1" row="0"/>
-		<Item source="tree.png" col="17" row="31" type="QuestItem" questItemId="questItem1" correspondingVitemId="Q_GWGC_TREE">
-			<questObject name = "castTree" />
-		</Item>
-		<Item source="tree.png" col="0" row="21" type="QuestItem" questItemId="questItem2" correspondingVitemId="Q_GWGC_TREE">
-			<questObject name = "castTree" />
-		</Item>
-		<Item source="tree.png" col="9" row="21" type="QuestItem" questItemId="questItem3" correspondingVitemId="Q_GWGC_TREE">
-			<questObject name = "castTree" />
-		</Item>
-		<Item source="tree.png" col="15" row="2" type="QuestItem" questItemId="questItem4" correspondingVitemId="Q_GWGC_TREE">
-			<questObject name = "castTree" />
-		</Item>
+		<Item source="tree.png" col="17" row="31" type="QuestItem"/>
+		<Item source="tree.png" col="0" row="21" type="QuestItem"/>
+		<Item source="tree.png" col="9" row="21" type="QuestItem"/>
+		<Item source="tree.png" col="15" row="2" type="QuestItem"/>
 		<Item source="lightLeft.png" col="16" row="22"/>
 		<Item source="train.png" col="17" row="34" type="NavigateToURL">
 			<file url="https://github.com/YuanIdea/yuan" width="1000" height="480" />
@@ -48,25 +35,13 @@
 		<Item source="lightRight.png" col="22" row="22"/>
 		<Item source="library.png" col="27" row="1"/>
 		<Item source="tussockLeft.png" col="29" row="17"/>
-		<Item source="tree.png" col="25" row="13" type="QuestItem" questItemId="wenhuaqu2513" correspondingVitemId="Q_GWGC_TREE">
-			<questObject name = "castTree" />
-		</Item>
-		<Item source="plantain.png" col="57" row="33" type="QuestItem" questItemId="wenhuaqu5733" correspondingVitemId="Q_GWGC_TREE">
-			<questObject name = "castTree" />
-		</Item>
-		<Item source="plantain.png" col="39" row="50" type="QuestItem" questItemId="wenhuaqu3950" correspondingVitemId="Q_GWGC_TREE">
-			<questObject name = "castTree" />
-		</Item>
-		<Item source="tree.png" col="26" row="32" type="QuestItem" questItemId="wenhuaqu2632" correspondingVitemId="Q_GWGC_TREE">
-			<questObject name = "castTree" />
-		</Item>
+		<Item source="tree.png" col="25" row="13" type="QuestItem" questItemId="wenhuaqu2513" />
+		<Item source="plantain.png" col="57" row="33" type="QuestItem" questItemId="wenhuaqu5733" />
+		<Item source="plantain.png" col="39" row="50" type="QuestItem" questItemId="wenhuaqu3950" />
+		<Item source="tree.png" col="26" row="32" type="QuestItem" questItemId="wenhuaqu2632" />
 		<Item source="horse.png" col="25" row="38"/>
-		<Item source="tree.png" col="29" row="54" type="QuestItem" questItemId="wenhuaqu2954" correspondingVitemId="Q_GWGC_TREE">
-			<questObject name = "castTree" />
-		</Item>
-		<Item source="tree.png" col="47" row="22" type="QuestItem" questItemId="wenhuaqu4722" correspondingVitemId="Q_GWGC_TREE">
-			<questObject name = "castTree" />
-		</Item>
+		<Item source="tree.png" col="29" row="54" type="QuestItem" questItemId="wenhuaqu2954" />
+		<Item source="tree.png" col="47" row="22" type="QuestItem" questItemId="wenhuaqu4722" />
 		<Item id="teaching" source="go.png" col="9" row="4" type="GoItem" onStop="resource/map/data/gly.xml"/>
 		<Item id="library" source="go.png" col="38" row="18" type="GoItem" onStop="resource/map/data/gly.xml"/>
 	</Items>

@@ -7,6 +7,12 @@
 #include "XmlUtil.h"
 #include "Sort.h"
 #include "GoItem.h"
+#include <fstream>
+
+bool FileExists(const std::wstring& filename) {
+	DWORD attr = GetFileAttributesW(filename.c_str());
+	return attr != INVALID_FILE_ATTRIBUTES && !(attr & FILE_ATTRIBUTE_DIRECTORY);
+}
 
 /**
  * CGLYGameDlg dialog
@@ -47,7 +53,7 @@ BOOL CGLYGameDlg::OnInitDialog()
 	SetIcon(mIcon, FALSE);		// Set small icon
 	ShowWindow(SW_MAXIMIZE); // Set window to maximized state.
 
-	EntryScene(_T("resource/map/data/gly.xml"));
+	CreateScene(_T("resource/map/data/gly.xml"));
 	return true;  // return TRUE  unless you set the focus to a control
 }
 
@@ -66,11 +72,11 @@ void CGLYGameDlg::OnWindowSizeChanged(CRect rect)
 	if (mBackDC.GetSafeHdc())
 	{
 		// Recreate a bitmap matching the window size.
-		CClientDC dc(this);
 		if (mBackMap.m_hObject != nullptr)
 		{
 			mBackMap.DeleteObject();
 		}
+		CClientDC dc(this);
 		mBackMap.CreateCompatibleBitmap(&dc, rect.Width(), rect.Height());
 		mBackDC.SelectObject(&mBackMap);
 		if (mCols > 0 && mRows > 0)
@@ -90,7 +96,6 @@ void CGLYGameDlg::OnPaint()
 	if (IsIconic())
 	{
 		CPaintDC dc(this); // device context for painting
-
 		SendMessage(WM_ICONERASEBKGND, (WPARAM)dc.GetSafeHdc(), 0);
 
 		// Center icon in client rectangle
@@ -100,9 +105,7 @@ void CGLYGameDlg::OnPaint()
 		GetClientRect(&rect);
 		int x = (rect.Width() - cxIcon + 1) / 2;
 		int y = (rect.Height() - cyIcon + 1) / 2;
-
-		// Draw the icon
-		dc.DrawIcon(x, y, mIcon);
+		dc.DrawIcon(x, y, mIcon);// Draw the icon
 	}
 	else
 	{
@@ -111,11 +114,17 @@ void CGLYGameDlg::OnPaint()
 	}
 }
 
-void CGLYGameDlg::EntryScene(const CString& xmlSource)
+void CGLYGameDlg::CreateScene(const CString& xmlSource)
 {
 	mIsReady = false;
+
+	bool success = LoadMapData(xmlSource);
+	if (!success)
+	{
+		return;
+	}
+
 	mMapDC.CreateCompatibleDC(NULL);
-	LoadMapData(xmlSource);
 
 	// Create map background.
 	if (!mBackGround.mIsReady)
@@ -146,7 +155,7 @@ void CGLYGameDlg::EntryScene(const CString& xmlSource)
 	GamePaint();
 }
 
-void CGLYGameDlg::LoadMapData(const CString& xmlSource)
+bool CGLYGameDlg::LoadMapData(const CString& xmlSource)
 {
 	// Initialize COM for this thread (should ideally be done once at program startup)
 	HRESULT hr = CoInitialize(NULL);
@@ -154,7 +163,7 @@ void CGLYGameDlg::LoadMapData(const CString& xmlSource)
 	{
 		// Log or handle error (e.g., throw exception)
 		TRACE(_T("CoInitialize failed\n"));
-		return;
+		return false;
 	}
 
 	// Create XML document instance
@@ -163,7 +172,7 @@ void CGLYGameDlg::LoadMapData(const CString& xmlSource)
 	{
 		// MessageBox("Failed to create DOMDocument. Please install MS XML Parser.");
 		CoUninitialize();
-		return;
+		return false;
 	}
 
 	// Load map configuration file
@@ -174,7 +183,7 @@ void CGLYGameDlg::LoadMapData(const CString& xmlSource)
 		TRACE(_T("Failed to load map XML file\n"));
 		mXmlMapConfig.Release();
 		CoUninitialize();
-		return;
+		return false;
 	}
 
 	// Get root node <map> once
@@ -182,7 +191,7 @@ void CGLYGameDlg::LoadMapData(const CString& xmlSource)
 	if (!mapNode)
 	{
 		TRACE(_T("Missing root node <map>\n"));
-		return;
+		return false;
 	}
 
 	// Get <background> child node once
@@ -190,7 +199,7 @@ void CGLYGameDlg::LoadMapData(const CString& xmlSource)
 	if (!bgNode)
 	{
 		TRACE(_T("Missing <background> node\n"));
-		return;
+		return false;
 	}
 
 	// Read attributes from <map> node
@@ -221,6 +230,7 @@ void CGLYGameDlg::LoadMapData(const CString& xmlSource)
 	mRows = mBackGround.mRows;
 
 	mAstar.Init(this); // Initialize A* pathfinding with this dialog
+	return true;
 }
 
 void CGLYGameDlg::GamePaint()
@@ -305,6 +315,10 @@ void CGLYGameDlg::CreateAllItemDefination()
 {
 	if (mItemDefinitions.IsEmpty())
 	{
+		if (mXmlMapConfig == nullptr)
+		{
+			return;
+		}
 		MSXML2::IXMLDOMElementPtr itemDefsNode = (MSXML2::IXMLDOMElementPtr)mXmlMapConfig->selectSingleNode("map/ItemDefinitions");
 		MSXML2::IXMLDOMNodeListPtr itemDefList = itemDefsNode->GetchildNodes();
 		int nCount = itemDefList->length;
@@ -349,6 +363,10 @@ void CGLYGameDlg::DeleteAllItemDefination()
 
 void CGLYGameDlg::CreateAllItem()
 {
+	if (mXmlMapConfig == nullptr)
+	{
+		return;
+	}
 	mBack = mBackGround.GetImage();
 	MSXML2::IXMLDOMElementPtr itemsNode = (MSXML2::IXMLDOMElementPtr)(mXmlMapConfig->selectSingleNode("map/Items"));
 	MSXML2::IXMLDOMNodeListPtr itemList = itemsNode->GetchildNodes();
@@ -499,8 +517,11 @@ void CGLYGameDlg::OnTimer(int id)
 					if (pGoItem->HitTest(point))
 					{
 						CString goTo = pGoItem->mGoTo;
-						ReleaseScene();
-						EntryScene(goTo);
+						if (FileExists((LPCTSTR)goTo))
+						{
+							ReleaseScene();
+							CreateScene(goTo);
+						}
 						break;
 					}
 				}

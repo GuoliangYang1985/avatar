@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map id="WHQ" name="杨老师校园" dir="resource/map/assets/" start_row="30" start_col="30" >
+<map id="gly" name="Teacher Yang's Campus" dir="resource/map/assets/" start_row="30" start_col="30" >
 	<background file="background.jpg" x_offset="-800" y_offset="0" cols="130" rows="130"/>
 	<ItemDefinitions>
 		<ItemDefinition id="greenPlants.png" file="greenPlants.png" x_offset="-36" y_offset="-77" rows="1" cols="1" walkable="false" overlap="true"/>
@@ -23,7 +23,7 @@
 		<ItemDefinition id="npc1.png" file="npc1.png" x_offset="-30" y_offset="-80" rows="1" cols="1" walkable="false" overlap="true"/>
 	</ItemDefinitions>
 	<Items>
-		<Item source="npc1.png" col="35" row="22" type="QuestNpcItem" name="园丁" >
+		<Item source="npc1.png" col="35" row="22" type="QuestNpcItem" name="Gardener" >
 			<onClick>
 				<quest_start id="casetree"/>
 				<quest_end id="casetree"/>
@@ -94,9 +94,9 @@
 		<Item id="teaching" source="go.png" col="9" row="4" type="GoItem" onStop="resource/map/data/world.xml"/>
 		<Item id="library" source="go.png" col="38" row="18" type="GoItem" onStop="resource/map/data/world.xml"/>
 		<Item source="navigation.png" col="29" row="31" type="MultiNavigationItem">
-			<title text="文化区" x="-26" y="-96" font_size="16" font_color="0x000000" font_family="微软雅黑"></title>
-			<menu  text="杨老师学堂" url="resource/map/teaching.xml"  x="-42" y="-60" font_size="14" font_color="0xCCCCCC" font_family="黑体" over_color="0x2B8FD1" out_color="0x000000" idBlod="true"></menu>
-			<menu  text="杨老师图书馆" url="resource/map/library.xml"  x="-42" y="-34" font_size="14" font_color="0xCCCCCC" font_family="黑体" over_color="0x2B8FD1" out_color="0x000000" idBlod="true"></menu>
+			<title text="Teacher Yang's Training Base" x="-26" y="-96" font_size="16" font_color="0x000000"></title>
+			<menu  text="Teacher Yang's School" url="resource/map/teaching.xml"  x="-42" y="-60" font_size="14" font_color="0xCCCCCC" font_family="黑体" over_color="0x2B8FD1" out_color="0x000000" idBlod="true"></menu>
+			<menu  text="Teacher Yang's Library" url="resource/map/library.xml"  x="-42" y="-34" font_size="14" font_color="0xCCCCCC" font_family="黑体" over_color="0x2B8FD1" out_color="0x000000" idBlod="true"></menu>
 		</Item>
 	</Items>
 	<Tiles>
