@@ -18,8 +18,17 @@ static bool FileExists(const std::wstring& filename) {
  * CGLYGameDlg dialog
  */
 CGLYGameDlg::CGLYGameDlg(CWnd* pParent) : CDialog(CGLYGameDlg::IDD, pParent)
+, mIcon(AfxGetApp()->LoadIcon(IDR_MAINFRAME))
+, mIsReady(false)
+, mXmlMapConfig(nullptr)
+, mBaseDir(_T(""))
+, mBack(nullptr)
+, mCols(0)
+, mRows(0)
+, mGdiToken(0)
+, mMapX(0.0f)
+, mMapY(0.0f)
 {
-	mIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 	GdiplusStartup(&mGdiToken, &mGdiplusStartupInput, NULL);
 	mBackDC.CreateCompatibleDC(NULL);
 }
