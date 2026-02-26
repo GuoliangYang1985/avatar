@@ -1,17 +1,10 @@
 // Isometric.h: interface for the CIsometric class.
-//
-//////////////////////////////////////////////////////////////////////
 
-#if !defined(AFX_ISOMETRIC_H__B1E7FBF4_F322_457A_BB00_00191323E78A__INCLUDED_)
-#define AFX_ISOMETRIC_H__B1E7FBF4_F322_457A_BB00_00191323E78A__INCLUDED_
-
-#if _MSC_VER > 1000
 #pragma once
 #include "GamePoint.h"
 #include "Coordiante.h"
-#endif // _MSC_VER > 1000
 
-class CIsometric  
+class CIsometric
 {
 public:
 	CIsometric(float declination = 30);
@@ -53,18 +46,15 @@ public:
 	CCoordiante MapToIsoWorld(float screenX, float screenY);
 private:
 	//θ垂直俯视角
-	float m_fTheta;
+	float mTheta;
 	//sinθ
-	float m_fSinTheta;
+	float mSinTheta;
 	//cosθ
-	float m_fCosTheta;
-	
+	float mCosTheta;
 	//α水平视角
-	float m_fAlpha;
+	float mAlpha;
 	//sinα
-	float m_fSinAlpha;
+	float mSinAlpha;
 	//cosα
-	float m_fCosAlpha;
+	float mCosAlpha;
 };
-
-#endif // !defined(AFX_ISOMETRIC_H__B1E7FBF4_F322_457A_BB00_00191323E78A__INCLUDED_)

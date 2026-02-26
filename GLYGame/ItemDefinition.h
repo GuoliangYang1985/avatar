@@ -1,17 +1,10 @@
 // ItemDefinition.h: interface for the CItemDefinition class.
-//
-//////////////////////////////////////////////////////////////////////
 
-#if !defined(AFX_ITEMDEFINITION_H__5C709F27_3F77_4CCB_B6ED_4779064CBB4B__INCLUDED_)
-#define AFX_ITEMDEFINITION_H__5C709F27_3F77_4CCB_B6ED_4779064CBB4B__INCLUDED_
-
-#if _MSC_VER > 1000
 #pragma once
 #include "XmlUtil.h"
 #include "Image.h"
-#endif // _MSC_VER > 1000
 
-class CItemDefinition: public CImage
+class CItemDefinition : public CImage
 {
 public:
 	CItemDefinition();
@@ -24,7 +17,7 @@ public:
 	void FromXml(MSXML2::IXMLDOMElementPtr pItemDefNode);
 
 	bool GetOverlap();
-	bool GetWalkable();
+	bool GetWalkable() const;
 	void SetOverlap(bool value);
 
 	/**
@@ -33,24 +26,22 @@ public:
 	void SetWalkable(bool value);
 public:
 	//id。
-	CString m_defId;
+	CString mDefId;
 	//文件基本路径。
-	CString m_strBaseDirectory;
+	CString mBaseDirectory;
 	//名字。
-	CString m_strFile;
+	CString mFile;
 	//所占的列数。
-	int m_nCols;
+	int mCols;
 	//所占的行数。
-	int m_nRows;
+	int mRows;
 	//x轴上的偏移量。
-	int m_nOffsetX;
+	int mOffsetX;
 	//y轴上的偏移量。
-	int m_nOffsetY;
+	int mOffsetY;
 private:
 	//是否可行走。
-	bool m_bWalkable;
+	bool mWalkable;
 	//是否可以覆盖
-	bool m_bOverlap;
+	bool mOverlap;
 };
-
-#endif // !defined(AFX_ITEMDEFINITION_H__5C709F27_3F77_4CCB_B6ED_4779064CBB4B__INCLUDED_)

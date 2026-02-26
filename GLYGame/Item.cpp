@@ -1,21 +1,10 @@
 // Item.cpp: implementation of the CItem class.
-//
-//////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
 #include "GLYGame.h"
 #include "Item.h"
 #include "MapUtil.h"
 #include "Tile.h"
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#define new DEBUG_NEW
-#endif
-
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
 
 CItem::CItem()
 {
@@ -59,13 +48,13 @@ void CItem::AddTile(CTile* t)
 float CItem::GetX()
 {
 	CGamePoint point = CMapUtil::GetScreenCoordinate(mCol, mRow);
-	return point.m_fX;
+	return point.mX;
 }
 
 float CItem::GetY()
 {
 	CGamePoint point = CMapUtil::GetScreenCoordinate(mCol, mRow);
-	return point.m_fY;
+	return point.mY;
 }
 
 /**
@@ -86,10 +75,10 @@ void CItem::FromXml(MSXML2::IXMLDOMElementPtr itemNode)
 void CItem::SetItemDefinition(CItemDefinition* pValue)
 {
 	mImage = pValue->mImage;
-	mCols = pValue->m_nCols;
-	mRows = pValue->m_nRows;
-	mOffsetX = pValue->m_nOffsetX;
-	mOffsetY = pValue->m_nOffsetY;
+	mCols = pValue->mCols;
+	mRows = pValue->mRows;
+	mOffsetX = pValue->mOffsetX;
+	mOffsetY = pValue->mOffsetY;
 	mItemDefinition = pValue;
 	pValue = NULL;
 }

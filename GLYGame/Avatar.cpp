@@ -95,8 +95,8 @@ void CAvatar::Walk()
 		INode* pNode = *(mCurWalkPath.begin());
 		mCurWalkPath.erase(mCurWalkPath.begin());
 		CGamePoint p = CMapUtil::GetScreenCoordinate(pNode->GetCol(), pNode->GetRow());
-		p.m_fX = p.m_fX - mMapOffSetX;
-		p.m_fY = p.m_fY - mMapOffSetY;
+		p.mX = p.mX - mMapOffSetX;
+		p.mY = p.mY - mMapOffSetY;
 		mDrect = GetDirection(p);
 	}
 }
@@ -108,8 +108,8 @@ void CAvatar::Walk()
  */
 int CAvatar::GetDirection(CGamePoint point)
 {
-	float fX = point.m_fX - GetViewX();
-	float fY = point.m_fY - GetViewY();
+	float fX = point.mX - GetViewX();
+	float fY = point.mY - GetViewY();
 	//得到弧度制角度
 	mRadian = atan2f(fY, fX);
 	float angle = (float)(mRadian * 180 / PI);
@@ -158,9 +158,9 @@ void CAvatar::CalculatePosition()
 {
 	//下一步移动距离
 	CSpeed nextSpeed = GetNextDistance();
-	mX += nextSpeed.m_fX;
-	mY += nextSpeed.m_fY;
-	mDistance -= nextSpeed.m_fInstance;
+	mX += nextSpeed.mX;
+	mY += nextSpeed.mY;
+	mDistance -= nextSpeed.mInstance;
 	if (mDistance <= 0)
 	{
 		mDistance = 0;
@@ -189,11 +189,11 @@ float CAvatar::GetNextMoveDistance() const
 CSpeed CAvatar::GetNextDistance() const
 {
 	CSpeed point;
-	point.m_fInstance = GetNextMoveDistance();
-	if (point.m_fInstance > 0)
+	point.mInstance = GetNextMoveDistance();
+	if (point.mInstance > 0)
 	{
-		point.m_fX = point.m_fInstance * cosf(mRadian);
-		point.m_fY = point.m_fInstance * sinf(mRadian);
+		point.mX = point.mInstance * cosf(mRadian);
+		point.mY = point.mInstance * sinf(mRadian);
 	}
 	return point;
 }

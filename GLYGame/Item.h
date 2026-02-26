@@ -1,17 +1,11 @@
 // Item.h: interface for the CItem class.
-//
-//////////////////////////////////////////////////////////////////////
 
-#if !defined(AFX_ITEM_H__CC38F86F_7FB7_46C8_91E2_1DDDD92E0E8F__INCLUDED_)
-#define AFX_ITEM_H__CC38F86F_7FB7_46C8_91E2_1DDDD92E0E8F__INCLUDED_
-
-#if _MSC_VER > 1000
 #pragma once
 #include "XmlUtil.h"
 #include "ItemDefinition.h"
 #include <vector>
 using namespace std;
-#endif // _MSC_VER > 1000
+
 class CTile;
 class CItem
 {
@@ -61,5 +55,3 @@ private:
 	vector<CTile*>* mArrTiles;
 	bool mInWorld;
 };
-
-#endif // !defined(AFX_ITEM_H__CC38F86F_7FB7_46C8_91E2_1DDDD92E0E8F__INCLUDED_)

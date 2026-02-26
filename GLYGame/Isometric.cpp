@@ -18,15 +18,15 @@ static char THIS_FILE[]=__FILE__;
 
 CIsometric::CIsometric(float declination)
 {
-	m_fTheta = declination;
-	m_fAlpha = 45;
-	m_fTheta *= PI / 180;
-	m_fAlpha *= PI / 180;
+	mTheta = declination;
+	mAlpha = 45;
+	mTheta *= PI / 180;
+	mAlpha *= PI / 180;
 
-	m_fSinTheta = sinf(m_fTheta);
-	m_fCosTheta = cosf(m_fTheta);
-	m_fSinAlpha = sinf(m_fAlpha);
-	m_fCosAlpha = cosf(m_fAlpha);
+	mSinTheta = sinf(mTheta);
+	mCosTheta = cosf(mTheta);
+	mSinAlpha = sinf(mAlpha);
+	mCosAlpha = cosf(mAlpha);
 }
 
 CIsometric::~CIsometric()
@@ -57,8 +57,8 @@ CGamePoint CIsometric::GetScreenCoordiation(int col, int row, float cellLength)
 CPoint CIsometric::GetMapCoordinate(float tx, float ty, float cellLength)
 {
 	CCoordiante cood = MapToIsoWorld(tx, ty);
-	int col = (int)(cood.m_fX / cellLength);
-	int row = (int)(-cood.m_fZ / cellLength);
+	int col = (int)(cood.mX / cellLength);
+	int row = (int)(-cood.mZ / cellLength);
 	if (col >= 0 && row >= 0)
 	{
 		return CPoint(col, row);
@@ -78,9 +78,9 @@ CPoint CIsometric::GetMapCoordinate(float tx, float ty, float cellLength)
  */
 CGamePoint CIsometric::MapToScreen(float xpp, float ypp, float zpp)
 {
-	float x = xpp * m_fCosAlpha + zpp * m_fSinAlpha;
-	float zp = zpp * m_fCosAlpha - xpp * m_fSinAlpha;
-	float y = ypp * m_fCosTheta - zp * m_fSinTheta;
+	float x = xpp * mCosAlpha + zpp * mSinAlpha;
+	float zp = zpp * mCosAlpha - xpp * mSinAlpha;
+	float y = ypp * mCosTheta - zp * mSinTheta;
 	return CGamePoint(x, y);
 }
 
@@ -92,7 +92,7 @@ CGamePoint CIsometric::MapToScreen(float xpp, float ypp, float zpp)
  */
 CCoordiante CIsometric::MapToIsoWorld(float screenX, float screenY)
 {
-	float z = screenX * m_fSinAlpha - screenY * m_fCosAlpha / m_fSinTheta;
-	float x = (1 / m_fCosAlpha) * (screenX - z * m_fSinAlpha);
+	float z = screenX * mSinAlpha - screenY * mCosAlpha / mSinTheta;
+	float x = (1 / mCosAlpha) * (screenX - z * mSinAlpha);
 	return CCoordiante(x, 0, z);
 }

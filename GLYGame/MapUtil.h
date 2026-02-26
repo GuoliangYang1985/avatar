@@ -1,18 +1,11 @@
 // MapUtil.h: interface for the CMapUtil class.
-//
-//////////////////////////////////////////////////////////////////////
 
-#if !defined(AFX_MAPUTIL_H__06A43440_C386_460A_AFF4_325A72CB1254__INCLUDED_)
-#define AFX_MAPUTIL_H__06A43440_C386_460A_AFF4_325A72CB1254__INCLUDED_
-
-#if _MSC_VER > 1000
 #pragma once
 #include "Isometric.h"
 #include "Tile.h"
-#endif // _MSC_VER > 1000
 
 //const float TILE_WIDTH_3D = ISO.MapToScreen(0,0,0);
-class CMapUtil  
+class CMapUtil
 {
 public:
 	CMapUtil();
@@ -44,5 +37,3 @@ public:
 		TILE_HEIGHT_SCREEN = 3,
 	};
 };
-
-#endif // !defined(AFX_MAPUTIL_H__06A43440_C386_460A_AFF4_325A72CB1254__INCLUDED_)

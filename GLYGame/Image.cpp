@@ -1,13 +1,7 @@
 // Image.cpp: implementation of the CImage class.
-//
-//////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
 #include "Image.h"
-
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
 
 CImage::CImage()
 {
@@ -16,9 +10,9 @@ CImage::CImage()
 }
 
 CImage::~CImage()
-{	
+{
 	if (mImage != NULL)
-	{	
+	{
 		::delete mImage;
 		mImage = NULL;
 	}
@@ -31,8 +25,8 @@ CImage::~CImage()
 bool CImage::Load(CString strFileName)
 {
 	//角色行走动画。
-	int len=strFileName.GetLength()+1;
-	wchar_t *pwText = new wchar_t[len];
+	int len = strFileName.GetLength() + 1;
+	wchar_t* pwText = new wchar_t[len];
 	mImage = ::new Image(strFileName, false);
 	mIsReady = true;
 	return mIsReady;
@@ -44,7 +38,7 @@ bool CImage::Load(CString strFileName)
 void CImage::UnLoad()
 {
 	if (mImage != NULL)
-	{	
+	{
 		::delete mImage;
 		mImage = NULL;
 	}
@@ -55,7 +49,7 @@ void CImage::UnLoad()
  * 得到Image的指针
  * @return 返回m_pImage
  */
-Image *CImage::GetImage()
+Image* CImage::GetImage()
 {
 	return mImage;
 }

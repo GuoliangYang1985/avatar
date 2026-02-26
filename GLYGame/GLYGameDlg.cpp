@@ -163,8 +163,8 @@ void CGLYGameDlg::OnPaint()
 			if (mBackGround.mStartCol > 0 && mBackGround.mStartRow > 0)
 			{
 				CGamePoint p = CMapUtil::GetScreenCoordinate(mBackGround.mStartCol, mBackGround.mStartRow);
-				mAvatar.mX = p.m_fX - mBackGround.mOffsetX - mAvatar.mOffsetX;
-				mAvatar.mY = p.m_fY - mBackGround.mOffsetY - mAvatar.mOffsetY;
+				mAvatar.mX = p.mX - mBackGround.mOffsetX - mAvatar.mOffsetX;
+				mAvatar.mY = p.mY - mBackGround.mOffsetY - mAvatar.mOffsetY;
 			}
 		}
 	}
@@ -263,11 +263,11 @@ void CGLYGameDlg::CreateAllItemDefination()
 			if (nodeType == MSXML2::NODE_ELEMENT)
 			{
 				CItemDefinition* pItemDef = new CItemDefinition();
-				pItemDef->m_strBaseDirectory = mBaseDir;
+				pItemDef->mBaseDirectory = mBaseDir;
 				pItemDef->FromXml(itemDefNode);
-				CString strFileUrl = pItemDef->m_strBaseDirectory + pItemDef->m_strFile;
+				CString strFileUrl = pItemDef->mBaseDirectory + pItemDef->mFile;
 				pItemDef->Load(strFileUrl);
-				mItemDefinitions.SetAt(pItemDef->m_defId, pItemDef);
+				mItemDefinitions.SetAt(pItemDef->mDefId, pItemDef);
 				pItemDef = NULL;
 			}
 		}
@@ -468,9 +468,9 @@ void CGLYGameDlg::LButtonDown(UINT modKeys, CPoint point)
 {
 	// Calculate the starting point.
 	CGamePoint p;
-	p.m_fX = mAvatar.GetViewX() + mBackGround.mOffsetX;
-	p.m_fY = mAvatar.GetViewY() + mBackGround.mOffsetY;
-	CTile* pStartNode = GetTileFromScreenCoordinate(p.m_fX, p.m_fY);
+	p.mX = mAvatar.GetViewX() + mBackGround.mOffsetX;
+	p.mY = mAvatar.GetViewY() + mBackGround.mOffsetY;
+	CTile* pStartNode = GetTileFromScreenCoordinate(p.mX, p.mY);
 
 	// Calculate the end point.
 	point.x += (long)mBackGround.mOffsetX - mMapX;

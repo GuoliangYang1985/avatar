@@ -1,22 +1,11 @@
 // MapUtil.cpp: implementation of the CMapUtil class.
-//
-//////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
 #include "GLYGame.h"
 #include "MapUtil.h"
 
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#define new DEBUG_NEW
-#endif
-
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
 CIsometric CMapUtil::m_iso = CIsometric(30);
-float CMapUtil::m_fTileWidth3D = m_iso.MapToIsoWorld(64, 0).m_fX;
+float CMapUtil::m_fTileWidth3D = m_iso.MapToIsoWorld(64, 0).mX;
 float CMapUtil::m_fTileHeight3D = m_fTileWidth3D;
 
 CMapUtil::CMapUtil()
@@ -51,4 +40,3 @@ CPoint CMapUtil::GetMapPointByScreen(float screenX, float screenY)
 	CPoint point = m_iso.GetMapCoordinate(screenX, screenY, m_fTileWidth3D);
 	return point;
 }
-

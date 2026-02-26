@@ -1,48 +1,36 @@
 // SearchResults.cpp: implementation of the CSearchResults class.
-//
-//////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
 #include "GLYGame.h"
 #include "SearchResults.h"
 
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[]=__FILE__;
-#define new DEBUG_NEW
-#endif
-
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
-
 CSearchResults::CSearchResults()
 {
-	m_bSuccess = false;
-	m_pPath = NULL;
+	mSuccess = false;
+	mPath = NULL;
 }
 
 CSearchResults::~CSearchResults()
-{	
-	m_pPath = NULL;
+{
+	mPath = NULL;
 }
 
-void CSearchResults::SetPath(CPath *p)
+void CSearchResults::SetPath(CPath* p)
 {
-	m_pPath = p;
+	mPath = p;
 }
 
-CPath *CSearchResults::GetPath()
+CPath* CSearchResults::GetPath()
 {
-	return m_pPath;
+	return mPath;
 }
 
 bool CSearchResults::GetIsSuccess()
 {
-	return m_bSuccess;
+	return mSuccess;
 }
 
 void CSearchResults::SetIsSuccess(bool val)
 {
-	m_bSuccess = val;
+	mSuccess = val;
 }
