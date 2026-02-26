@@ -9,7 +9,7 @@
 #include "GoItem.h"
 #include <fstream>
 
-bool FileExists(const std::wstring& filename) {
+static bool FileExists(const std::wstring& filename) {
 	DWORD attr = GetFileAttributesW(filename.c_str());
 	return attr != INVALID_FILE_ATTRIBUTES && !(attr & FILE_ATTRIBUTE_DIRECTORY);
 }
@@ -246,42 +246,59 @@ void CGLYGameDlg::GamePaint()
 
 void CGLYGameDlg::Show()
 {
-	CRect rect;
-	GetClientRect(&rect); // Get client area range.
-	CDC* hdc = GetDC(); // Get source device context (DC).
+	// Get client area rectangle
+	CRect clientRect;
+	GetClientRect(&clientRect);
 
-	int bWidth = mBack->GetWidth();
-	int bHeight = mBack->GetHeight();
+	// Get device context for the window
+	CDC* pWindowDC = GetDC();
+	if (!pWindowDC)
+		return;
 
-	if (mAvatar.mX <= 0 && mAvatar.mY <= 0)
+	// Background image dimensions
+	const int backWidth = mBack->GetWidth();
+	const int backHeight = mBack->GetHeight();
+
+	// Initialize avatar position if it's at origin (first show)
+	if (mAvatar.mX <= 0.0f && mAvatar.mY <= 0.0f)
 	{
-		mAvatar.mX = bWidth / 2.0f;
-		mAvatar.mY = bHeight / 2.0f;
+		mAvatar.mX = backWidth / 2.0f;
+		mAvatar.mY = backHeight / 2.0f;
 	}
 
-	if (mMap.GetSafeHandle() == NULL)
+	// Create a compatible bitmap for the map if not already created
+	if (mMap.GetSafeHandle() == nullptr)
 	{
-		mMap.CreateCompatibleBitmap(hdc, bWidth, bHeight);
-		mMapDC.SelectObject(&mMap); // Select a compatible bitmap into the compatible DC.
+		mMap.CreateCompatibleBitmap(pWindowDC, backWidth, backHeight);
+		mMapDC.SelectObject(&mMap);
 	}
 
-	Graphics graphics(mMapDC.GetSafeHdc());
-	DrawMap(graphics);
+	// Draw the map onto the map DC using GDI+
+	{
+		Gdiplus::Graphics graphics(mMapDC.GetSafeHdc());
+		DrawMap(graphics);
+		// Graphics destructor automatically releases the HDC
+	}
 
-	// Use the window's background color to fill the map background.
-	CBrush blackBrush(::GetSysColor(COLOR_WINDOW));
-	mBackDC.FillRect(&rect, &blackBrush);
+	// Prepare the back buffer DC
+	CBrush windowBgBrush(::GetSysColor(COLOR_WINDOW));
+	mBackDC.FillRect(&clientRect, &windowBgBrush);
 
-	// Draw the map.
-	mMapX = rect.Width() / 2.0f - mAvatar.GetViewX();
-	mMapY = rect.Height() / 2.0f - mAvatar.GetViewY();
-	mBackDC.BitBlt(mMapX, mMapY, bWidth, bHeight, &mMapDC, 0, 0, SRCCOPY);
+	// Calculate the position to blit the map onto the back buffer
+	// Use rounding to convert float to int without truncation warning
+	const float viewX = mAvatar.GetViewX();
+	const float viewY = mAvatar.GetViewY();
+	mMapX = lroundf(clientRect.Width() / 2.0f - viewX);
+	mMapY = lroundf(clientRect.Height() / 2.0f - viewY);
 
-	// Draw the scene background and the map.
-	hdc->BitBlt(0, 0, rect.Width(), rect.Height(), &mBackDC, 0, 0, SRCCOPY);
+	// Blit the map onto the back buffer
+	mBackDC.BitBlt(mMapX, mMapY, backWidth, backHeight, &mMapDC, 0, 0, SRCCOPY);
 
-	graphics.ReleaseHDC(mBackDC.GetSafeHdc());
-	graphics.ReleaseHDC(mMapDC.GetSafeHdc());
+	// Finally, present the back buffer to the window
+	pWindowDC->BitBlt(0, 0, clientRect.Width(), clientRect.Height(), &mBackDC, 0, 0, SRCCOPY);
+
+	// Release the window DC
+	ReleaseDC(pWindowDC);
 }
 
 void CGLYGameDlg::DrawMap(Graphics& graphics)
@@ -448,35 +465,51 @@ LRESULT CGLYGameDlg::WindowProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
  */
 void CGLYGameDlg::LButtonDown(UINT modKeys, CPoint point)
 {
-	// Calculate the starting point.
-	CGamePoint p;
-	p.mX = mAvatar.GetViewX() + mBackGround.mOffsetX;
-	p.mY = mAvatar.GetViewY() + mBackGround.mOffsetY;
-	CTile* pStartNode = GetTileFromScreenCoordinate(p.mX, p.mY);
+	// Compute the start tile from the avatar's current view position
+	const float startWorldX = mAvatar.GetViewX() + mBackGround.mOffsetX;
+	const float startWorldY = mAvatar.GetViewY() + mBackGround.mOffsetY;
+	CTile* pStartNode = GetTileFromScreenCoordinate(startWorldX, startWorldY);
+	if (!pStartNode)
+	{
+		OutputDebugString(_T("Start tile not found (invalid view position).\n"));
+		return;
+	}
 
-	// Calculate the end point.
-	point.x += (long)mBackGround.mOffsetX - mMapX;
-	point.y += (long)mBackGround.mOffsetY - mMapY;
+	// Convert the click point to world coordinates
+	// Note: mMapX/Y are the viewport origin in world coordinates (assumed integer)
+	const LONG adjustedX = point.x + static_cast<LONG>(mBackGround.mOffsetX) - mMapX;
+	const LONG adjustedY = point.y + static_cast<LONG>(mBackGround.mOffsetY) - mMapY;
+	CTile* pGoalNode = GetTileFromScreenCoordinate(static_cast<float>(adjustedX),
+		static_cast<float>(adjustedY));
+	if (!pGoalNode)
+	{
+		OutputDebugString(_T("Clicked tile not found (out of bounds).\n"));
+		return;
+	}
 
-	CTile* pGoalNode = GetTileFromScreenCoordinate((float)point.x, (float)point.y);
-
+	// Validate the goal tile is walkable
 	if (!pGoalNode->GetWalkable())
 	{
 		OutputDebugString(_T("The clicked point is not walkable!\n"));
 		return;
 	}
 
+	// If start and goal are the same, no movement needed
 	if (pStartNode->Equal(pGoalNode))
 	{
-		OutputDebugString(_T("The current position is the target position."));
+		OutputDebugString(_T("The current position is the target position.\n"));
 		return;
 	}
+
+	// Perform A* search
 	CSearchResults result = mAstar.Search(pStartNode, pGoalNode);
 	if (!result.GetIsSuccess())
 	{
 		OutputDebugString(_T("No walkable path found!\n"));
 		return;
 	}
+
+	// Start movement along the found path
 	StartTimer();
 	CPath* pPath = result.GetPath();
 	mAvatar.StartWalk(pPath);

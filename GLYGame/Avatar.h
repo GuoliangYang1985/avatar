@@ -36,10 +36,11 @@ public:
 	void Init();
 
 	/**
-	 * 加载指定素材。
-	 * @param strFileName 要加载素材的路径。
+	 * Loads the specified avatar image.
+	 * @param fileName Path to the image file.
+	 * @return true if loaded successfully, false otherwise.
 	 */
-	bool Load(CString strFileName);
+	bool Load(const CString& strFileName);
 
 	/**
 	 * 卸载加载的素材
@@ -109,8 +110,8 @@ public:
 	 */
 	void DrawNextFrame(Graphics& graphics);
 
-	int GetCol();
-	int GetRow();
+	int GetCol() const;
+	int GetRow() const;
 
 	/**
 	 * Calculate the X-coordinate of the view position.
@@ -123,16 +124,16 @@ public:
 	float GetViewY() const;
 public:
 	//角色的宽度。
-	unsigned int mWidth;
+	float mWidth;
 
 	//角色的高度。
-	unsigned int mHeight;
+	float mHeight;
 
 	//角色X轴上的偏移量
-	unsigned int mOffsetX;
+	float mOffsetX;
 
 	//角色Y轴上的偏移量
-	unsigned int mOffsetY;
+	float mOffsetY;
 
 	//角色所占行数。
 	unsigned int mCols;

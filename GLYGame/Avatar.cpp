@@ -43,18 +43,30 @@ void CAvatar::Init()
 	mWalking = false;
 }
 
-/**
- * 加载指定素材。
- * @param fileName 要加载素材的路径。
- */
-bool CAvatar::Load(CString strFileName)
+
+bool CAvatar::Load(const CString& strFileName)
 {
-	CImage::Load(strFileName);
-	//计算一帧动画的宽高和偏移量
-	mWidth = mImage->GetWidth() / COLS;
-	mHeight = mImage->GetHeight() / ROWS;
-	mOffsetX = mWidth / 2;
-	mOffsetY = mHeight - 8;
+	// Load the image (assumes CImage::Load returns bool, adjust if needed)
+	if (!CImage::Load(strFileName))
+		return false;
+
+	// Retrieve image dimensions
+	const UINT imageWidth = mImage->GetWidth();
+	const UINT imageHeight = mImage->GetHeight();
+
+	// Verify that the image dimensions are multiples of the frame grid
+	ASSERT(imageWidth % COLS == 0);
+	ASSERT(imageHeight % ROWS == 0);
+
+	// Calculate frame size using floating-point division to avoid truncation
+	// and eliminate conversion warnings
+	mWidth = static_cast<float>(imageWidth) / COLS;
+	mHeight = static_cast<float>(imageHeight) / ROWS;
+
+	// Compute offsets (center and bottom adjustment)
+	mOffsetX = mWidth / 2.0f;
+	mOffsetY = mHeight - 8.0f;   // 8 is a fixed pixel offset
+
 	return mIsReady;
 }
 
@@ -207,10 +219,24 @@ void CAvatar::NextFrameIndex()
 	}
 }
 
-void CAvatar::DrawFrame(Graphics& graphics)
+/**
+ * Draws the current animation frame.
+ * @param graphics GDI+ graphics context.
+ */
+void CAvatar::DrawFrame(Gdiplus::Graphics& graphics)
 {
-	Rect rect(mX, mY, mWidth, mHeight);
-	graphics.DrawImage(mImage, rect, mWidth * mCurCol, mHeight * mDrect, mWidth, mHeight, UnitPixel);
+	// Use floating-point rectangle for precise positioning
+	Gdiplus::RectF destRect(mX, mY, mWidth, mHeight);
+
+	// Draw the frame from the sprite sheet.
+	// Source rectangle: (col * frameWidth, row * frameHeight, frameWidth, frameHeight)
+	graphics.DrawImage(mImage,
+		destRect,                          // destination rectangle (float)
+		mWidth * mCurCol,                  // source x (float)
+		mHeight * mDrect,                  // source y (float)
+		mWidth,                             // source width (float)
+		mHeight,                            // source height (float)
+		Gdiplus::UnitPixel);                // unit is pixels
 }
 
 void CAvatar::DrawNextFrame(Graphics& graphics)
@@ -224,13 +250,13 @@ void CAvatar::DrawNextFrame(Graphics& graphics)
 	DrawFrame(graphics);
 }
 
-int CAvatar::GetCol()
+int CAvatar::GetCol() const
 {
 	CPoint point = CMapUtil::GetMapPointByScreen(GetViewX() + mMapOffSetX, GetViewY() + mMapOffSetY);
 	return point.x + 1;
 }
 
-int CAvatar::GetRow()
+int CAvatar::GetRow() const
 {
 	CPoint point = CMapUtil::GetMapPointByScreen(GetViewX() + mMapOffSetX, GetViewY() + mMapOffSetY);
 	return point.y + 1;
