@@ -7,6 +7,8 @@
 #include "Avatar.h"
 #include "MapUtil.h"
 
+using namespace std;
+
 CAvatar::CAvatar()
 {
 	Init();

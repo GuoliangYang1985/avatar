@@ -1,104 +1,71 @@
-// Item.cpp: implementation of the CItem class.
-
 #include "stdafx.h"
 #include "GLYGame.h"
 #include "Item.h"
 #include "MapUtil.h"
 #include "Tile.h"
 
+
 CItem::CItem()
 {
-	mCol = 0;
-	mRow = 0;
-	mCols = 0;
-	mRows = 0;
-	mOffsetX = 0;
-	mOffsetY = 0;
-	mSource = "";
-	mImage = NULL;
-	mItemDefinition = NULL;
-	mArrTiles = new vector<CTile*>;
-	mInWorld = false;
-}
-
-CItem::~CItem()
-{
-	mImage = NULL;
-
-	if (mArrTiles != NULL)
-	{
-		delete mArrTiles;
-		mArrTiles = NULL;
-	}
-
-	if (mItemDefinition != NULL)
-	{
-		//不在此处创建，不在此处释放。
-		//delete m_pItemDefinition;
-		mItemDefinition = NULL;
-	}
+    // All members initialized in-class, constructor body can be empty
 }
 
 void CItem::AddTile(CTile* t)
 {
-	mArrTiles->push_back(t);
-	mInWorld = true;
+    mArrTiles.push_back(t);
+    mInWorld = true;
+}
+
+const std::vector<CTile*>& CItem::GetTiles() const
+{
+    return mArrTiles;
 }
 
 float CItem::GetX() const
 {
-	CGamePoint point = CMapUtil::GetScreenCoordinate(mCol, mRow);
-	return point.mX;
+    CGamePoint point = CMapUtil::GetScreenCoordinate(mCol, mRow);
+    return point.mX;
 }
 
 float CItem::GetY() const
 {
-	CGamePoint point = CMapUtil::GetScreenCoordinate(mCol, mRow);
-	return point.mY;
+    CGamePoint point = CMapUtil::GetScreenCoordinate(mCol, mRow);
+    return point.mY;
 }
 
-/**
- * 解析xml创建数据。
- * @param itemNode 当前item的xml数据
- */
 void CItem::FromXml(MSXML2::IXMLDOMElementPtr itemNode)
 {
-	mSource = CXmlUtil::GetAttributeToCString(itemNode, "source");
-	mCol = CXmlUtil::GetAttributeToInt(itemNode, "col");
-	mRow = CXmlUtil::GetAttributeToInt(itemNode, "row");
-	mInWorld = false;//CXmlUtil::GetAttributeToBool(itemNode, "isInWorld");
+    mSource = CXmlUtil::GetAttributeToCString(itemNode, "source");
+    mCol = CXmlUtil::GetAttributeToInt(itemNode, "col");
+    mRow = CXmlUtil::GetAttributeToInt(itemNode, "row");
+    // mInWorld is not set from XML; default false
 }
 
-/**
- * 设置item的定义。
- */
-void CItem::SetItemDefinition(CItemDefinition* pValue)
+void CItem::SetItemDefinition(CItemDefinition* pDef)
 {
-	mImage = pValue->mImage;
-	mCols = pValue->mCols;
-	mRows = pValue->mRows;
-	mOffsetX = pValue->mOffsetX;
-	mOffsetY = pValue->mOffsetY;
-	mItemDefinition = pValue;
-	pValue = NULL;
+    if (pDef)
+    {
+        mImage = pDef->mImage;
+        mCols = pDef->mCols;
+        mRows = pDef->mRows;
+        mOffsetX = pDef->mOffsetX;
+        mOffsetY = pDef->mOffsetY;
+    }
+    mItemDefinition = pDef;
 }
 
-/**
- * 得到item的定义。
- */
-CItemDefinition* CItem::GetItemDefinition()
+CItemDefinition* CItem::GetItemDefinition() const
 {
-	return mItemDefinition;
+    return mItemDefinition;
 }
 
-vector<CTile*>* CItem::GetTile()
+void CItem::Draw(Graphics& graphics, float backOffsetX, float backOffsetY) const
 {
-	return mArrTiles;
-}
+    if (!mImage) return;
 
-void CItem::Draw(Graphics& graphics, float backOffsetX, float backOffsetY)
-{
-	float offsetX = float(GetX() + mOffsetX - backOffsetX); // Offset in the X-axis direction.
-	float offsetY = float(GetY() + mOffsetY - backOffsetY); // Offset in the Y-axis direction.
-	graphics.DrawImage(mImage, offsetX, offsetY, (Gdiplus::REAL)mImage->GetWidth(), (Gdiplus::REAL)mImage->GetHeight());
+    float offsetX = GetX() + static_cast<float>(mOffsetX) - backOffsetX;
+    float offsetY = GetY() + static_cast<float>(mOffsetY) - backOffsetY;
+    graphics.DrawImage(mImage, offsetX, offsetY,
+        static_cast<REAL>(mImage->GetWidth()),
+        static_cast<REAL>(mImage->GetHeight()));
 }
