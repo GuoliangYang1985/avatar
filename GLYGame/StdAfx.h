@@ -22,8 +22,7 @@ using namespace Gdiplus;
 #pragma comment(lib, "GdiPlus.lib")
 #endif
 
-#ifndef PI
-#define PI 3.141592653589793f
-#endif
+static constexpr float PI = 3.14159265358979323846f;
+static constexpr float PI_4 = PI / 4.0f;
 
 #endif // _AFX_NO_AFXCMN_SUPPORT

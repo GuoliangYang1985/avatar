@@ -39,29 +39,21 @@ void CAvatar::Init()
 	mRows = 1;
 	mCols = 1;
 	mCurCol = 2;
-	mDrect = 0;
+	mCurRow = 0;
 	mWalking = false;
 }
 
 
 bool CAvatar::Load(const CString& strFileName)
 {
-	// Load the image (assumes CImage::Load returns bool, adjust if needed)
+	// Load the image
 	if (!CImage::Load(strFileName))
 		return false;
 
-	// Retrieve image dimensions
-	const UINT imageWidth = mImage->GetWidth();
-	const UINT imageHeight = mImage->GetHeight();
-
-	// Verify that the image dimensions are multiples of the frame grid
-	ASSERT(imageWidth % COLS == 0);
-	ASSERT(imageHeight % ROWS == 0);
-
 	// Calculate frame size using floating-point division to avoid truncation
 	// and eliminate conversion warnings
-	mWidth = static_cast<float>(imageWidth) / COLS;
-	mHeight = static_cast<float>(imageHeight) / ROWS;
+	mWidth = static_cast<float>(mImage->GetWidth()) / COLS;
+	mHeight = static_cast<float>(mImage->GetHeight()) / ROWS;
 
 	// Compute offsets (center and bottom adjustment)
 	mOffsetX = mWidth / 2.0f;
@@ -106,12 +98,16 @@ void CAvatar::Walk()
 		CGamePoint p = CMapUtil::GetScreenCoordinate(pNode->GetCol(), pNode->GetRow());
 		p.mX = p.mX - mMapOffSetX;
 		p.mY = p.mY - mMapOffSetY;
-		mDrect = GetDirection(p);
+		mCurRow = (GetDirection(p) - 1) % ROWS;
+		if (mCurRow < 0)
+		{
+			mCurRow += ROWS;
+		}
 	}
 }
 
 /**
- * 根据下一个到到达的点得到角色索方向。
+ * 根据下一个到到达的点得到角色方向。
  * @param point 要移动到的下一点。
  * @return 角色的方向。
  */
@@ -119,45 +115,14 @@ int CAvatar::GetDirection(CGamePoint point)
 {
 	float fX = point.mX - GetViewX();
 	float fY = point.mY - GetViewY();
-	//得到弧度制角度
+	mDistance = hypotf(fX, fY);
+
+	// Get the angle in radians.
 	mRadian = atan2f(fY, fX);
-	float angle = (float)(mRadian * 180 / PI);
-	mDistance = sqrtf(fX * fX + fY * fY);
-	unsigned int dir = FindAngleIndex(angle);
-	if (dir >= ROWS)
-		dir = 0;
+	int dir = static_cast<int>(round(mRadian / PI_4)) % ROWS;
+	if (dir < 0)
+		dir += ROWS;
 	return dir;
-}
-
-/**
- * 输入角度，根据角度计算方向索引值。
- * @param 要输入的角度。
- * return 得到方向索引值。
- */
-int CAvatar::FindAngleIndex(float angle)
-{
-	angle = ClamDegrees(angle);
-	int index = (int)floor(angle / 45 + 0.5) - 1;
-	return index;
-}
-
-/**
- * 把小于0度大于360度的角度转化为0~360度之间。
- * @param degree 需要转化的角度。
- * @return 转化后的角度在(0~360度之间)。
- */
-float CAvatar::ClamDegrees(float degree)
-{
-	while (degree < 0)
-	{
-		degree += 360;
-	}
-
-	while (degree > 360)
-	{
-		degree -= 360;
-	}
-	return degree;
 }
 
 /**
@@ -219,10 +184,6 @@ void CAvatar::NextFrameIndex()
 	}
 }
 
-/**
- * Draws the current animation frame.
- * @param graphics GDI+ graphics context.
- */
 void CAvatar::DrawFrame(Gdiplus::Graphics& graphics)
 {
 	// Use floating-point rectangle for precise positioning
@@ -233,7 +194,7 @@ void CAvatar::DrawFrame(Gdiplus::Graphics& graphics)
 	graphics.DrawImage(mImage,
 		destRect,                          // destination rectangle (float)
 		mWidth * mCurCol,                  // source x (float)
-		mHeight * mDrect,                  // source y (float)
+		mHeight * mCurRow,                  // source y (float)
 		mWidth,                             // source width (float)
 		mHeight,                            // source height (float)
 		Gdiplus::UnitPixel);                // unit is pixels

@@ -58,24 +58,18 @@ public:
 
 	/**
 	 * 根据下一个到到达的点得到角色索方向。
+	 * 
 	 * @param point 要移动到的下一点。
 	 * @return 角色的方向。
 	 */
+	 /**
+	  * Determines the direction and distance to a target point.
+	  * Updates mRadian and mDistance, and returns the direction index.
+	  * 0: Right, 1: Down-Right, 2: Down, 3: Down-Left, 4: Left, 5: Up-Left, 6: Up, 7: Up-Right
+	  * @param point The target point in world coordinates.
+	  * @return Direction index (0-7) as defined in FindDirectionIndex.
+	  */
 	int GetDirection(CGamePoint point);
-
-	/**
-	 * 输入角度，根据角度计算方向索引值。
-	 * @param 要输入的角度。
-	 * return 得到方向索引值。
-	 */
-	int FindAngleIndex(float angle);
-
-	/**
-	 * 把小于0度大于360度的角度转化为0~360度之间。
-	 * @param degree 需要转化的角度。
-	 * @return 转化后的角度在(0~360度之间)。
-	 */
-	float ClamDegrees(float degree);
 
 	/**
 	 * 计算位置
@@ -142,13 +136,10 @@ public:
 	unsigned int mRows;
 
 	//角色当前方向。
-	int mDrect;
+	int mCurRow;
 
 	//角色当前列数
 	int mCurCol;
-
-	//弧度制方向。
-	float mRadian;
 
 	//距离。
 	float mDistance;
@@ -170,25 +161,15 @@ public:
 
 	//角色是否在行走
 	bool mWalking;
+
+	const int SPEED = 10; //行走单位速度
 private:
+	//弧度制方向。
+	float mRadian;
+
 	//角色所在列数。
 	unsigned int mCol;
 
 	//角色所在行数。
 	unsigned int mRow;
-public:
-	//角色方向
-	enum
-	{
-		RIGHT,		//0			右		
-		RIGHT_DOWN, //1			右下		
-		DOWN,		//2			下
-		LEFT_DOWN,	//3			左下
-		LEFT,		//4			左
-		LEFT_UP,		//5			左上
-		UP,			//6			上
-		RIGHT_UP,	//7			右上
-
-		SPEED = 10, //行走单位速度
-	};
 };
