@@ -136,7 +136,7 @@ void CGLYGameDlg::CreateScene(const CString& xmlSource)
 	mMapDC.CreateCompatibleDC(NULL);
 
 	// Create map background.
-	if (!mBackGround.mIsReady)
+	if (!mBackGround.IsReady())
 	{
 		mBackGround.Load(mBackGround.mBackPath);
 	}
@@ -148,10 +148,10 @@ void CGLYGameDlg::CreateScene(const CString& xmlSource)
 		mRenderGrid.ParseTileXML(mXmlMapConfig);
 	}
 
-	if (!mAvatar.mIsReady)
+	if (!mAvatar.IsReady())
 	{
 		mAvatar.Load("resource/avatar/male.png");
-		if (mAvatar.mIsReady)
+		if (mAvatar.IsReady())
 		{
 			if (mBackGround.mStartCol > 0 && mBackGround.mStartRow > 0)
 			{

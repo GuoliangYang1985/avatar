@@ -32,7 +32,7 @@ public:
 	 */
 	bool IsReady() const { return mIsReady; }
 
-public:
+private:
 	// Initialization flag
 	bool mIsReady;
 

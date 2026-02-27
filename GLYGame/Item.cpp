@@ -45,7 +45,7 @@ void CItem::SetItemDefinition(CItemDefinition* pDef)
 {
     if (pDef)
     {
-        mImage = pDef->mImage;
+        mImage = pDef->GetImage();
         mCols = pDef->mCols;
         mRows = pDef->mRows;
         mOffsetX = pDef->mOffsetX;

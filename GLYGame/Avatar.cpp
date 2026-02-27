@@ -44,14 +44,14 @@ bool CAvatar::Load(const CString& strFileName)
 
 	// Calculate frame size using floating-point division to avoid truncation
 	// and eliminate conversion warnings
-	mWidth = static_cast<float>(mImage->GetWidth()) / COLS;
-	mHeight = static_cast<float>(mImage->GetHeight()) / ROWS;
+	mWidth = static_cast<float>(GetImage()->GetWidth()) / COLS;
+	mHeight = static_cast<float>(GetImage()->GetHeight()) / ROWS;
 
 	// Compute offsets (center and bottom adjustment)
 	mOffsetX = mWidth / 2.0f;
 	mOffsetY = mHeight - 8.0f;   // 8 is a fixed pixel offset
 
-	return mIsReady;
+	return IsReady();
 }
 
 void CAvatar::UnLoad()
@@ -168,7 +168,7 @@ void CAvatar::DrawFrame(Gdiplus::Graphics& graphics)
 
 	// Draw the frame from the sprite sheet.
 	// Source rectangle: (col * frameWidth, row * frameHeight, frameWidth, frameHeight)
-	graphics.DrawImage(mImage,
+	graphics.DrawImage(GetImage(),
 		destRect,                          // destination rectangle (float)
 		mWidth * mColIndex,                  // source x (float)
 		mHeight * mRowIndex,                  // source y (float)
