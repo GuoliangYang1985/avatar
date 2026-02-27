@@ -8,7 +8,6 @@
 
 // Forward declarations
 class CItem;
-using namespace std; // 或者使用 std::vector
 
 class CTile : public INode
 {
@@ -28,16 +27,16 @@ public:
 	void DeterminePlaceability();
 
 	// INode interface implementation
-	virtual bool Equal(INode* n) override;
-	virtual int GetCol() override;
-	virtual int GetRow() override;
+	virtual bool Equal(const INode* other)const override;
+	virtual int GetCol()const override;
+	virtual int GetRow()const override;
 	virtual void SetCol(int value) override;
 	virtual void SetRow(int value) override;
-	virtual double GetHeuristic() override;
+	virtual double GetHeuristic()const override;
 	virtual void SetHeuristic(double h) override;
-	virtual CString GetNodeId() override;
-	virtual vector<INode*>* GetNeighbors() override;
-	virtual void SetNeighbors(vector<INode*>* pArr) override;
+	virtual const CString& GetNodeId() const override;
+	virtual const std::vector<INode*>& GetNeighbors() const override;
+	virtual void SetNeighbors(const std::vector<INode*>& neighbors) override;
 	virtual bool GetWalkable();
 
 	// Base properties accessors
@@ -69,7 +68,7 @@ private:
 
 	// Private members
 	// Neighboring nodes for pathfinding
-	vector<INode*>* mArrNeighbors;
+	std::vector<INode*> mArrNeighbors;
 	// Whether the tile is enabled
 	bool mEnabled;
 	// Base walkability flag

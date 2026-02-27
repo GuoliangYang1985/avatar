@@ -5,19 +5,20 @@
 #include "GLYGame.h"
 #include "Tile.h"
 
+using namespace std;
+
 // Initialize static member
 int CTile::IDS = 0;
 
-CTile::CTile()
-	: mArrItems(new std::vector<CItem*>()),
-	mArrNeighbors(nullptr),
-	mEnabled(true),
-	mBaseWalkability(true),
-	mBasePlaceability(true),
-	mH(0.0),
-	mWalkable(true),
-	mCol(0),
-	mRow(0)
+CTile::CTile() : mArrItems(new vector<CItem*>()),
+mArrNeighbors(),
+mEnabled(true),
+mBaseWalkability(true),
+mBasePlaceability(true),
+mH(0.0),
+mWalkable(true),
+mCol(0),
+mRow(0)
 {
 	++IDS;
 	mNodeId.Format(_T("%d"), IDS);
@@ -26,7 +27,6 @@ CTile::CTile()
 
 CTile::~CTile()
 {
-	delete mArrNeighbors;
 	delete mArrItems;
 }
 
@@ -113,12 +113,12 @@ bool CTile::GetBasePlaceability() const
 	return mBasePlaceability;
 }
 
-int CTile::GetCol()
+int CTile::GetCol() const
 {
 	return mCol;
 }
 
-int CTile::GetRow()
+int CTile::GetRow() const
 {
 	return mRow;
 }
@@ -133,7 +133,7 @@ void CTile::SetRow(int value)
 	mRow = value;
 }
 
-double CTile::GetHeuristic()
+double CTile::GetHeuristic() const
 {
 	return mH;
 }
@@ -143,23 +143,22 @@ void CTile::SetHeuristic(double h)
 	mH = h;
 }
 
-CString CTile::GetNodeId()
+const CString& CTile::GetNodeId() const
 {
 	return mNodeId;
 }
 
-bool CTile::Equal(INode* n)
+bool CTile::Equal(const INode* other)const
 {
-	return (n->GetCol() == mCol && n->GetRow() == mRow);
+	return (other->GetCol() == mCol && other->GetRow() == mRow);
 }
 
-void CTile::SetNeighbors(std::vector<INode*>* pArr)
+void CTile::SetNeighbors(const std::vector<INode*>& neighbors)
 {
-	// Note: assumes ownership of the pointer; previous neighbor list is not deleted.
-	mArrNeighbors = pArr;
+	mArrNeighbors = neighbors;
 }
 
-std::vector<INode*>* CTile::GetNeighbors()
+const std::vector<INode*>& CTile::GetNeighbors() const
 {
 	return mArrNeighbors;
 }

@@ -145,7 +145,6 @@
     <ClCompile Include="GLYGameDlg.cpp" />
     <ClCompile Include="GoItem.cpp" />
     <ClCompile Include="Image.cpp" />
-    <ClCompile Include="INode.cpp" />
     <ClCompile Include="ISearchable.cpp" />
     <ClCompile Include="Isometric.cpp" />
     <ClCompile Include="Item.cpp" />

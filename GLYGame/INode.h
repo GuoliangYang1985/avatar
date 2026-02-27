@@ -3,20 +3,23 @@
 #pragma once
 #include <vector>
 
-using std::vector;
-
-
 class __declspec(novtable)INode
 {
 public:
-	virtual int GetCol();
-	virtual int GetRow();
-	virtual void SetCol(int value);
-	virtual void SetRow(int value);
-	virtual double GetHeuristic();
-	virtual CString GetNodeId();
-	virtual bool Equal(INode* n);
-	virtual void SetHeuristic(double h);
-	virtual vector<INode*>* GetNeighbors();
-	virtual void SetNeighbors(vector<INode*>* arr);
+	virtual ~INode() {}
+
+	virtual int GetCol()const = 0;
+	virtual int GetRow()const = 0;
+	virtual void SetCol(int value) = 0;
+	virtual void SetRow(int value) = 0;
+
+	virtual double GetHeuristic()const = 0;
+	virtual void SetHeuristic(double h) = 0;
+
+	virtual const CString& GetNodeId() const = 0;
+
+	virtual bool Equal(const INode* other)const = 0;
+
+	virtual const std::vector<INode*>& GetNeighbors() const = 0;
+	virtual void SetNeighbors(const std::vector<INode*>& neighbors) = 0;
 };

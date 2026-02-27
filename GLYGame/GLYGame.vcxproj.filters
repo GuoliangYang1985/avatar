@@ -39,9 +39,6 @@
     <ClCompile Include="Image.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="INode.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ISearchable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
