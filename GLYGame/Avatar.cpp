@@ -7,25 +7,16 @@
 #include "Avatar.h"
 #include "MapUtil.h"
 
-/**
- * 构造函数。
- */
 CAvatar::CAvatar()
 {
 	Init();
 }
 
-/**
- * 析构函数。
- */
 CAvatar::~CAvatar()
 {
 
 }
 
-/**
- * 初始化。
- */
 void CAvatar::Init()
 {
 	mX = 0;
@@ -38,11 +29,10 @@ void CAvatar::Init()
 	mCol = 0;
 	mRows = 1;
 	mCols = 1;
-	mCurCol = 2;
-	mCurRow = 0;
+	mColIndex = 2;
+	mRowIndex = 0;
 	mWalking = false;
 }
-
 
 bool CAvatar::Load(const CString& strFileName)
 {
@@ -62,9 +52,6 @@ bool CAvatar::Load(const CString& strFileName)
 	return mIsReady;
 }
 
-/**
- * 卸载加载的素材。
- */
 void CAvatar::UnLoad()
 {
 	CImage::UnLoad();
@@ -85,9 +72,6 @@ void CAvatar::StartWalk(CPath* pPath)
 	}
 }
 
-/**
- * 开始行走。
- */
 void CAvatar::Walk()
 {
 	if (mCurWalkPath.size() > 0)
@@ -98,19 +82,14 @@ void CAvatar::Walk()
 		CGamePoint p = CMapUtil::GetScreenCoordinate(pNode->GetCol(), pNode->GetRow());
 		p.mX = p.mX - mMapOffSetX;
 		p.mY = p.mY - mMapOffSetY;
-		mCurRow = (GetDirection(p) - 1) % ROWS;
-		if (mCurRow < 0)
+		mRowIndex = (GetDirection(p) - 1) % ROWS;
+		if (mRowIndex < 0)
 		{
-			mCurRow += ROWS;
+			mRowIndex += ROWS;
 		}
 	}
 }
 
-/**
- * 根据下一个到到达的点得到角色方向。
- * @param point 要移动到的下一点。
- * @return 角色的方向。
- */
 int CAvatar::GetDirection(CGamePoint point)
 {
 	float fX = point.mX - GetViewX();
@@ -125,12 +104,9 @@ int CAvatar::GetDirection(CGamePoint point)
 	return dir;
 }
 
-/**
- * 计算位置。
- */
 void CAvatar::CalculatePosition()
 {
-	//下一步移动距离
+	// Next step movement distance.
 	CSpeed nextSpeed = GetNextDistance();
 	mX += nextSpeed.mX;
 	mY += nextSpeed.mY;
@@ -145,8 +121,7 @@ void CAvatar::CalculatePosition()
 		else
 		{
 			mWalking = false;
-			mCurCol = 0;
-			//AfxMessageBox("结束");
+			mColIndex = 0;
 		}
 	}
 }
@@ -176,11 +151,11 @@ void CAvatar::NextFrameIndex()
 {
 	if (mWalking)
 	{
-		++mCurCol; //指向要绘制的帧
+		++mColIndex; // Point to the next frame.
 	}
-	if (mCurCol >= COLS)
+	if (mColIndex >= COLS)
 	{
-		mCurCol = 0;
+		mColIndex = 0;
 	}
 }
 
@@ -193,8 +168,8 @@ void CAvatar::DrawFrame(Gdiplus::Graphics& graphics)
 	// Source rectangle: (col * frameWidth, row * frameHeight, frameWidth, frameHeight)
 	graphics.DrawImage(mImage,
 		destRect,                          // destination rectangle (float)
-		mWidth * mCurCol,                  // source x (float)
-		mHeight * mCurRow,                  // source y (float)
+		mWidth * mColIndex,                  // source x (float)
+		mHeight * mRowIndex,                  // source y (float)
 		mWidth,                             // source width (float)
 		mHeight,                            // source height (float)
 		Gdiplus::UnitPixel);                // unit is pixels

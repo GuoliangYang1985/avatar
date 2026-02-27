@@ -7,31 +7,26 @@
 #include "Speed.h"
 #include "Image.h" 
 
-//角色的总行数。
-const unsigned int ROWS = 8;
-//角色的总列数。
-const unsigned int COLS = 8;
-
 /**
- * 角色类，实现角色的各种动作。
- * 创建人：杨国梁。
- * 创建时间：2011-10-26。
+ * Character class, implementing various character actions.
+ * Created by: Guoliang Yang.
+ * Creation date: 2011-10-26.
  */
 class CAvatar :public CImage
 {
 public:
 	/**
-	 * 构造函数。
+	 * Constructor
 	 */
 	CAvatar();
 
 	/**
-	 * 析构函数。
+	 * Destructor.
 	 */
 	virtual ~CAvatar();
 public:
 	/**
-	 * 初始化。
+	 * Initialize
 	 */
 	void Init();
 
@@ -43,36 +38,31 @@ public:
 	bool Load(const CString& strFileName);
 
 	/**
-	 * 卸载加载的素材
+	 * Unload loaded assets.
 	 */
 	void UnLoad();
+
 	/**
-	 * 行走。
+	 * Avatar walking process.
 	 */
 	void Walk();
 
 	/**
-	 * 开始移动
+	 * Start walking.
 	 */
 	void StartWalk(CPath* pPath);
 
 	/**
-	 * 根据下一个到到达的点得到角色索方向。
-	 * 
-	 * @param point 要移动到的下一点。
-	 * @return 角色的方向。
+	 * Determines the direction and distance to a target point.
+	 * Updates mRadian and mDistance, and returns the direction index.
+	 * 0: Right, 1: Down-Right, 2: Down, 3: Down-Left, 4: Left, 5: Up-Left, 6: Up, 7: Up-Right
+	 * @param point The target point in world coordinates.
+	 * @return Direction index (0-7) as defined in FindDirectionIndex.
 	 */
-	 /**
-	  * Determines the direction and distance to a target point.
-	  * Updates mRadian and mDistance, and returns the direction index.
-	  * 0: Right, 1: Down-Right, 2: Down, 3: Down-Left, 4: Left, 5: Up-Left, 6: Up, 7: Up-Right
-	  * @param point The target point in world coordinates.
-	  * @return Direction index (0-7) as defined in FindDirectionIndex.
-	  */
 	int GetDirection(CGamePoint point);
 
 	/**
-	 * 计算位置
+	 * Calculate position.
 	 */
 	void CalculatePosition();
 
@@ -88,7 +78,7 @@ public:
 	float GetNextMoveDistance() const;
 
 	/**
-	 * 计算下一个帧索引。
+	 * Calculate the next frame index.
 	 */
 	void NextFrameIndex();
 
@@ -117,59 +107,64 @@ public:
 	 */
 	float GetViewY() const;
 public:
-	//角色的宽度。
+	// Avatar's width.
 	float mWidth;
 
-	//角色的高度。
+	// Avatar's height.
 	float mHeight;
 
-	//角色X轴上的偏移量
+	// Avatar's offset on the X-axis.
 	float mOffsetX;
 
-	//角色Y轴上的偏移量
+	// Avatar's offset on the Y-axis.
 	float mOffsetY;
 
-	//角色所占行数。
+	// Total number of cols occupied by the Avatar.
 	unsigned int mCols;
 
-	//角色所占列数。
+	// Total number of rows occupied by the Avatar.
 	unsigned int mRows;
 
-	//角色当前方向。
-	int mCurRow;
+	// Avatar's current row index.
+	int mRowIndex;
 
-	//角色当前列数
-	int mCurCol;
+	// Avatar's current col index.
+	int mColIndex;
 
-	//距离。
+	// Distance。
 	float mDistance;
 
-	//绘制位置x。
+	// X-coordinate of the Avatar image.
 	float mX;
 
-	//绘制位置y。
+	// Y-coordinate of the Avatar image.
 	float mY;
 
-	//地图x偏移量。
+	// Map X offset.
 	int mMapOffSetX;
 
-	//地图y偏移量。
+	// Map Y offset.
 	int mMapOffSetY;
 
-	//当前行走路径。
+	// Current walking path.
 	vector<INode*> mCurWalkPath;
 
-	//角色是否在行走
+	// Is the avatar walking?
 	bool mWalking;
-
-	const int SPEED = 10; //行走单位速度
+public:
+	// Walking speed unit.
+	const unsigned int SPEED = 10;
+	// Total number of rows for the Avatar.
+	const unsigned int ROWS = 8;
+	// Total number of cols for the Avatar.
+	const unsigned int COLS = 8;
 private:
-	//弧度制方向。
+	// Direction value in radians.
 	float mRadian;
 
-	//角色所在列数。
+	// Current column number of the Avatar.
 	unsigned int mCol;
 
-	//角色所在行数。
+	// Current row number of the Avatar.
 	unsigned int mRow;
 };
