@@ -45,13 +45,13 @@ void CItem::AddTile(CTile* t)
 	mInWorld = true;
 }
 
-float CItem::GetX()
+float CItem::GetX() const
 {
 	CGamePoint point = CMapUtil::GetScreenCoordinate(mCol, mRow);
 	return point.mX;
 }
 
-float CItem::GetY()
+float CItem::GetY() const
 {
 	CGamePoint point = CMapUtil::GetScreenCoordinate(mCol, mRow);
 	return point.mY;

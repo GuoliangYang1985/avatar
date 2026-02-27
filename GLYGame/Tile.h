@@ -55,7 +55,7 @@ public:
 	// Unique identifier
 	CString mNodeId;
 	// Collection of items on this tile
-	vector<CItem*>* mArrItems;
+	std::vector<CItem*> mArrItems;
 	// Static counter for generating unique IDs
 	static int IDS;
 

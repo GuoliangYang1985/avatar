@@ -14,36 +14,21 @@ struct ComparePathPtr
     }
 };
 
-CPriorityQueue::CPriorityQueue()
-{
-}
-
-CPriorityQueue::~CPriorityQueue()
-{
-    // unique_ptr will automatically delete all contained CPath objects.
-    // No explicit cleanup needed.
-}
-
 bool CPriorityQueue::HasNextItem() const
 {
     return !mItems.empty();
 }
 
-CPath* CPriorityQueue::GetNextItem()
+std::unique_ptr<CPath> CPriorityQueue::GetNextItem()
 {
-    // Move the smallest element to the back of the heap.
     std::pop_heap(mItems.begin(), mItems.end(), ComparePathPtr());
-    // Transfer ownership from the back element to a raw pointer,
-    // then remove it from the vector.
-    CPath* result = mItems.back().release();
+    auto top = std::move(mItems.back());
     mItems.pop_back();
-    return result;
+    return top;
 }
 
-void CPriorityQueue::Enqueue(CPath* p)
+void CPriorityQueue::Enqueue(std::unique_ptr<CPath> p)
 {
-    // Wrap the raw pointer in a unique_ptr and add to vector.
-    mItems.push_back(std::unique_ptr<CPath>(p));
-    // Re-establish heap property.
+    mItems.push_back(std::move(p));
     std::push_heap(mItems.begin(), mItems.end(), ComparePathPtr());
 }

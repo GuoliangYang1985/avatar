@@ -49,7 +49,7 @@ void CImage::UnLoad()
  * 得到Image的指针
  * @return 返回m_pImage
  */
-Image* CImage::GetImage()
+Image* CImage::GetImage() const
 {
 	return mImage;
 }

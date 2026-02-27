@@ -147,7 +147,7 @@ public:
 	int mMapOffSetY;
 
 	// Current walking path.
-	vector<INode*> mCurWalkPath;
+	std::vector<INode*> mCurWalkPath;
 
 	// Is the avatar walking?
 	bool mWalking;

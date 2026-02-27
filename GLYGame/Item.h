@@ -15,8 +15,8 @@ public:
 public:
 	void AddTile(CTile* t);
 	vector<CTile*>* GetTile();
-	float GetX();
-	float GetY();
+	float GetX() const;
+	float GetY() const;
 	/**
 	 * 解析xml创建数据。
 	 * @param itemNode 当前item的xml数据

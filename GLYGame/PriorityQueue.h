@@ -14,9 +14,8 @@
 class CPriorityQueue
 {
 public:
-    CPriorityQueue();
-    // No need for virtual destructor unless used polymorphically
-    ~CPriorityQueue();
+    CPriorityQueue() = default;
+    ~CPriorityQueue() = default;
 
     // Disable copy (unique_ptr cannot be copied)
     CPriorityQueue(const CPriorityQueue&) = delete;
@@ -38,13 +37,13 @@ public:
      *         the object is removed from the queue and will be destroyed when the queue is cleared.
      * @pre HasNextItem() must be true.
      */
-    CPath* GetNextItem();
+    std::unique_ptr<CPath> GetNextItem();
 
     /**
      * Inserts a CPath object into the queue. The queue takes ownership.
      * @param p Raw pointer to a CPath object allocated with new.
      */
-    void Enqueue(CPath* p);
+    void Enqueue(std::unique_ptr<CPath> p);
 
 private:
     // Internal storage: vector of unique_ptr ensures automatic cleanup.

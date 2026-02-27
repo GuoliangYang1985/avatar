@@ -23,7 +23,7 @@ public:
 	 * 得到Image的指针
 	 * @return 返回m_pImage
 	 */
-	Image* GetImage();
+	Image* GetImage() const;
 public:
 	//初始化是否完成。
 	bool mIsReady;

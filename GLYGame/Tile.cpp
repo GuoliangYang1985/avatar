@@ -10,15 +10,16 @@ using namespace std;
 // Initialize static member
 int CTile::IDS = 0;
 
-CTile::CTile() : mArrItems(new vector<CItem*>()),
-mArrNeighbors(),
-mEnabled(true),
-mBaseWalkability(true),
-mBasePlaceability(true),
-mH(0.0),
-mWalkable(true),
-mCol(0),
-mRow(0)
+CTile::CTile()
+	: mArrItems(),
+	mArrNeighbors(),
+	mEnabled(true),
+	mBaseWalkability(true),
+	mBasePlaceability(true),
+	mH(0.0),
+	mWalkable(true),
+	mCol(0),
+	mRow(0)
 {
 	++IDS;
 	mNodeId.Format(_T("%d"), IDS);
@@ -27,12 +28,11 @@ mRow(0)
 
 CTile::~CTile()
 {
-	delete mArrItems;
 }
 
 void CTile::AddItem(CItem* pItem)
 {
-	mArrItems->push_back(pItem);
+	mArrItems.push_back(pItem);
 	DeterminePlaceability();
 	DetermineWalkability();
 }
@@ -59,7 +59,7 @@ void CTile::DeterminePlaceability()
 	bool allowsPlacement = mBasePlaceability;
 	if (allowsPlacement)
 	{
-		for (CItem* pItem : *mArrItems)
+		for (CItem* pItem : mArrItems)
 		{
 			if (!pItem->GetItemDefinition()->GetOverlap())
 			{
@@ -76,7 +76,7 @@ void CTile::DetermineWalkability()
 	bool allowsWalk = mBaseWalkability;
 	if (allowsWalk)
 	{
-		for (CItem* pItem : *mArrItems)
+		for (CItem* pItem : mArrItems)
 		{
 			if (!pItem->GetItemDefinition()->GetWalkable())
 			{

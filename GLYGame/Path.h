@@ -4,7 +4,6 @@
 #include "INode.h"
 #include <vector>
 #include <afxtempl.h>
-using std::vector;
 
 class CPath
 {
@@ -15,18 +14,18 @@ public:
 	CPath* Clone();
 	INode* GetLastNode();
 	double GetF();
-	double GetCost();
+	double GetCost() const;
 	void IncrementCost(double num);
-	void SetNodes(vector<INode*> nodes);
+	void SetNodes(std::vector<INode*> nodes);
 
 	/**
 	 * 添加一个节点到path。
 	 * @param n 要添加的节点。
 	 */
 	void AddNode(INode* n);
-	vector<INode*> GetNodes();
+	std::vector<INode*> GetNodes();
 private:
-	vector<INode*> mNodes;
+	std::vector<INode*> mNodes;
 	double mCost;
 	INode* mLastNode;
 };

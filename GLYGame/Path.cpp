@@ -36,7 +36,7 @@ double CPath::GetF()
 	return GetCost() + mLastNode->GetHeuristic();
 }
 
-double CPath::GetCost()
+double CPath::GetCost() const
 {
 	return mCost;
 }
