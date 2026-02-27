@@ -8,7 +8,7 @@ class CItemDefinition : public CImage
 {
 public:
 	CItemDefinition();
-	virtual ~CItemDefinition();
+	~CItemDefinition();
 public:
 	/**
 	 * 解析xml创建数据。

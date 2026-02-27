@@ -1,9 +1,9 @@
 // Path.h: interface for the CPath class.
 
 #pragma once
-#include "INode.h"
 #include <vector>
 #include <memory>
+#include "INode.h"
 
 class CPath
 {

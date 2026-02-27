@@ -1,5 +1,6 @@
 // Sort.h: interface for the CSort class.
-
+#pragma once
+#include <memory>
 #include"Item.h"
 
 class CSort
@@ -13,6 +14,5 @@ public:
 	 * @param items The list of items to be sorted.
 	 * @return A new list after sorting.
 	 */
-	static std::vector<CItem*> SortPosition(const std::vector<CItem*>& items);
+	static std::vector<std::unique_ptr<CItem>> SortPosition(std::vector<std::unique_ptr<CItem>> items);
 };
-

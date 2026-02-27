@@ -2,12 +2,14 @@
 
 #pragma once
 #include <afxtempl.h>
+#include <memory>
 #include "Avatar.h"
 #include "BackGround.h"
 #include "Item.h"
 #include "ItemDefinition.h"
 #include "RenderGrid.h"
 #include "Astar.h"
+
 #import "msxml4.dll"
 
 class CGLYGameDlg : public CDialog, public ISearchable
@@ -157,9 +159,9 @@ public:
 	CString mBaseDir;
 	Image* mBack;
 	// Object instances.
-	std::vector<CItem*> mArrItems;
+	std::vector<std::unique_ptr<CItem>> mArrItems;
 	// Object definitions.
-	CMap<CString, LPCTSTR, CItemDefinition*, CItemDefinition*> mItemDefinitions;
+	std::unordered_map<CString, std::unique_ptr<CItemDefinition>> mItemDefinitions;
 	// Grid layer.
 	CRenderGrid mRenderGrid;
 	// Number of columns occupied by the game.

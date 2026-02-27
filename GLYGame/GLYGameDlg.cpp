@@ -248,7 +248,7 @@ void CGLYGameDlg::GamePaint()
 	if (mArrItems.empty())
 	{
 		CreateAllItem();
-		mArrItems = CSort::SortPosition(mArrItems);
+		mArrItems = CSort::SortPosition(std::move(mArrItems));
 	}
 	Show();
 }
@@ -319,7 +319,7 @@ void CGLYGameDlg::DrawMap(Graphics& graphics)
 
 	// Draw all elements within the map.
 	BOOL bFinded = false;
-	for (CItem* item : mArrItems)
+	for (const auto& item : mArrItems)
 	{
 		if (!bFinded)
 		{
@@ -339,28 +339,27 @@ void CGLYGameDlg::DrawMap(Graphics& graphics)
 
 void CGLYGameDlg::CreateAllItemDefination()
 {
-	if (mItemDefinitions.IsEmpty())
+	if (!mItemDefinitions.empty() || !mXmlMapConfig)
+		return;
+	MSXML2::IXMLDOMElementPtr itemDefsNode = (MSXML2::IXMLDOMElementPtr)mXmlMapConfig->selectSingleNode("map/ItemDefinitions");
+	if (!itemDefsNode)
+		return;
+	MSXML2::IXMLDOMNodeListPtr itemDefList = itemDefsNode->GetchildNodes();
+	int nCount = itemDefList->length;
+	for (int i = 0; i < nCount; ++i)
 	{
-		if (mXmlMapConfig == nullptr)
+		MSXML2::IXMLDOMElementPtr itemDefNode = itemDefList->item[i];
+		MSXML2::DOMNodeType nodeType = itemDefNode->nodeType;
+		if (nodeType == MSXML2::NODE_ELEMENT)
 		{
-			return;
-		}
-		MSXML2::IXMLDOMElementPtr itemDefsNode = (MSXML2::IXMLDOMElementPtr)mXmlMapConfig->selectSingleNode("map/ItemDefinitions");
-		MSXML2::IXMLDOMNodeListPtr itemDefList = itemDefsNode->GetchildNodes();
-		int nCount = itemDefList->length;
-		for (int i = 0; i < nCount; ++i)
-		{
-			MSXML2::IXMLDOMElementPtr itemDefNode = itemDefList->item[i];
-			MSXML2::DOMNodeType nodeType = itemDefNode->nodeType;
-			if (nodeType == MSXML2::NODE_ELEMENT)
+			auto pItemDef = std::make_unique<CItemDefinition>();
+			pItemDef->mBaseDirectory = mBaseDir;
+			pItemDef->FromXml(itemDefNode);
+			CString strFileUrl = pItemDef->mBaseDirectory + pItemDef->mFile;
+			if (pItemDef->Load(strFileUrl))
 			{
-				CItemDefinition* pItemDef = new CItemDefinition();
-				pItemDef->mBaseDirectory = mBaseDir;
-				pItemDef->FromXml(itemDefNode);
-				CString strFileUrl = pItemDef->mBaseDirectory + pItemDef->mFile;
-				pItemDef->Load(strFileUrl);
-				mItemDefinitions.SetAt(pItemDef->mDefId, pItemDef);
-				pItemDef = NULL;
+				// 成功，将所有权转移给map
+				mItemDefinitions.emplace(pItemDef->mDefId, std::move(pItemDef));
 			}
 		}
 	}
@@ -368,70 +367,82 @@ void CGLYGameDlg::CreateAllItemDefination()
 
 void CGLYGameDlg::DeleteAllItemDefination()
 {
-	if (!mItemDefinitions.IsEmpty())
-	{
-		POSITION pos = mItemDefinitions.GetStartPosition();
-		while (pos != NULL)
-		{
-			CString strKey = "";
-			CItemDefinition* pItemDef = NULL;
-			mItemDefinitions.GetNextAssoc(pos, strKey, pItemDef);
-			if (pItemDef != NULL)
-			{
-				mItemDefinitions.RemoveKey(strKey);
-				pItemDef->UnLoad();
-				delete pItemDef;
-				pItemDef = NULL;
-			}
-		}
-	}
+	mItemDefinitions.clear();
 }
 
 void CGLYGameDlg::CreateAllItem()
 {
 	if (mXmlMapConfig == nullptr)
-	{
 		return;
-	}
-	mBack = mBackGround.GetImage();
-	MSXML2::IXMLDOMElementPtr itemsNode = (MSXML2::IXMLDOMElementPtr)(mXmlMapConfig->selectSingleNode("map/Items"));
-	MSXML2::IXMLDOMNodeListPtr itemList = itemsNode->GetchildNodes();
 
-	long lCount = itemList->length;
-	for (int i = 0; i < lCount; ++i)
+	// 获取背景图像（若后续未使用，可移除）
+	mBack = mBackGround.GetImage();
+
+	// 定位 <Items> 节点
+	MSXML2::IXMLDOMElementPtr itemsNode = mXmlMapConfig->selectSingleNode("map/Items");
+	if (itemsNode == nullptr)
+		return;
+
+	MSXML2::IXMLDOMNodeListPtr itemList = itemsNode->GetchildNodes();
+	long count = itemList->length;
+
+	for (long i = 0; i < count; ++i)
 	{
 		MSXML2::IXMLDOMElementPtr itemNode = itemList->item[i];
-		MSXML2::DOMNodeType nodeType = itemNode->nodeType;
-		if (nodeType == MSXML2::NODE_ELEMENT)
-		{
-			CString type = CXmlUtil::GetAttributeToCString(itemNode, "type"); // Get the NPC type.
-			CItem* pItem = NULL;
-			if (type == "GoItem")
-			{
-				CString goToPath = CXmlUtil::GetAttributeToCString(itemNode, "onStop");
-				pItem = new CGoItem(goToPath);
-			}
-			else
-			{
-				pItem = new CItem();
-			}
+		if (itemNode->nodeType != MSXML2::NODE_ELEMENT)
+			continue;
 
-			pItem->FromXml(itemNode);
-			CItemDefinition* pItemDef;
-			mItemDefinitions.Lookup(pItem->mSource, pItemDef);
-			pItem->SetItemDefinition(pItemDef);
-			mArrItems.push_back(pItem);
-			for (int m = pItem->mCol; m < pItem->mCol + pItem->mCols; ++m)
+		// 读取物品类型
+		CString type = CXmlUtil::GetAttributeToCString(itemNode, _T("type"));
+
+		// 根据类型创建物品对象（使用 unique_ptr 临时管理）
+		std::unique_ptr<CItem> pItem;
+		if (type == _T("GoItem"))
+		{
+			CString goToPath = CXmlUtil::GetAttributeToCString(itemNode, _T("onStop"));
+			pItem = std::make_unique<CGoItem>(goToPath);
+		}
+		else
+		{
+			pItem = std::make_unique<CItem>();
+		}
+
+		// 从 XML 填充物品属性
+		pItem->FromXml(itemNode);
+
+		// 查找对应的物品定义
+		auto it = mItemDefinitions.find(pItem->mSource);
+		if (it != mItemDefinitions.end())
+		{
+			pItem->SetItemDefinition(it->second.get()); // 传入原始指针
+		}
+		else
+		{
+			// 定义缺失，记录错误并跳过此物品（或使用默认定义）
+			TRACE(_T("Warning: Item definition '%s' not found\n"), (LPCTSTR)pItem->mSource);
+			continue;
+		}
+
+		// 将物品加入全局列表（转移所有权）
+		CItem* rawItem = pItem.get(); // 保存原始指针，用于后续关联 Tile
+		mArrItems.push_back(std::move(pItem));
+
+		// 更新物品所占格子
+		for (int col = rawItem->mCol; col < rawItem->mCol + rawItem->mCols; ++col)
+		{
+			for (int row = rawItem->mRow; row < rawItem->mRow + rawItem->mRows; ++row)
 			{
-				for (int n = pItem->mRow; n < pItem->mRow + pItem->mRows; ++n)
+				CTile* tile = GetTile(col, row);
+				if (tile)
 				{
-					CTile* t = GetTile(m, n);
-					t->AddItem(pItem);
-					pItem->AddTile(t);
+					tile->AddItem(rawItem);
+					rawItem->AddTile(tile);
+				}
+				else
+				{
+					TRACE(_T("Warning: Tile (%d, %d) out of bounds for item\n"), col, row);
 				}
 			}
-			pItem = NULL;
-			pItemDef = NULL;
 		}
 	}
 }
@@ -550,8 +561,9 @@ void CGLYGameDlg::OnTimer(int id)
 		if (!mAvatar.mWalking)
 		{
 			KillTimer(id);
-			for (CItem* item : mArrItems)
+			for (const auto& itemPtr : mArrItems)
 			{
+				CItem* item = itemPtr.get();
 				CGoItem* pGoItem = dynamic_cast<CGoItem*>(item);
 				if (pGoItem != nullptr)
 				{
@@ -609,10 +621,7 @@ void CGLYGameDlg::ReleaseScene()
 	DeleteAllItemDefination(); // Ensure this function deallocates memory properly
 
 	// Clean up item instances
-	for (CItem* item : mArrItems)
-	{
-		delete item; // Ensure CItem destructor handles its own resources
-	}
+	mArrItems.clear();
 	mArrItems.clear(); // Clear the vector after deletion
 	mRenderGrid.mIsReady = false;
 

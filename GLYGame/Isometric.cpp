@@ -1,20 +1,9 @@
 // Isometric.cpp: implementation of the CIsometric class.
-//
-//////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
 #include "GLYGame.h"
 #include "Isometric.h"
 
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[]=__FILE__;
-#define new DEBUG_NEW
-#endif
-
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
 
 CIsometric::CIsometric(float declination)
 {
