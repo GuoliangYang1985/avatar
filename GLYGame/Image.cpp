@@ -3,10 +3,8 @@
 #include "stdafx.h"
 #include "Image.h"
 
-CImage::CImage()
+CImage::CImage() : mImage(nullptr), mIsReady(false)
 {
-	mIsReady = false;
-	mImage = NULL;
 }
 
 CImage::~CImage()
@@ -18,24 +16,15 @@ CImage::~CImage()
 	}
 }
 
-/**
- * 加载指定素材。
- * @param strFileName 要加载素材的路径。
- */
-bool CImage::Load(CString strFileName)
+bool CImage::Load(const CString& fileName)
 {
 	//角色行走动画。
-	int len = strFileName.GetLength() + 1;
-	wchar_t* pwText = new wchar_t[len];
-	mImage = ::new Image(strFileName, false);
+	mImage = ::new Image(fileName, false);
 	mIsReady = true;
-	return mIsReady;
+	return true;
 }
 
-/**
- * 卸载加载的素材
- */
-void CImage::UnLoad()
+void CImage::Unload()
 {
 	if (mImage != NULL)
 	{
@@ -45,10 +34,6 @@ void CImage::UnLoad()
 	mIsReady = false;
 }
 
-/**
- * 得到Image的指针
- * @return 返回m_pImage
- */
 Image* CImage::GetImage() const
 {
 	return mImage;

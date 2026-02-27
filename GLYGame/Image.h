@@ -9,23 +9,31 @@ public:
 	virtual ~CImage();
 public:
 	/**
-	 * 加载指定素材。
-	 * @param strFileName 要加载素材的路径。
+	 * Loads the specified asset.
+	 * @param fileName Path to the asset file.
+	 * @return true if loaded successfully, false otherwise.
 	 */
-	bool Load(CString strFileName);
+	bool Load(const CString& fileName);
 
 	/**
-	 * 卸载加载的素材
+	 * Unloads the loaded asset.
 	 */
-	void UnLoad();
+	void Unload();
 
 	/**
-	 * 得到Image的指针
-	 * @return 返回m_pImage
+	 * Gets the underlying Image pointer.
+	 * @return Pointer to the GDI+ Image object (may be null).
 	 */
 	Image* GetImage() const;
+
+	/**
+	 * Checks if the image is loaded and ready.
+	 * @return true if ready, false otherwise.
+	 */
+	bool IsReady() const { return mIsReady; }
+
 public:
-	//初始化是否完成。
+	// Initialization flag
 	bool mIsReady;
 
 	//角色动画数据。

@@ -56,7 +56,7 @@ bool CAvatar::Load(const CString& strFileName)
 
 void CAvatar::UnLoad()
 {
-	CImage::UnLoad();
+	CImage::Unload();
 	Init();
 }
 
