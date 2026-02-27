@@ -147,16 +147,15 @@ CSearchResults CAstar::Search(INode* pStartNode, INode* pGoalNode)
 
             // 创建新路径 = 当前路径 + 邻居
             auto newPath = currentPath->Clone();  // Clone 应返回原始指针，需用 unique_ptr 管理
-            unique_ptr<CPath> newPathPtr(newPath);
-            newPathPtr->AddNode(neighbor);
-            newPathPtr->IncrementCost(stepCost);
+            newPath->AddNode(neighbor);
+            newPath->IncrementCost(stepCost);
 
             // 计算启发值
             double h = CalculateHeuristic(neighbor, pGoalNode);
             neighbor->SetHeuristic(h);
 
             // 入队
-            openSet.Enqueue(std::move(newPathPtr));
+            openSet.Enqueue(std::move(newPath));
         }
     }
 

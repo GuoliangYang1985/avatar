@@ -5,63 +5,39 @@
 #include "Path.h"
 using namespace std;
 
-CPath::CPath()
+CPath::CPath() : mCost(0.0)
 {
-	mCost = 0;
-	mLastNode = NULL;
 }
 
-CPath::~CPath()
+unique_ptr<CPath> CPath::Clone() const
 {
-	mLastNode = NULL;
-	mNodes.clear();
-}
-
-CPath* CPath::Clone()
-{
-	CPath* p = new CPath();
-	p->IncrementCost(mCost);
-	vector<INode*> temp(mNodes);
-	p->SetNodes(temp);
+	auto p = make_unique<CPath>();
+	p->mCost = mCost;
+	p->mNodes = mNodes;  // vector copy
 	return p;
 }
 
-INode* CPath::GetLastNode()
+INode* CPath::GetLastNode() const
 {
-	return mLastNode;
+	return mNodes.back();
 }
 
-double CPath::GetF()
+double CPath::GetF() const
 {
-	return GetCost() + mLastNode->GetHeuristic();
-}
-
-double CPath::GetCost() const
-{
-	return mCost;
+	return GetCost() + GetLastNode()->GetHeuristic();
 }
 
 void CPath::IncrementCost(double num)
 {
-	mCost = GetCost() + num;
+	mCost += num;
 }
 
-void CPath::SetNodes(vector<INode*> nodes)
+void CPath::SetNodes(const std::vector<INode*>& nodes)
 {
 	mNodes = nodes;
 }
 
-/**
- * 添加一个节点到path。
- * @param n 要添加的节点。
- */
 void CPath::AddNode(INode* n)
 {
 	mNodes.push_back(n);
-	mLastNode = n;
-}
-
-vector<INode*> CPath::GetNodes()
-{
-	return mNodes;
 }
