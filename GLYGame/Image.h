@@ -7,7 +7,11 @@ class CImage
 public:
 	CImage();
 	virtual ~CImage();
-public:
+
+	// Disable copy
+	CImage(const CImage&) = delete;
+	CImage& operator=(const CImage&) = delete;
+
 	/**
 	 * Loads the specified asset.
 	 * @param fileName Path to the asset file.

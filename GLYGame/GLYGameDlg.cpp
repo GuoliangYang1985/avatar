@@ -617,12 +617,13 @@ void CGLYGameDlg::ReleaseScene()
 		mXmlMapConfig = nullptr;
 	}
 
-	// Clean up item definitions
-	DeleteAllItemDefination(); // Ensure this function deallocates memory properly
-
 	// Clean up item instances
 	mArrItems.clear();
 	mArrItems.clear(); // Clear the vector after deletion
+
+	// Clean up item definitions
+	DeleteAllItemDefination(); // Ensure this function deallocates memory properly
+
 	mRenderGrid.mIsReady = false;
 
 	// Unload character and background resources
