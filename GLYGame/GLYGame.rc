@@ -78,7 +78,7 @@ CAPTION "关于 GLYGame"
 FONT 9, "宋体", 0, 0, 0x0
 BEGIN
     ICON            IDR_MAINFRAME,IDC_STATIC,11,17,20,20
-    LTEXT           "GLYGame 1.01 版",IDC_STATIC,40,10,119,8,SS_NOPREFIX
+    LTEXT           "GLYGame 1.0.2 版",IDC_STATIC,40,10,119,8,SS_NOPREFIX
     LTEXT           "版权所有 (C) 2026",IDC_STATIC,40,25,119,8
     DEFPUSHBUTTON   "确定",IDOK,178,7,50,14,WS_GROUP
 END
@@ -86,7 +86,7 @@ END
 IDD_GLYGAME_DIALOG DIALOGEX 0, 0, 538, 365
 STYLE DS_SETFONT | DS_MODALFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
 EXSTYLE WS_EX_APPWINDOW
-CAPTION "GLYGame1.0.1"
+CAPTION "GLYGame1.0.2"
 FONT 9, "宋体", 0, 0, 0x1
 BEGIN
 END
@@ -98,8 +98,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,0,1
- PRODUCTVERSION 1,0,1
+ FILEVERSION 1,0,2
+ PRODUCTVERSION 1,0,2
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -115,12 +115,12 @@ BEGIN
         BLOCK "080404b0"
         BEGIN
             VALUE "FileDescription", "GLYGame Microsoft 基础类应用程序"
-            VALUE "FileVersion", "1, 0, 0, 1"
+            VALUE "FileVersion", "1, 0, 2"
             VALUE "InternalName", "GLYGame"
             VALUE "LegalCopyright", "版权所有 (C) 2011"
             VALUE "OriginalFilename", "GLYGame.EXE"
             VALUE "ProductName", "GLYGame 应用程序"
-            VALUE "ProductVersion", "1, 0, 1"
+            VALUE "ProductVersion", "1, 0, 2"
         END
     END
     BLOCK "VarFileInfo"
@@ -180,7 +180,7 @@ END
 
 STRINGTABLE
 BEGIN
-    IDS_ABOUTBOX            "关于 GLYGame1.0.1(&A)..."
+    IDS_ABOUTBOX            "关于 GLYGame1.0.2(&A)..."
 END
 
 #endif    // 中文(简体，中国) resources
