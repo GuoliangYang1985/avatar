@@ -54,19 +54,12 @@ bool CAvatar::Load(const CString& strFileName)
 	return IsReady();
 }
 
-void CAvatar::UnLoad()
-{
-	CImage::Unload();
-	Init();
-}
-
 void CAvatar::StartWalk(CPath* pPath)
 {
 	if (pPath != NULL)
 	{
 		vector<INode*> nodes = pPath->GetNodes();
 		delete pPath;
-		pPath = NULL;
 		mCurWalkPath.clear();
 		mCurWalkPath = nodes;
 		mCurWalkPath.erase(mCurWalkPath.begin());

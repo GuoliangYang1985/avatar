@@ -1,6 +1,7 @@
 // Image.h: interface for the CImage class.
 
 #pragma once
+#include <memory>
 
 class CImage
 {
@@ -40,6 +41,6 @@ private:
 	// Initialization flag
 	bool mIsReady;
 
-	//角色动画数据。
-	Image* mImage;
+	// Managed GDI+ Image
+	std::unique_ptr<Image> mImage;
 };

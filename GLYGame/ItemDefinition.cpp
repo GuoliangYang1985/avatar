@@ -19,7 +19,7 @@ CItemDefinition::CItemDefinition()
 
 CItemDefinition::~CItemDefinition()
 {
-	Unload();
+
 }
 
 /**

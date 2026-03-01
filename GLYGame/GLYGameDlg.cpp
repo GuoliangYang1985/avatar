@@ -627,7 +627,7 @@ void CGLYGameDlg::ReleaseScene()
 	mRenderGrid.mIsReady = false;
 
 	// Unload character and background resources
-	mAvatar.UnLoad();
+	mAvatar.Unload();
 	mBackGround.Unload();
 
 	// Clean up GDI objects

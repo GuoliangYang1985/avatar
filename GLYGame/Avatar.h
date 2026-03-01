@@ -38,11 +38,6 @@ public:
 	bool Load(const CString& strFileName);
 
 	/**
-	 * Unload loaded assets.
-	 */
-	void UnLoad();
-
-	/**
 	 * Avatar walking process.
 	 */
 	void Walk();

@@ -9,32 +9,35 @@ CImage::CImage() : mImage(nullptr), mIsReady(false)
 
 CImage::~CImage()
 {
-	if (mImage != NULL)
-	{
-		::delete mImage;
-		mImage = NULL;
-	}
+
 }
 
 bool CImage::Load(const CString& fileName)
 {
-	//角色行走动画。
-	mImage = ::new Image(fileName, false);
+	// Unload any previously loaded image
+	Unload();
+
+	// Load the GDI+ image
+	Image* rawImage = new Image(fileName, FALSE);  // FALSE = don't use embedded color management
+	if (rawImage->GetLastStatus() != Ok)
+	{
+		delete rawImage;
+		mIsReady = false;
+		return false;
+	}
+
+	mImage.reset(rawImage);
 	mIsReady = true;
 	return true;
 }
 
 void CImage::Unload()
 {
-	if (mImage != NULL)
-	{
-		::delete mImage;
-		mImage = NULL;
-	}
+	mImage.reset();  // Deletes the managed Image
 	mIsReady = false;
 }
 
 Image* CImage::GetImage() const
 {
-	return mImage;
+	return mImage.get();
 }
