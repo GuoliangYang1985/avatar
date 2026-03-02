@@ -13,6 +13,5 @@ public:
 	 * @param point The point to test, typically from a mouse message.
 	 * @return true if the point is within the item's interactive area.
 	 */
-    virtual bool HitTest(CPoint point);
-	void FromXml(MSXML2::IXMLDOMElementPtr itemNode);
+    bool HitTest(CPoint point);
 };
