@@ -23,7 +23,7 @@ public:
 	/**
 	 * Unloads the loaded asset.
 	 */
-	void Unload();
+	virtual void Unload();
 
 	/**
 	 * Gets the underlying Image pointer.

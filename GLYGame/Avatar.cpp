@@ -54,6 +54,12 @@ bool CAvatar::Load(const CString& strFileName)
 	return IsReady();
 }
 
+void CAvatar::Unload()
+{
+	CImage::Unload();
+	Init();
+}
+
 void CAvatar::StartWalk(CPath* pPath)
 {
 	if (pPath != NULL)

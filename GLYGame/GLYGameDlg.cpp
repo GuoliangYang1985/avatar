@@ -295,10 +295,8 @@ void CGLYGameDlg::Show()
 
 	// Calculate the position to blit the map onto the back buffer
 	// Use rounding to convert float to int without truncation warning
-	const float viewX = mAvatar.GetViewX();
-	const float viewY = mAvatar.GetViewY();
-	mMapX = lroundf(clientRect.Width() / 2.0f - viewX);
-	mMapY = lroundf(clientRect.Height() / 2.0f - viewY);
+	mMapX = lroundf(clientRect.Width() / 2.0f - mAvatar.GetViewX());
+	mMapY = lroundf(clientRect.Height() / 2.0f - mAvatar.GetViewY());
 
 	// Blit the map onto the back buffer
 	mBackDC.BitBlt(mMapX, mMapY, backWidth, backHeight, &mMapDC, 0, 0, SRCCOPY);
