@@ -184,13 +184,13 @@ void CAvatar::DrawNextFrame(Graphics& graphics)
 int CAvatar::GetCol() const
 {
 	CPoint point = CMapUtil::GetMapPointByScreen(GetViewX() + mMapOffSetX, GetViewY() + mMapOffSetY);
-	return point.x + 1;
+	return point.x;
 }
 
 int CAvatar::GetRow() const
 {
 	CPoint point = CMapUtil::GetMapPointByScreen(GetViewX() + mMapOffSetX, GetViewY() + mMapOffSetY);
-	return point.y + 1;
+	return point.y;
 }
 
 float CAvatar::GetViewX() const

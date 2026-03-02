@@ -358,7 +358,6 @@ void CGLYGameDlg::CreateAllItemDefination()
 			CString strFileUrl = pItemDef->mBaseDirectory + pItemDef->mFile;
 			if (pItemDef->Load(strFileUrl))
 			{
-				// 成功，将所有权转移给map
 				mItemDefinitions.emplace(pItemDef->mDefId, std::move(pItemDef));
 			}
 		}
@@ -375,10 +374,9 @@ void CGLYGameDlg::CreateAllItem()
 	if (mXmlMapConfig == nullptr)
 		return;
 
-	// 获取背景图像（若后续未使用，可移除）
-	mBack = mBackGround.GetImage();
+	mBack = mBackGround.GetImage();// Get background image.
 
-	// 定位 <Items> 节点
+	// Locate the <Items> node.
 	MSXML2::IXMLDOMElementPtr itemsNode = mXmlMapConfig->selectSingleNode("map/Items");
 	if (itemsNode == nullptr)
 		return;
@@ -392,14 +390,28 @@ void CGLYGameDlg::CreateAllItem()
 		if (itemNode->nodeType != MSXML2::NODE_ELEMENT)
 			continue;
 
-		// 读取物品类型
-		CString type = CXmlUtil::GetAttributeToCString(itemNode, _T("type"));
-
-		// 根据类型创建物品对象（使用 unique_ptr 临时管理）
-		std::unique_ptr<CItem> pItem;
-		if (type == _T("GoItem"))
+		// Triggered upon completion of walking.
+		CString goToPath = CXmlUtil::GetAttributeToCString(itemNode, _T("onStop"));
+		bool find = false;
+		if (goToPath.IsEmpty())
 		{
-			CString goToPath = CXmlUtil::GetAttributeToCString(itemNode, _T("onStop"));
+			find = false;
+		}
+		else
+		{
+			if (FileExists((LPCTSTR)goToPath))
+			{
+				find = true;
+			}
+			else if (FileExists((LPCTSTR)(_T("resource/map/") + goToPath)))
+			{
+				find = true;
+				goToPath = "resource/map/" + goToPath;
+			}
+		}
+		std::unique_ptr<CItem> pItem;
+		if (find)
+		{
 			pItem = std::make_unique<CGoItem>(goToPath);
 		}
 		else
@@ -407,27 +419,24 @@ void CGLYGameDlg::CreateAllItem()
 			pItem = std::make_unique<CItem>();
 		}
 
-		// 从 XML 填充物品属性
-		pItem->FromXml(itemNode);
-
-		// 查找对应的物品定义
-		auto it = mItemDefinitions.find(pItem->mSource);
+		pItem->FromXml(itemNode); // Populate item attributes from XML.
+		auto it = mItemDefinitions.find(pItem->mSource); // Find the corresponding item definition.
 		if (it != mItemDefinitions.end())
 		{
-			pItem->SetItemDefinition(it->second.get()); // 传入原始指针
+			pItem->SetItemDefinition(it->second.get()); // Pass in raw pointer.
 		}
 		else
 		{
-			// 定义缺失，记录错误并跳过此物品（或使用默认定义）
+			// Definition missing, log error and skip this item.
 			TRACE(_T("Warning: Item definition '%s' not found\n"), (LPCTSTR)pItem->mSource);
 			continue;
 		}
 
-		// 将物品加入全局列表（转移所有权）
-		CItem* rawItem = pItem.get(); // 保存原始指针，用于后续关联 Tile
+		// Add item to the global list.
+		CItem* rawItem = pItem.get();
 		mArrItems.push_back(std::move(pItem));
 
-		// 更新物品所占格子
+		// Update the grid cells occupied by the item.
 		for (int col = rawItem->mCol; col < rawItem->mCol + rawItem->mCols; ++col)
 		{
 			for (int row = rawItem->mRow; row < rawItem->mRow + rawItem->mRows; ++row)

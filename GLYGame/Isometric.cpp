@@ -46,8 +46,8 @@ CGamePoint CIsometric::GetScreenCoordiation(int col, int row, float cellLength)
 CPoint CIsometric::GetMapCoordinate(float tx, float ty, float cellLength)
 {
 	CCoordiante cood = MapToIsoWorld(tx, ty);
-	int col = (int)(cood.mX / cellLength);
-	int row = (int)(-cood.mZ / cellLength);
+	int col = static_cast<int>(std::round(cood.mX / cellLength));
+	int row = static_cast<int>(std::round(-cood.mZ / cellLength));
 	if (col >= 0 && row >= 0)
 	{
 		return CPoint(col, row);
