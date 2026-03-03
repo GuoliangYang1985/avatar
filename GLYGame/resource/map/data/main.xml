@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map id="gly" name="Teacher Yang's Campus" dir="resource/map/assets/" start_row="30" start_col="30" >
+<map id="gly" name="Teacher Yang's Campus" dir="resource/map/assets/main/" start_row="30" start_col="30" >
 	<background file="background.jpg" x_offset="-800" y_offset="0" cols="130" rows="130"/>
 	<ItemDefinitions>
 		<ItemDefinition id="greenPlants.png" file="greenPlants.png" x_offset="-36" y_offset="-77" rows="1" cols="1" walkable="false" overlap="true"/>
@@ -92,8 +92,8 @@
 		<Item source="carBlackRight.png" col="42" row="19"/>
 		<Item source="light0.png" col="19" row="30"/>
 		<Item id="teaching" source="go.png" col="9" row="4" type="GoItem" onStop="resource/map/data/world.xml"/>
-		<Item id="library" source="go.png" col="38" row="18" type="GoItem" onStop="resource/map/data/world.xml"/>
-		<Item source="navigation.png" col="29" row="31" type="MultiNavigationItem">
+		<Item id="library" source="go.png" col="38" row="18" type="GoItem" onStop="resource/map/data/test.xml"/>
+		<Item source="navigation.png" col="29" row="32" type="MultiNavigationItem">
 			<title text="Teacher Yang's Training Base" x="-26" y="-96" font_size="16" font_color="0x000000"></title>
 			<menu  text="Teacher Yang's School" url="resource/map/teaching.xml"  x="-42" y="-60" font_size="14" font_color="0xCCCCCC" font_family="黑体" over_color="0x2B8FD1" out_color="0x000000" idBlod="true"></menu>
 			<menu  text="Teacher Yang's Library" url="resource/map/library.xml"  x="-42" y="-34" font_size="14" font_color="0xCCCCCC" font_family="黑体" over_color="0x2B8FD1" out_color="0x000000" idBlod="true"></menu>

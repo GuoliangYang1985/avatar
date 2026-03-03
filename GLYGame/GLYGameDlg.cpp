@@ -62,7 +62,7 @@ BOOL CGLYGameDlg::OnInitDialog()
 	SetIcon(mIcon, FALSE);		// Set small icon
 	ShowWindow(SW_MAXIMIZE); // Set window to maximized state.
 
-	CreateScene(_T("resource/map/data/gly.xml"));
+	CreateScene(_T("resource/map/data/main.xml"));
 	return true;  // return TRUE  unless you set the focus to a control
 }
 

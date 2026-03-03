@@ -196,15 +196,6 @@
     <ClInclude Include="XmlUtil.h" />
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="res\GLYGame.ico" />
-    <CustomBuild Include="res\GLYGame.rc2">
-      <FileType>RC</FileType>
-    </CustomBuild>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="resource\map\gly.xml" />
-  </ItemGroup>
-  <ItemGroup>
     <Image Include="resource\GLYGame.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map id="world" name="Teacher Yang's Campus" dir="resource/map/assets/" start_row="30" start_col="30" >
+<map id="world" name="Teacher Yang's Campus" dir="resource/map/assets/main/" start_row="30" start_col="30" >
 	<background file="background.jpg" x_offset="-800" y_offset="0" cols="130" rows="130"/>
 	<ItemDefinitions>
 		<ItemDefinition id="greenPlants.png" file="greenPlants.png" x_offset="-36" y_offset="-77" rows="1" cols="1" walkable="false" overlap="true"/>
@@ -42,8 +42,8 @@
 		<Item source="horse.png" col="25" row="38"/>
 		<Item source="tree.png" col="29" row="54" type="QuestItem" questItemId="wenhuaqu2954" />
 		<Item source="tree.png" col="47" row="22" type="QuestItem" questItemId="wenhuaqu4722" />
-		<Item id="teaching" source="go.png" col="9" row="4" type="GoItem" onStop="resource/map/data/gly.xml"/>
-		<Item id="library" source="go.png" col="38" row="18" type="GoItem" onStop="resource/map/data/gly.xml"/>
+		<Item id="teaching" source="go.png" col="9" row="4" type="GoItem" onStop="resource/map/data/world.xml"/>
+		<Item id="library" source="go.png" col="38" row="18" type="GoItem" onStop="resource/map/data/main.xml"/>
 	</Items>
 	<Tiles>
 		<Tile col="1" row="0" walkability="false" placeability="true"/>
