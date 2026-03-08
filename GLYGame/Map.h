@@ -5,6 +5,7 @@
 #include "BackGround.h"
 #include "Item.h"
 #include "RenderGrid.h"
+
 #import "msxml4.dll"
 
 namespace ygl
@@ -74,6 +75,12 @@ namespace ygl
 		 * @return Pointer to the node (likely a CTile or pathfinding node), or nullptr if invalid.
 		 */
 		INode* GetNode(int col, int row);
+
+		/**
+		 * Detect transition paths.
+		 * @return Path to the next scene..
+		 */
+		CString CheckGoto();
 
 		/**
 		 * Releases resources associated with the current scene.

@@ -304,13 +304,33 @@ namespace ygl
 		return mRenderGrid.GetTile(col, row);
 	}
 
+	CString CMap::CheckGoto()
+	{
+		for (const auto& itemPtr : mArrItems)
+		{
+			if (CGoItem* pGoItem = dynamic_cast<CGoItem*>(itemPtr.get()))
+			{
+				CPoint point(mAvatar.GetCol(), mAvatar.GetRow());
+				if (pGoItem->HitTest(point))
+				{
+					CString goTo = pGoItem->mGoTo;
+					if (FileExists((LPCTSTR)goTo))
+					{
+						return goTo;
+					}
+					break;
+				}
+			}
+		}
+		return _T("");
+	}
+
 	void CMap::ReleaseScene()
 	{
 		// Release COM resources (XML Document)
 		if (mXmlMapConfig != nullptr)
 		{
 			mXmlMapConfig.Release();
-			mXmlMapConfig = nullptr;
 		}
 
 		mArrItems.clear(); // Clear the vector after deletion

@@ -286,24 +286,11 @@ namespace ygl
 			if (!mMap.mAvatar.mWalking)
 			{
 				KillTimer(id);
-				for (const auto& itemPtr : mMap.mArrItems)
+				CString gotoPath = mMap.CheckGoto();
+				if (!gotoPath.IsEmpty())
 				{
-					CItem* item = itemPtr.get();
-					CGoItem* pGoItem = dynamic_cast<CGoItem*>(item);
-					if (pGoItem != nullptr)
-					{
-						CPoint point(mMap.mAvatar.GetCol(), mMap.mAvatar.GetRow());
-						if (pGoItem->HitTest(point))
-						{
-							CString goTo = pGoItem->mGoTo;
-							if (FileExists((LPCTSTR)goTo))
-							{
-								ReleaseScene();
-								CreateScene(goTo);
-							}
-							break;
-						}
-					}
+					ReleaseScene();
+					CreateScene(gotoPath);
 				}
 			}
 		}
