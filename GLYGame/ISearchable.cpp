@@ -2,24 +2,26 @@
 
 #include "stdafx.h"
 #include "ISearchable.h"
-
-int ISearchable::GetCols()
+namespace ygl
 {
-	return 0;
-}
+	int ISearchable::GetCols()
+	{
+		return 0;
+	}
 
-int ISearchable::GetRows()
-{
-	return 0;
-}
+	int ISearchable::GetRows()
+	{
+		return 0;
+	}
 
-INode* ISearchable::GetNode(int col, int row)
-{
-	INode* n = NULL;
-	return n;
-}
+	INode* ISearchable::GetNode(int col, int row)
+	{
+		INode* n = NULL;
+		return n;
+	}
 
-float ISearchable::GetNodeTransitionCost(INode* n1, INode* n2)
-{
-	return 0;
+	float ISearchable::GetNodeTransitionCost(INode* n1, INode* n2)
+	{
+		return 0;
+	}
 }

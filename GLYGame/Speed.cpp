@@ -2,15 +2,17 @@
 
 #include "stdafx.h"
 #include "Speed.h"
-
-CSpeed::CSpeed()
+namespace ygl
 {
-	mX = 0;
-	mY = 0;
-	mInstance = 0;
-}
+	CSpeed::CSpeed()
+	{
+		mX = 0;
+		mY = 0;
+		mInstance = 0;
+	}
 
-CSpeed::~CSpeed()
-{
+	CSpeed::~CSpeed()
+	{
 
+	}
 }

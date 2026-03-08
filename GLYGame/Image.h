@@ -2,45 +2,47 @@
 
 #pragma once
 #include <memory>
-
-class CImage
+namespace ygl
 {
-public:
-	CImage();
-	virtual ~CImage();
+	class CImage
+	{
+	public:
+		CImage();
+		virtual ~CImage();
 
-	// Disable copy
-	CImage(const CImage&) = delete;
-	CImage& operator=(const CImage&) = delete;
+		// Disable copy
+		CImage(const CImage&) = delete;
+		CImage& operator=(const CImage&) = delete;
 
-	/**
-	 * Loads the specified asset.
-	 * @param fileName Path to the asset file.
-	 * @return true if loaded successfully, false otherwise.
-	 */
-	bool Load(const CString& fileName);
+		/**
+		 * Loads the specified asset.
+		 * @param fileName Path to the asset file.
+		 * @return true if loaded successfully, false otherwise.
+		 */
+		bool Load(const CString& fileName);
 
-	/**
-	 * Unloads the loaded asset.
-	 */
-	virtual void Unload();
+		/**
+		 * Unloads the loaded asset.
+		 */
+		virtual void Unload();
 
-	/**
-	 * Gets the underlying Image pointer.
-	 * @return Pointer to the GDI+ Image object (may be null).
-	 */
-	Image* GetImage() const;
+		/**
+		 * Gets the underlying Image pointer.
+		 * @return Pointer to the GDI+ Image object (may be null).
+		 */
+		Image* GetImage() const;
 
-	/**
-	 * Checks if the image is loaded and ready.
-	 * @return true if ready, false otherwise.
-	 */
-	bool IsReady() const { return mIsReady; }
+		/**
+		 * Checks if the image is loaded and ready.
+		 * @return true if ready, false otherwise.
+		 */
+		bool IsReady() const { return mIsReady; }
 
-private:
-	// Initialization flag
-	bool mIsReady;
+	private:
+		// Initialization flag
+		bool mIsReady;
 
-	// Managed GDI+ Image
-	std::unique_ptr<Image> mImage;
-};
+		// Managed GDI+ Image
+		std::unique_ptr<Image> mImage;
+	};
+}

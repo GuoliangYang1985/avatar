@@ -2,16 +2,18 @@
 
 #pragma once
 
-
-class CCoordiante  
+namespace ygl
 {
-public:
-	CCoordiante();
-	CCoordiante(float x, float y, float z);
-	virtual ~CCoordiante();
-public:
-	float mX;
-	float mY;
-	float mZ;
-};
+	class CCoordiante
+	{
+	public:
+		CCoordiante();
+		CCoordiante(float x, float y, float z);
+		virtual ~CCoordiante();
+	public:
+		float mX;
+		float mY;
+		float mZ;
+	};
+}
 

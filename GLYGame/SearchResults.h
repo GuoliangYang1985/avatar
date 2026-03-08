@@ -2,18 +2,20 @@
 
 #pragma once
 #include "Path.h"
-
-class CSearchResults
+namespace ygl
 {
-public:
-	CSearchResults();
-	virtual ~CSearchResults();
-public:
-	void SetPath(CPath* p);
-	CPath* GetPath();
-	bool GetIsSuccess();
-	void SetIsSuccess(bool val);
-public:
-	bool mSuccess;
-	CPath* mPath;
-};
+	class CSearchResults
+	{
+	public:
+		CSearchResults();
+		virtual ~CSearchResults();
+	public:
+		void SetPath(CPath* p);
+		CPath* GetPath();
+		bool GetIsSuccess();
+		void SetIsSuccess(bool val);
+	public:
+		bool mSuccess;
+		CPath* mPath;
+	};
+}

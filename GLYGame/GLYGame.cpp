@@ -4,23 +4,25 @@
 #include "stdafx.h"
 #include "GLYGame.h"
 #include "GLYGameDlg.h"
-
-CGLYGameApp theApp;
-
-BEGIN_MESSAGE_MAP(CGLYGameApp, CWinApp)
-	ON_COMMAND(ID_HELP, CWinApp::OnHelp)
-END_MESSAGE_MAP()
-
-CGLYGameApp::CGLYGameApp()
+namespace ygl
 {
+	CGLYGameApp theApp;
 
-}
+	BEGIN_MESSAGE_MAP(CGLYGameApp, CWinApp)
+		ON_COMMAND(ID_HELP, CWinApp::OnHelp)
+	END_MESSAGE_MAP()
 
-BOOL CGLYGameApp::InitInstance()
-{
-	AfxEnableControlContainer();
-	CGLYGameDlg dlg;
-	m_pMainWnd = &dlg;
-	dlg.DoModal();
-	return false;
+	CGLYGameApp::CGLYGameApp()
+	{
+
+	}
+
+	BOOL CGLYGameApp::InitInstance()
+	{
+		AfxEnableControlContainer();
+		CGLYGameDlg dlg;
+		m_pMainWnd = &dlg;
+		dlg.DoModal();
+		return false;
+	}
 }

@@ -3,19 +3,21 @@
 #include "stdafx.h"
 #include "GLYGame.h"
 #include "GamePoint.h"
-
-CGamePoint::CGamePoint()
+namespace ygl
 {
+	CGamePoint::CGamePoint()
+	{
 
-}
+	}
 
-CGamePoint::CGamePoint(float x, float y)
-{
-	mX = x;
-	mY = y;
-}
+	CGamePoint::CGamePoint(float x, float y)
+	{
+		mX = x;
+		mY = y;
+	}
 
-CGamePoint::~CGamePoint()
-{
+	CGamePoint::~CGamePoint()
+	{
 
+	}
 }

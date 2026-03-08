@@ -3,34 +3,36 @@
 #include "stdafx.h"
 #include "GLYGame.h"
 #include "SearchResults.h"
-
-CSearchResults::CSearchResults()
+namespace ygl
 {
-	mSuccess = false;
-	mPath = NULL;
-}
+	CSearchResults::CSearchResults()
+	{
+		mSuccess = false;
+		mPath = NULL;
+	}
 
-CSearchResults::~CSearchResults()
-{
-	mPath = NULL;
-}
+	CSearchResults::~CSearchResults()
+	{
+		mPath = NULL;
+	}
 
-void CSearchResults::SetPath(CPath* p)
-{
-	mPath = p;
-}
+	void CSearchResults::SetPath(CPath* p)
+	{
+		mPath = p;
+	}
 
-CPath* CSearchResults::GetPath()
-{
-	return mPath;
-}
+	CPath* CSearchResults::GetPath()
+	{
+		return mPath;
+	}
 
-bool CSearchResults::GetIsSuccess()
-{
-	return mSuccess;
-}
+	bool CSearchResults::GetIsSuccess()
+	{
+		return mSuccess;
+	}
 
-void CSearchResults::SetIsSuccess(bool val)
-{
-	mSuccess = val;
+	void CSearchResults::SetIsSuccess(bool val)
+	{
+		mSuccess = val;
+	}
 }

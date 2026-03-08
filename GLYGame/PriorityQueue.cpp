@@ -3,32 +3,34 @@
 #include "stdafx.h"
 #include "GLYGame.h"
 #include "PriorityQueue.h"
-
-// Comparison functor for heap ordering (min-heap based on F value)
-struct ComparePathPtr
+namespace ygl
 {
-    bool operator()(const std::unique_ptr<CPath>& a, const std::unique_ptr<CPath>& b) const
+    // Comparison functor for heap ordering (min-heap based on F value)
+    struct ComparePathPtr
     {
-        // We want a min-heap, so return true if a's F is greater than b's F.
-        return a->GetF() > b->GetF();
+        bool operator()(const std::unique_ptr<CPath>& a, const std::unique_ptr<CPath>& b) const
+        {
+            // We want a min-heap, so return true if a's F is greater than b's F.
+            return a->GetF() > b->GetF();
+        }
+    };
+
+    bool CPriorityQueue::HasNextItem() const
+    {
+        return !mItems.empty();
     }
-};
 
-bool CPriorityQueue::HasNextItem() const
-{
-    return !mItems.empty();
-}
+    std::unique_ptr<CPath> CPriorityQueue::GetNextItem()
+    {
+        std::pop_heap(mItems.begin(), mItems.end(), ComparePathPtr());
+        auto top = std::move(mItems.back());
+        mItems.pop_back();
+        return top;
+    }
 
-std::unique_ptr<CPath> CPriorityQueue::GetNextItem()
-{
-    std::pop_heap(mItems.begin(), mItems.end(), ComparePathPtr());
-    auto top = std::move(mItems.back());
-    mItems.pop_back();
-    return top;
-}
-
-void CPriorityQueue::Enqueue(std::unique_ptr<CPath> p)
-{
-    mItems.push_back(std::move(p));
-    std::push_heap(mItems.begin(), mItems.end(), ComparePathPtr());
+    void CPriorityQueue::Enqueue(std::unique_ptr<CPath> p)
+    {
+        mItems.push_back(std::move(p));
+        std::push_heap(mItems.begin(), mItems.end(), ComparePathPtr());
+    }
 }
