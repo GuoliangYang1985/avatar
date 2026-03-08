@@ -3,11 +3,10 @@
 #include "stdafx.h"
 #include "GLYGame.h"
 #include "GLYGameDlg.h"
-#include "MapUtil.h"
-#include "XmlUtil.h"
 #include "Sort.h"
+#include "MapUtil.h"
 #include "GoItem.h"
-#include <fstream>
+
 namespace ygl
 {
 	static bool FileExists(const std::wstring& filename) {
@@ -20,12 +19,6 @@ namespace ygl
 	 */
 	CGLYGameDlg::CGLYGameDlg(CWnd* pParent) : CDialog(CGLYGameDlg::IDD, pParent)
 		, mIcon(AfxGetApp()->LoadIcon(IDR_MAINFRAME))
-		, mIsReady(false)
-		, mXmlMapConfig(nullptr)
-		, mBaseDir(_T(""))
-		, mBack(nullptr)
-		, mCols(0)
-		, mRows(0)
 		, mGdiToken(0)
 		, mMapX(0.0f)
 		, mMapY(0.0f)
@@ -89,7 +82,7 @@ namespace ygl
 			CClientDC dc(this);
 			mBackMap.CreateCompatibleBitmap(&dc, rect.Width(), rect.Height());
 			mBackDC.SelectObject(&mBackMap);
-			if (mCols > 0 && mRows > 0)
+			if (mMap.mCols > 0 && mMap.mRows > 0)
 			{
 				Show();
 			}
@@ -126,130 +119,18 @@ namespace ygl
 
 	void CGLYGameDlg::CreateScene(const CString& xmlSource)
 	{
-		mIsReady = false;
-
-		bool success = LoadMapData(xmlSource);
-		if (!success)
-		{
-			return;
-		}
-
 		mMapDC.CreateCompatibleDC(NULL);
-
-		// Create map background.
-		if (!mBackGround.IsReady())
-		{
-			mBackGround.Load(mBackGround.mBackPath);
-		}
-
-		// If the grid is not initialized, initialize it.
-		if (!mRenderGrid.mIsReady)
-		{
-			mRenderGrid.CreateGrid(mCols, mRows);
-			mRenderGrid.ParseTileXML(mXmlMapConfig);
-		}
-
-		if (!mAvatar.IsReady())
-		{
-			mAvatar.Load("resource/avatar/male.png");
-			if (mAvatar.IsReady())
-			{
-				if (mBackGround.mStartCol > 0 && mBackGround.mStartRow > 0)
-				{
-					CGamePoint p = CMapUtil::GetScreenCoordinate(mBackGround.mStartCol, mBackGround.mStartRow);
-					mAvatar.mX = p.mX - mBackGround.mOffsetX - mAvatar.mOffsetX;
-					mAvatar.mY = p.mY - mBackGround.mOffsetY - mAvatar.mOffsetY;
-				}
-			}
-		}
+		mMap.CreateScene(xmlSource);
 		GamePaint();
-	}
-
-	bool CGLYGameDlg::LoadMapData(const CString& xmlSource)
-	{
-		// Initialize COM for this thread (should ideally be done once at program startup)
-		HRESULT hr = CoInitialize(NULL);
-		if (FAILED(hr))
-		{
-			// Log or handle error (e.g., throw exception)
-			TRACE(_T("CoInitialize failed\n"));
-			return false;
-		}
-
-		// Create XML document instance
-		hr = mXmlMapConfig.CreateInstance(__uuidof(MSXML2::DOMDocument30));
-		if (FAILED(hr))
-		{
-			// MessageBox("Failed to create DOMDocument. Please install MS XML Parser.");
-			CoUninitialize();
-			return false;
-		}
-
-		// Load map configuration file
-		VARIANT_BOOL success = mXmlMapConfig->load(_variant_t(xmlSource));
-		if (success != VARIANT_TRUE)
-		{
-			// Handle load failure (e.g., file not found)
-			TRACE(_T("Failed to load map XML file\n"));
-			mXmlMapConfig.Release();
-			CoUninitialize();
-			return false;
-		}
-
-		// Get root node <map> once
-		MSXML2::IXMLDOMElementPtr mapNode = mXmlMapConfig->documentElement;
-		if (!mapNode)
-		{
-			TRACE(_T("Missing root node <map>\n"));
-			return false;
-		}
-
-		// Get <background> child node once
-		MSXML2::IXMLDOMElementPtr bgNode = mapNode->selectSingleNode(_T("background"));
-		if (!bgNode)
-		{
-			TRACE(_T("Missing <background> node\n"));
-			return false;
-		}
-
-		// Read attributes from <map> node
-		mBackGround.mStartCol = CXmlUtil::GetAttributeToInt(mapNode, _T("start_col"));
-		mBackGround.mStartRow = CXmlUtil::GetAttributeToInt(mapNode, _T("start_row"));
-		mBaseDir = CXmlUtil::GetAttributeToCString(mapNode, _T("dir"));
-		if (mBaseDir.IsEmpty())
-		{
-			mBaseDir = _T("resource/map/assets/");   // Default directory
-		}
-
-		// Read attributes from <background> node
-		CString strMapPath = CXmlUtil::GetAttributeToCString(bgNode, _T("file"));
-		mBackGround.mBackPath = mBaseDir + strMapPath;
-
-		// Read background offsets and grid dimensions
-		mBackGround.mOffsetX = CXmlUtil::GetAttributeToFloat(bgNode, _T("x_offset"));
-		mBackGround.mOffsetY = CXmlUtil::GetAttributeToFloat(bgNode, _T("y_offset"));
-		mBackGround.mCols = CXmlUtil::GetAttributeToInt(bgNode, _T("cols"));
-		mBackGround.mRows = CXmlUtil::GetAttributeToInt(bgNode, _T("rows"));
-
-		// Update avatar's map offsets (ensure both X and Y are set after both offsets are read)
-		mAvatar.mMapOffSetX = static_cast<int>(mBackGround.mOffsetX);
-		mAvatar.mMapOffSetY = static_cast<int>(mBackGround.mOffsetY);
-
-		// Also store grid dimensions in dialog members if needed elsewhere
-		mCols = mBackGround.mCols;
-		mRows = mBackGround.mRows;
-
-		mAstar.Init(this); // Initialize A* pathfinding with this dialog
-		return true;
 	}
 
 	void CGLYGameDlg::GamePaint()
 	{
-		CreateAllItemDefination();
-		if (mArrItems.empty())
+		mMap.CreateAllItemDefination();
+		if (mMap.mArrItems.empty())
 		{
-			CreateAllItem();
-			mArrItems = CSort::SortPosition(std::move(mArrItems));
+			mMap.CreateAllItem();
+			mMap.mArrItems = CSort::SortPosition(std::move(mMap.mArrItems));
 		}
 		Show();
 	}
@@ -266,29 +147,26 @@ namespace ygl
 			return;
 
 		// Background image dimensions
-		const int backWidth = mBack->GetWidth();
-		const int backHeight = mBack->GetHeight();
+		const int backWidth = mMap.mBack->GetWidth();
+		const int backHeight = mMap.mBack->GetHeight();
 
 		// Initialize avatar position if it's at origin (first show)
-		if (mAvatar.mX <= 0.0f && mAvatar.mY <= 0.0f)
+		if (mMap.mAvatar.mX <= 0.0f && mMap.mAvatar.mY <= 0.0f)
 		{
-			mAvatar.mX = backWidth / 2.0f;
-			mAvatar.mY = backHeight / 2.0f;
+			mMap.mAvatar.mX = backWidth / 2.0f;
+			mMap.mAvatar.mY = backHeight / 2.0f;
 		}
 
 		// Create a compatible bitmap for the map if not already created
-		if (mMap.GetSafeHandle() == nullptr)
+		if (mBitmap.GetSafeHandle() == nullptr)
 		{
-			mMap.CreateCompatibleBitmap(pWindowDC, backWidth, backHeight);
-			mMapDC.SelectObject(&mMap);
+			mBitmap.CreateCompatibleBitmap(pWindowDC, backWidth, backHeight);
+			mMapDC.SelectObject(&mBitmap);
 		}
 
 		// Draw the map onto the map DC using GDI+
-		{
-			Gdiplus::Graphics graphics(mMapDC.GetSafeHdc());
-			DrawMap(graphics);
-			// Graphics destructor automatically releases the HDC
-		}
+		Gdiplus::Graphics graphics(mMapDC.GetSafeHdc());
+		mMap.DrawMap(graphics);
 
 		// Prepare the back buffer DC
 		CBrush windowBgBrush(::GetSysColor(COLOR_WINDOW));
@@ -296,8 +174,8 @@ namespace ygl
 
 		// Calculate the position to blit the map onto the back buffer
 		// Use rounding to convert float to int without truncation warning
-		mMapX = lroundf(clientRect.Width() / 2.0f - mAvatar.GetViewX());
-		mMapY = lroundf(clientRect.Height() / 2.0f - mAvatar.GetViewY());
+		mMapX = lroundf(clientRect.Width() / 2.0f - mMap.mAvatar.GetViewX());
+		mMapY = lroundf(clientRect.Height() / 2.0f - mMap.mAvatar.GetViewY());
 
 		// Blit the map onto the back buffer
 		mBackDC.BitBlt(mMapX, mMapY, backWidth, backHeight, &mMapDC, 0, 0, SRCCOPY);
@@ -309,152 +187,6 @@ namespace ygl
 		ReleaseDC(pWindowDC);
 	}
 
-	void CGLYGameDlg::DrawMap(Graphics& graphics)
-	{
-		// Draw the map.
-		int bWidth = mBack->GetWidth();
-		int bHeight = mBack->GetHeight();
-		graphics.DrawImage(mBack, 0, 0, bWidth, bHeight);
-
-		// Draw all elements within the map.
-		BOOL bFinded = false;
-		for (const auto& item : mArrItems)
-		{
-			if (!bFinded)
-			{
-				if (mAvatar.GetCol() < item->mCol + item->mCols && mAvatar.GetRow() < item->mRow + item->mRows)
-				{
-					bFinded = true;
-					mAvatar.DrawNextFrame(graphics);
-				}
-			}
-			item->Draw(graphics, mBackGround.mOffsetX, mBackGround.mOffsetY);
-		}
-		if (!bFinded)
-		{
-			mAvatar.DrawNextFrame(graphics);
-		}
-	}
-
-	void CGLYGameDlg::CreateAllItemDefination()
-	{
-		if (!mItemDefinitions.empty() || !mXmlMapConfig)
-			return;
-		MSXML2::IXMLDOMElementPtr itemDefsNode = (MSXML2::IXMLDOMElementPtr)mXmlMapConfig->selectSingleNode("map/ItemDefinitions");
-		if (!itemDefsNode)
-			return;
-		MSXML2::IXMLDOMNodeListPtr itemDefList = itemDefsNode->GetchildNodes();
-		int nCount = itemDefList->length;
-		for (int i = 0; i < nCount; ++i)
-		{
-			MSXML2::IXMLDOMElementPtr itemDefNode = itemDefList->item[i];
-			MSXML2::DOMNodeType nodeType = itemDefNode->nodeType;
-			if (nodeType == MSXML2::NODE_ELEMENT)
-			{
-				auto pItemDef = std::make_unique<CItemDefinition>();
-				pItemDef->mBaseDirectory = mBaseDir;
-				pItemDef->FromXml(itemDefNode);
-				CString strFileUrl = pItemDef->mBaseDirectory + pItemDef->mFile;
-				if (pItemDef->Load(strFileUrl))
-				{
-					mItemDefinitions.emplace(pItemDef->mDefId, std::move(pItemDef));
-				}
-			}
-		}
-	}
-
-	void CGLYGameDlg::DeleteAllItemDefination()
-	{
-		mItemDefinitions.clear();
-	}
-
-	void CGLYGameDlg::CreateAllItem()
-	{
-		if (mXmlMapConfig == nullptr)
-			return;
-
-		mBack = mBackGround.GetImage();// Get background image.
-
-		// Locate the <Items> node.
-		MSXML2::IXMLDOMElementPtr itemsNode = mXmlMapConfig->selectSingleNode("map/Items");
-		if (itemsNode == nullptr)
-			return;
-
-		MSXML2::IXMLDOMNodeListPtr itemList = itemsNode->GetchildNodes();
-		long count = itemList->length;
-
-		for (long i = 0; i < count; ++i)
-		{
-			MSXML2::IXMLDOMElementPtr itemNode = itemList->item[i];
-			if (itemNode->nodeType != MSXML2::NODE_ELEMENT)
-				continue;
-
-			// Triggered upon completion of walking.
-			CString goToPath = CXmlUtil::GetAttributeToCString(itemNode, _T("onStop"));
-			bool find = false;
-			if (goToPath.IsEmpty())
-			{
-				find = false;
-			}
-			else
-			{
-				if (FileExists((LPCTSTR)goToPath))
-				{
-					find = true;
-				}
-				else if (FileExists((LPCTSTR)(_T("resource/map/") + goToPath)))
-				{
-					find = true;
-					goToPath = "resource/map/" + goToPath;
-				}
-			}
-			std::unique_ptr<CItem> pItem;
-			if (find)
-			{
-				pItem = std::make_unique<CGoItem>(goToPath);
-			}
-			else
-			{
-				pItem = std::make_unique<CItem>();
-			}
-
-			pItem->FromXml(itemNode); // Populate item attributes from XML.
-			auto it = mItemDefinitions.find(pItem->mSource); // Find the corresponding item definition.
-			if (it != mItemDefinitions.end())
-			{
-				pItem->SetItemDefinition(it->second.get()); // Pass in raw pointer.
-			}
-			else
-			{
-				// Definition missing, log error and skip this item.
-				TRACE(_T("Warning: Item definition '%s' not found\n"), (LPCTSTR)pItem->mSource);
-				continue;
-			}
-
-			// Add item to the global list.
-			CItem* rawItem = pItem.get();
-			mArrItems.push_back(std::move(pItem));
-
-			// Update the grid cells occupied by the item.
-			for (int col = rawItem->mCol; col < rawItem->mCol + rawItem->mCols; ++col)
-			{
-				for (int row = rawItem->mRow; row < rawItem->mRow + rawItem->mRows; ++row)
-				{
-					CTile* tile = GetTile(col, row);
-					if (tile)
-					{
-						tile->AddItem(rawItem);
-						rawItem->AddTile(tile);
-					}
-					else
-					{
-						TRACE(_T("Warning: Tile (%d, %d) out of bounds for item\n"), col, row);
-					}
-				}
-			}
-		}
-	}
-
 	/**
 	 * Get the cell.
 	 * @param tx The x-coordinate on the screen.
@@ -464,12 +196,7 @@ namespace ygl
 	CTile* CGLYGameDlg::GetTileFromScreenCoordinate(float tx, float ty) const
 	{
 		CPoint point = CMapUtil::GetMapPointByScreen(tx, ty);
-		return mRenderGrid.GetTile(point.x, point.y);
-	}
-
-	CTile* CGLYGameDlg::GetTile(int col, int row) const
-	{
-		return mRenderGrid.GetTile(col, row);
+		return mMap.mRenderGrid.GetTile(point.x, point.y);
 	}
 
 	LRESULT CGLYGameDlg::WindowProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -494,8 +221,8 @@ namespace ygl
 	void CGLYGameDlg::LButtonDown(UINT modKeys, CPoint point)
 	{
 		// Compute the start tile from the avatar's current view position
-		const float startWorldX = mAvatar.GetViewX() + mBackGround.mOffsetX;
-		const float startWorldY = mAvatar.GetViewY() + mBackGround.mOffsetY;
+		const float startWorldX = mMap.mAvatar.GetViewX() + mMap.mBackGround.mOffsetX;
+		const float startWorldY = mMap.mAvatar.GetViewY() + mMap.mBackGround.mOffsetY;
 		CTile* pStartNode = GetTileFromScreenCoordinate(startWorldX, startWorldY);
 		if (!pStartNode)
 		{
@@ -505,8 +232,8 @@ namespace ygl
 
 		// Convert the click point to world coordinates
 		// Note: mMapX/Y are the viewport origin in world coordinates (assumed integer)
-		const LONG adjustedX = point.x + static_cast<LONG>(mBackGround.mOffsetX) - mMapX;
-		const LONG adjustedY = point.y + static_cast<LONG>(mBackGround.mOffsetY) - mMapY;
+		const LONG adjustedX = point.x + static_cast<LONG>(mMap.mBackGround.mOffsetX) - mMapX;
+		const LONG adjustedY = point.y + static_cast<LONG>(mMap.mBackGround.mOffsetY) - mMapY;
 		CTile* pGoalNode = GetTileFromScreenCoordinate(static_cast<float>(adjustedX),
 			static_cast<float>(adjustedY));
 		if (!pGoalNode)
@@ -530,7 +257,7 @@ namespace ygl
 		}
 
 		// Perform A* search
-		CSearchResults result = mAstar.Search(pStartNode, pGoalNode);
+		CSearchResults result = mMap.mAstar.Search(pStartNode, pGoalNode);
 		if (!result.GetIsSuccess())
 		{
 			OutputDebugString(_T("No walkable path found!\n"));
@@ -540,22 +267,12 @@ namespace ygl
 		// Start movement along the found path
 		StartTimer();
 		CPath* pPath = result.GetPath();
-		mAvatar.StartWalk(pPath);
+		mMap.mAvatar.StartWalk(pPath);
 	}
 
 	void CGLYGameDlg::StartTimer()
 	{
 		SetTimer(1, 70, NULL);
-	}
-
-	float CGLYGameDlg::GetNodeTransitionCost(INode* n1, INode* n2)
-	{
-		float cost = 1;
-		if (!((CTile*)n1)->GetWalkable() || !((CTile*)n2)->GetWalkable())
-		{
-			cost = 100000;
-		}
-		return cost;
 	}
 
 	/**
@@ -566,16 +283,16 @@ namespace ygl
 		if (id == 1)
 		{
 			GamePaint();
-			if (!mAvatar.mWalking)
+			if (!mMap.mAvatar.mWalking)
 			{
 				KillTimer(id);
-				for (const auto& itemPtr : mArrItems)
+				for (const auto& itemPtr : mMap.mArrItems)
 				{
 					CItem* item = itemPtr.get();
 					CGoItem* pGoItem = dynamic_cast<CGoItem*>(item);
 					if (pGoItem != nullptr)
 					{
-						CPoint point(mAvatar.GetCol(), mAvatar.GetRow());
+						CPoint point(mMap.mAvatar.GetCol(), mMap.mAvatar.GetRow());
 						if (pGoItem->HitTest(point))
 						{
 							CString goTo = pGoItem->mGoTo;
@@ -601,47 +318,14 @@ namespace ygl
 		return (HCURSOR)mIcon;
 	}
 
-	int CGLYGameDlg::GetCols()
-	{
-		return mCols;
-	}
-
-	int CGLYGameDlg::GetRows()
-	{
-		return mRows;
-	}
-
-	INode* CGLYGameDlg::GetNode(int col, int row)
-	{
-		return GetTile(col, row);
-	}
-
 	void CGLYGameDlg::ReleaseScene()
 	{
-		// Release COM resources (XML Document)
-		if (mXmlMapConfig != nullptr)
-		{
-			mXmlMapConfig.Release();
-			mXmlMapConfig = nullptr;
-		}
-
-		// Clean up item instances
-		mArrItems.clear();
-		mArrItems.clear(); // Clear the vector after deletion
-
-		// Clean up item definitions
-		DeleteAllItemDefination(); // Ensure this function deallocates memory properly
-
-		mRenderGrid.mIsReady = false;
-
-		// Unload character and background resources
-		mAvatar.Unload();
-		mBackGround.Unload();
+		mMap.ReleaseScene();
 
 		// Clean up GDI objects
-		if (mMap.m_hObject != nullptr)
+		if (mBitmap.m_hObject != nullptr)
 		{
-			mMap.DeleteObject(); // Delete the GDI object (e.g., bitmap)
+			mBitmap.DeleteObject(); // Delete the GDI object (e.g., bitmap)
 		}
 
 		// Delete the device context

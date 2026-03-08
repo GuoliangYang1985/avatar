@@ -149,6 +149,7 @@
     <ClCompile Include="Isometric.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="ItemDefinition.cpp" />
+    <ClCompile Include="Map.cpp" />
     <ClCompile Include="MapUtil.cpp" />
     <ClCompile Include="Path.cpp" />
     <ClCompile Include="PriorityQueue.cpp" />
@@ -183,6 +184,7 @@
     <ClInclude Include="Isometric.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="ItemDefinition.h" />
+    <ClInclude Include="Map.h" />
     <ClInclude Include="MapUtil.h" />
     <ClInclude Include="Path.h" />
     <ClInclude Include="PriorityQueue.h" />

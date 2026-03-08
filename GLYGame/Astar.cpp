@@ -51,18 +51,26 @@ namespace ygl
         neighbors.reserve(mAllowDiag ? 8 : 4);
 
         // 四个基本方向
-        if (c + 1 < max_c) neighbors.push_back(mGrid->GetNode(c + 1, r));
-        if (r + 1 < max_r) neighbors.push_back(mGrid->GetNode(c, r + 1));
-        if (c - 1 >= 0)    neighbors.push_back(mGrid->GetNode(c - 1, r));
-        if (r - 1 >= 0)    neighbors.push_back(mGrid->GetNode(c, r - 1));
+        if (c + 1 < max_c)
+            neighbors.push_back(mGrid->GetNode(c + 1, r));
+        if (r + 1 < max_r)
+            neighbors.push_back(mGrid->GetNode(c, r + 1));
+        if (c - 1 >= 0)
+            neighbors.push_back(mGrid->GetNode(c - 1, r));
+        if (r - 1 >= 0)
+            neighbors.push_back(mGrid->GetNode(c, r - 1));
 
         // 对角线方向（如果允许）
         if (mAllowDiag)
         {
-            if (c - 1 >= 0 && r + 1 < max_r) neighbors.push_back(mGrid->GetNode(c - 1, r + 1));
-            if (c + 1 < max_c && r + 1 < max_r) neighbors.push_back(mGrid->GetNode(c + 1, r + 1));
-            if (c - 1 >= 0 && r - 1 >= 0)    neighbors.push_back(mGrid->GetNode(c - 1, r - 1));
-            if (c + 1 < max_c && r - 1 >= 0)    neighbors.push_back(mGrid->GetNode(c + 1, r - 1));
+            if (c - 1 >= 0 && r + 1 < max_r)
+                neighbors.push_back(mGrid->GetNode(c - 1, r + 1));
+            if (c + 1 < max_c && r + 1 < max_r)
+                neighbors.push_back(mGrid->GetNode(c + 1, r + 1));
+            if (c - 1 >= 0 && r - 1 >= 0)
+                neighbors.push_back(mGrid->GetNode(c - 1, r - 1));
+            if (c + 1 < max_c && r - 1 >= 0)
+                neighbors.push_back(mGrid->GetNode(c + 1, r - 1));
         }
 
         return neighbors;
