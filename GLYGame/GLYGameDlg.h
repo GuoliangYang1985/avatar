@@ -1,7 +1,6 @@
 // GLYGameDlg.h : header file
 
 #pragma once
-#include <afxtempl.h>
 #include "Map.h"
 
 namespace ygl
@@ -10,7 +9,7 @@ namespace ygl
 	{
 	public:
 		CGLYGameDlg(CWnd* pParent = NULL);	// standard constructor
-		virtual ~CGLYGameDlg();
+		~CGLYGameDlg();
 
 		/**
 		 * Releases resources associated with the current scene.

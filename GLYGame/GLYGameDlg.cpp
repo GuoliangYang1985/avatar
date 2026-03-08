@@ -5,15 +5,9 @@
 #include "GLYGameDlg.h"
 #include "Sort.h"
 #include "MapUtil.h"
-#include "GoItem.h"
 
 namespace ygl
 {
-	static bool FileExists(const std::wstring& filename) {
-		DWORD attr = GetFileAttributesW(filename.c_str());
-		return attr != INVALID_FILE_ATTRIBUTES && !(attr & FILE_ATTRIBUTE_DIRECTORY);
-	}
-
 	/**
 	 * CGLYGameDlg dialog
 	 */
