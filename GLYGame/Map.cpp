@@ -237,7 +237,7 @@ namespace ygl
 			{
 				for (int row = rawItem->mRow; row < rawItem->mRow + rawItem->mRows; ++row)
 				{
-					CTile* tile = GetTile(col, row);
+					CTile* tile = (CTile*)GetNode(col, row);
 					if (tile)
 					{
 						tile->AddItem(rawItem);
@@ -279,11 +279,6 @@ namespace ygl
 		}
 	}
 
-	CTile* CMap::GetTile(int col, int row) const
-	{
-		return mRenderGrid.GetTile(col, row);
-	}
-
 	float CMap::GetNodeTransitionCost(INode* n1, INode* n2)
 	{
 		float cost = 1;
@@ -306,7 +301,7 @@ namespace ygl
 
 	INode* CMap::GetNode(int col, int row)
 	{
-		return GetTile(col, row);
+		return mRenderGrid.GetTile(col, row);
 	}
 
 	void CMap::ReleaseScene()

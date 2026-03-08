@@ -48,15 +48,6 @@ namespace ygl
 		void DrawMap(Graphics& graphics);
 
 		/**
-		 * Gets the tile at the specified grid column and row.
-		 * @param col Column index.
-		 * @param row Row index.
-		 * @return Pointer to the tile, or nullptr if indices are invalid.
-		 */
-		CTile* GetTile(int col, int row) const;
-
-
-		/**
 		 * Calculates the transition cost between two nodes for pathfinding.
 		 * @param n1 Pointer to the first node.
 		 * @param n2 Pointer to the second node.
