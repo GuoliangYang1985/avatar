@@ -72,7 +72,6 @@ namespace ygl
 		 */
 		CTile* GetTileFromScreenCoordinate(float tx, float ty) const;
 
-
 		/**
 		 * Handles window size changes.
 		 * @param rect The new client rectangle of the window.
