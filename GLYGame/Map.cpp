@@ -233,9 +233,13 @@ namespace ygl
 			mArrItems.push_back(std::move(pItem));
 
 			// Update the grid cells occupied by the item.
-			for (int col = rawItem->mCol; col < rawItem->mCol + rawItem->mCols; ++col)
+			int startCol = rawItem->mCol;
+			int startRow = rawItem->mRow;
+			int endCol = startCol + rawItem->mCols;
+			int endRow = startRow + rawItem->mRows;
+			for (int col = startCol; col < endCol; ++col)
 			{
-				for (int row = rawItem->mRow; row < rawItem->mRow + rawItem->mRows; ++row)
+				for (int row = startRow; row < endRow; ++row)
 				{
 					CTile* tile = (CTile*)GetNode(col, row);
 					if (tile)
