@@ -3,60 +3,62 @@
 #pragma once
 #include "GamePoint.h"
 #include "Coordiante.h"
+
 namespace ygl
 {
 	class CIsometric
 	{
 	public:
 		CIsometric(float declination = 30);
-		virtual ~CIsometric();
+		~CIsometric();
 	public:
 		/**
-		 * 由行列得到屏幕坐标
-		 * @param col 该点对应的列
-		 * @param row 该点对应的行
-		 * @return 屏幕坐标
+		 * Convert row and column indices to screen coordinates.
+		 * @param col Column index of the point.
+		 * @param row  row Row index of the point.
+		 * @return Screen coordinates
 		 */
 		CGamePoint GetScreenCoordiation(int col, int row, float cellLegth);
 
 		/**
-		 * 获取地图坐标。
-		 * @param tx 屏幕的x轴上的坐标。
-		 * @param ty 屏幕的y轴上的坐标。
-		 * @param cellLength 单元格的长度。
-		 * @return 地图上的行列
+		 * Get map coordinates.
+		 * @param tx X-coordinate on the screen.
+		 * @param ty Y-coordinate on the screen.
+		 * @param cellLength cellLength Length of a grid cell.
+		 * @return Row and column on the map.
 		 */
 		CPoint GetMapCoordinate(float tx, float ty, float cellLength);
 
 		/**
-		 * 根据3D坐标系的值计算出2D屏幕坐标系的值，
-		 * 2D坐标系中没有z轴
-		 * @param xpp 3D坐标系中的x坐标，以像素为单位
-		 * @param ypp 3D坐标系中的y坐标，以像素为单位
-		 * @param zpp 3D坐标系中的z坐标，以像素为单位
-		 * @return 2d坐标系的坐标，以像素为单位
+		 * Convert 3D coordinate system values to 2D screen coordinate system values.
+		 * Note: The 2D coordinate system has no Z-axis.
+		 * @param xpp X-coordinate in the 3D coordinate system (in pixels).
+		 * @param ypp Y-coordinate in the 3D coordinate system (in pixels).
+		 * @param zpp Z-coordinate in the 3D coordinate system (in pixels).
+		 * @return Coordinates in the 2D screen coordinate system (in pixels).
 		 */
 		CGamePoint MapToScreen(float xpp, float ypp, float zpp);
 
 		/**
-		 * 2D像素坐标系转换为3D坐标系，3D坐标中y为0
-		 * @param screenX 2D坐标系中的x坐标
-		 * @param screenY 2D坐标系中的y坐标
-		 * @return 3D坐标系的坐标
+		 * Convert 2D pixel coordinate system to 3D coordinate system.
+		 * Note: In the resulting 3D coordinates, the Y value is set to 0.
+		 * @param screenX X-coordinate in the 2D coordinate system.
+		 * @param screenY Y-coordinate in the 2D coordinate system.
+		 * @return Coordinates in the 3D coordinate system (with Y = 0).
 		 */
 		CCoordiante MapToIsoWorld(float screenX, float screenY);
 	private:
-		//θ垂直俯视角
+		// Vertical viewing angle Theta.
 		float mTheta;
-		//sinθ
+		// sin Theta
 		float mSinTheta;
-		//cosθ
+		// cos Theta
 		float mCosTheta;
-		//α水平视角
+		// Horizontal viewing angle Alpha
 		float mAlpha;
-		//sinα
+		// sin Alpha
 		float mSinAlpha;
-		//cosα
+		// cos Alpha
 		float mCosAlpha;
 	};
 }
