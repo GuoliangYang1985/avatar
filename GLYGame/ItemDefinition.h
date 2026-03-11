@@ -3,6 +3,7 @@
 #pragma once
 #include "XmlUtil.h"
 #include "Image.h"
+
 namespace ygl
 {
 	class CItemDefinition : public CImage
@@ -12,8 +13,8 @@ namespace ygl
 		~CItemDefinition();
 	public:
 		/**
-		 * 解析xml创建数据。
-		 * @pItemDefNode 当前ItemDefinition的xml数据
+		 * Parse XML to create data.
+		 * @pItemDefNode pItemDefNode XML data for the current ItemDefinition.
 		 */
 		void FromXml(MSXML2::IXMLDOMElementPtr pItemDefNode);
 
@@ -22,28 +23,29 @@ namespace ygl
 		void SetOverlap(bool value);
 
 		/**
-		 * 设置是否可以行走。
+		 * Set whether it is walkable.
+		 * @param value Whether it is walkable.
 		 */
 		void SetWalkable(bool value);
 	public:
-		//id。
+		// id。
 		CString mDefId;
-		//文件基本路径。
+		// Base path of the file.
 		CString mBaseDirectory;
-		//名字。
+		// File name.
 		CString mFile;
-		//所占的列数。
+		// Number of columns occupied.
 		int mCols;
-		//所占的行数。
+		// Number of rows occupied.
 		int mRows;
-		//x轴上的偏移量。
+		// Offset on the X-axis.
 		int mOffsetX;
-		//y轴上的偏移量。
+		// Offset on the Y-axis.
 		int mOffsetY;
 	private:
-		//是否可行走。
+		// Is it walkable.
 		bool mWalkable;
-		//是否可以覆盖
+		// Whether it can be overlapped.
 		bool mOverlap;
 	};
 }
